@@ -2,8 +2,8 @@ package uk.gov.justice.services.example.cakeshop.it.util;
 
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventlog.EventLog;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.eventlog.JdbcEventLogRepository;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.EventLogRepositoryException;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.eventlog.EventLogJdbcRepository;
+import uk.gov.justice.services.jdbc.persistence.JdbcRepositoryException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,12 +16,12 @@ import javax.sql.DataSource;
 /**
  * Standalone repository class to access event streams. To be used in integration testing
  */
-public class StandaloneJdbcEventLogRepository extends JdbcEventLogRepository {
+public class StandaloneEventLogJdbcRepository extends EventLogJdbcRepository {
     static final String SQL_FIND_ALL = "SELECT * FROM event_log";
 
     private final DataSource datasource;
 
-    public StandaloneJdbcEventLogRepository(DataSource datasource) {
+    public StandaloneEventLogJdbcRepository(DataSource datasource) {
         this.datasource = datasource;
     }
 
@@ -41,7 +41,7 @@ public class StandaloneJdbcEventLogRepository extends JdbcEventLogRepository {
 
             events = extractResults(ps);
         } catch (SQLException e) {
-            throw new EventLogRepositoryException("Error fetching event stream", e);
+            throw new JdbcRepositoryException("Error fetching event stream", e);
         }
 
         return events.stream();
