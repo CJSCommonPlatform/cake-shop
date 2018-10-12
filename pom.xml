@@ -10,9 +10,9 @@
         <version>1.13.0</version>
     </parent>
 
-    <groupId>uk.gov.justice.examples.cake-shop</groupId>
+    <groupId>uk.gov.justice.example</groupId>
     <artifactId>cake-shop</artifactId>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Cakeshop Application</name>
@@ -25,6 +25,7 @@
     </scm>
 
     <modules>
+        <module>example-context</module>
     </modules>
 
     <properties>
@@ -39,6 +40,7 @@
         <generator-maven-plugin.version>2.6.0</generator-maven-plugin.version>
         <json-schema-catalog.version>1.4.1</json-schema-catalog.version>
         <framework-api.version>3.0.0-M14</framework-api.version>
+        <cpp.framework.version>5.0.0-SNAPSHOT</cpp.framework.version>
     </properties>
 
     <dependencyManagement>
