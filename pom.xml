@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>uk.gov.justice</groupId>
+        <artifactId>maven-framework-parent-pom</artifactId>
+        <version>1.13.0</version>
+    </parent>
+
+    <groupId>uk.gov.justice.examples.cake-shop</groupId>
+    <artifactId>cake-shop</artifactId>
+    <version>5.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Cakeshop Application</name>
+    <description>Example application for Microservice Framework</description>
+
+    <scm>
+        <connection>${cpp.scm.connection}</connection>
+        <developerConnection>${cpp.scm.developerConnection}</developerConnection>
+        <url>${cpp.scm.url}</url>
+    </scm>
+
+    <modules>
+    </modules>
+
+    <properties>
+        <common-bom.version>1.27.0</common-bom.version>
+        <embedded-artemis.version>1.2.0</embedded-artemis.version>
+        <file.service.version>1.16.4</file.service.version>
+        <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
+        <jboss-vfs.version>3.2.12.Final</jboss-vfs.version>
+        <raml-maven-plugin.version>1.6.3</raml-maven-plugin.version>
+        <test-utils.version>1.17.3</test-utils.version>
+        <utilities.version>1.15.1</utilities.version>
+        <generator-maven-plugin.version>2.6.0</generator-maven-plugin.version>
+        <json-schema-catalog.version>1.4.1</json-schema-catalog.version>
+        <framework-api.version>3.0.0-M14</framework-api.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>uk.gov.justice</groupId>
+                <artifactId>maven-common-bom</artifactId>
+                <version>${common-bom.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.artemis</groupId>
+                <artifactId>embedded-artemis</artifactId>
+                <version>${embedded-artemis.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.services</groupId>
+                <artifactId>file-service-persistence</artifactId>
+                <version>${file.service.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.utils</groupId>
+                <artifactId>utilities-core</artifactId>
+                <version>${utilities.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.ejb3</groupId>
+                <artifactId>jboss-ejb3-ext-api</artifactId>
+                <version>${jboss-ejb3-ext-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.utils</groupId>
+                <artifactId>test-utils-logging-simple</artifactId>
+                <version>${test-utils.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.utils</groupId>
+                <artifactId>test-utils-logging-log4j</artifactId>
+                <version>${test-utils.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.framework-api</groupId>
+                <artifactId>framework-api-bom</artifactId>
+                <version>${framework-api.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <argLine>${argLine} -Xmx64m</argLine>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>integration-tests</id>
+            <activation>
+                <property>
+                    <name>run.it</name>
+                    <value>!false</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <random.jms.port>${random-jms-port}</random.jms.port>
+                                <random.http.port>${random-http-port}</random.http.port>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>reserve-jms-port</id>
+                                <goals>
+                                    <goal>reserve-network-port</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <portNames>
+                                        <portName>random-jms-port</portName>
+                                        <portName>random-http-port</portName>
+                                        <portName>random-management-port</portName>
+                                    </portNames>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
