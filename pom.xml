@@ -30,17 +30,20 @@
 
     <properties>
         <common-bom.version>1.27.0</common-bom.version>
+        <framework.version>5.0.0-SNAPSHOT</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
+        <event-store.version>1.0.0-SNAPSHOT</event-store.version>
+        <framework-domain.version>1.0.0-SNAPSHOT</framework-domain.version>
+        <framework-generators.version>1.0.0-SNAPSHOT</framework-generators.version>
         <file.service.version>1.16.4</file.service.version>
+        <framework-api.version>3.0.0-M14</framework-api.version>
+        <generator-maven-plugin.version>2.6.0</generator-maven-plugin.version>
+        <json-schema-catalog.version>1.4.1</json-schema-catalog.version>
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
         <jboss-vfs.version>3.2.12.Final</jboss-vfs.version>
         <raml-maven-plugin.version>1.6.3</raml-maven-plugin.version>
         <test-utils.version>1.17.3</test-utils.version>
         <utilities.version>1.15.1</utilities.version>
-        <generator-maven-plugin.version>2.6.0</generator-maven-plugin.version>
-        <json-schema-catalog.version>1.4.1</json-schema-catalog.version>
-        <framework-api.version>3.0.0-M14</framework-api.version>
-        <cpp.framework.version>5.0.0-SNAPSHOT</cpp.framework.version>
     </properties>
 
     <dependencyManagement>
@@ -89,6 +92,13 @@
                 <groupId>uk.gov.justice.framework-api</groupId>
                 <artifactId>framework-api-bom</artifactId>
                 <version>${framework-api.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.services</groupId>
+                <artifactId>framework-bom</artifactId>
+                <version>${framework.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>

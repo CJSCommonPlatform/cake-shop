@@ -29,22 +29,22 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>common</artifactId>
-            <version>${cpp.framework.version}</version>
+            <version>${framework.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>core</artifactId>
-            <version>${cpp.framework.version}</version>
+            <version>${framework.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.services</groupId>
+            <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>rest-adapter-core</artifactId>
-            <version>${cpp.framework.version}</version>
+            <version>${framework-generators.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.services</groupId>
+            <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>rest-client-core</artifactId>
-            <version>${cpp.framework.version}</version>
+            <version>${framework-generators.version}</version>
         </dependency>
 
 
@@ -58,9 +58,9 @@
             <artifactId>file-service-persistence</artifactId>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.services</groupId>
+            <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>rest-adapter-file-service</artifactId>
-            <version>${cpp.framework.version}</version>
+            <version>${framework-generators.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>test-utils-core</artifactId>
-            <version>${cpp.framework.version}</version>
+            <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -127,9 +127,9 @@
                         <classifier>raml</classifier>
                     </dependency>
                     <dependency>
-                        <groupId>uk.gov.justice.services</groupId>
+                        <groupId>uk.gov.justice.framework-generators</groupId>
                         <artifactId>rest-client-generator</artifactId>
-                        <version>${cpp.framework.version}</version>
+                        <version>${framework-generators.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
