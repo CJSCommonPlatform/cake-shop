@@ -24,7 +24,6 @@
             <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>

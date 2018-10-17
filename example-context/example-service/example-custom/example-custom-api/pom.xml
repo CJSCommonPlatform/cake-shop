@@ -36,9 +36,6 @@
             <artifactId>schema-service</artifactId>
             <version>${json-schema-catalog.version}</version>
         </dependency>
-
-        <!--TODO: Move me to service-parent-pom-->
-
         <dependency>
             <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>rest-adapter-core</artifactId>
@@ -49,7 +46,6 @@
             <artifactId>rest-client-core</artifactId>
             <version>${framework-generators.version}</version>
         </dependency>
-
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
