@@ -29,6 +29,7 @@
     </modules>
 
     <properties>
+        <cpp.repo.name>cake-shop</cpp.repo.name>
         <common-bom.version>1.27.0</common-bom.version>
         <framework.version>5.0.0-SNAPSHOT</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
