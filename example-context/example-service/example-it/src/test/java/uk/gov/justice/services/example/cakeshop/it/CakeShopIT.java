@@ -20,7 +20,7 @@ import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTy
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.OVEN_RESOURCE_CUSTOM_URI;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_QUERY_URI;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
-import static uk.gov.justice.services.test.utils.core.matchers.ResponseStatusMatcher.isStatus;
+import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;

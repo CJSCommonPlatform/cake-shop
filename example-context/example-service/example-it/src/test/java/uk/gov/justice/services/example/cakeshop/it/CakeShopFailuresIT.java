@@ -17,7 +17,7 @@ import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTy
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_RECIPES_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_QUERY_URI;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
-import static uk.gov.justice.services.test.utils.core.matchers.ResponseStatusMatcher.isStatus;
+import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;

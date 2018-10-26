@@ -13,7 +13,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
-import static uk.gov.justice.services.test.utils.core.matchers.ResponseStatusMatcher.isStatus;
+import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
