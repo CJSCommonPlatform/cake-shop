@@ -30,12 +30,12 @@
 
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
-        <common-bom.version>1.27.0</common-bom.version>
-        <framework.version>5.0.0-M1</framework.version>
+        <common-bom.version>1.28.0</common-bom.version>
+        <framework.version>5.0.0-M2</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
-        <event-store.version>1.0.0-M1</event-store.version>
-        <framework-domain.version>1.0.0-M1</framework-domain.version>
-        <framework-generators.version>1.0.0-M1</framework-generators.version>
+        <event-store.version>1.0.0-M4</event-store.version>
+        <framework-domain.version>1.0.0-M3</framework-domain.version>
+        <framework-generators.version>1.0.0-M2</framework-generators.version>
         <file.service.version>1.16.4</file.service.version>
         <framework-api.version>3.0.0-M14</framework-api.version>
         <generator-maven-plugin.version>2.6.1</generator-maven-plugin.version>
@@ -43,7 +43,7 @@
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
         <jboss-vfs.version>3.2.12.Final</jboss-vfs.version>
         <raml-maven-plugin.version>1.6.3</raml-maven-plugin.version>
-        <test-utils.version>1.17.3</test-utils.version>
+        <test-utils.version>1.18.0</test-utils.version>
         <utilities.version>1.15.1</utilities.version>
     </properties>
 
