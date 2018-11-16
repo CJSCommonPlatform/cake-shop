@@ -1,11 +1,13 @@
 package uk.gov.justice.services.example.cakeshop.query.view;
 
 import static uk.gov.justice.services.core.annotation.Component.QUERY_VIEW;
+import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;
 
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
-import uk.gov.justice.services.core.enveloper.Enveloper;
+import uk.gov.justice.services.example.cakeshop.query.view.response.CakesView;
 import uk.gov.justice.services.example.cakeshop.query.view.service.CakeService;
+import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import javax.inject.Inject;
@@ -14,19 +16,13 @@ import javax.inject.Inject;
 @ServiceComponent(QUERY_VIEW)
 public class CakesQueryView {
 
-    private final CakeService service;
-    private final Enveloper enveloper;
-
     @Inject
-    public CakesQueryView(final CakeService service, final Enveloper enveloper) {
-
-        this.service = service;
-        this.enveloper = enveloper;
-    }
+    CakeService service;
 
     @Handles("example.search-cakes")
-    public JsonEnvelope cakes(final JsonEnvelope query) {
-        return enveloper.withMetadataFrom(query, "example.search-cakes").apply(service.cakes());
-
+    public Envelope<CakesView> cakes(final JsonEnvelope query) {
+        return envelop(service.cakes())
+                .withName("example.search-cakes")
+                .withMetadataFrom(query);
     }
 }

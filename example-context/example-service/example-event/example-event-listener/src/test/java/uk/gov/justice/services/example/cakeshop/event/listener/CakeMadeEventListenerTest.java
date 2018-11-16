@@ -4,7 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import uk.gov.justice.services.common.converter.JsonObjectToObjectConverter;
 import uk.gov.justice.services.example.cakeshop.persistence.CakeRepository;
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Cake;
 import uk.gov.justice.services.messaging.Envelope;
@@ -23,9 +22,6 @@ public class CakeMadeEventListenerTest {
 
     @Mock
     private CakeRepository cakeRepository;
-
-    @Mock
-    private JsonObjectToObjectConverter converter;
 
     @InjectMocks
     private CakeMadeEventListener cakeMadeEventListener = new CakeMadeEventListener();

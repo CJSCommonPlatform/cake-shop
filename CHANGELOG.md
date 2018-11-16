@@ -5,6 +5,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+### Changed
+- Update framework-api to 3.0.1
+- Update framework to 5.0.4
+- Update framework-domain to 1.0.3
+- Update event-store to 1.0.4
+- Update framework-generators to 1.0.2
+- Use new Enveloper in service components
+
 ## [1.0.0] - 2018-11-09
 
 ### Added

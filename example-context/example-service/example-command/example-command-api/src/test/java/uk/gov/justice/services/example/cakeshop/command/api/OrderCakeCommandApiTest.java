@@ -10,10 +10,9 @@ import static uk.gov.justice.services.test.utils.core.matchers.HandlerMethodMatc
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
 
-import uk.gov.justice.services.core.enveloper.Enveloper;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.JsonEnvelope;
-import uk.gov.justice.services.test.utils.core.enveloper.EnveloperFactory;
+import uk.gov.justice.services.messaging.spi.DefaultEnvelope;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,12 +27,10 @@ public class OrderCakeCommandApiTest {
     @Mock
     private Sender sender;
 
-    private Enveloper enveloper = EnveloperFactory.createEnveloper();
-
     private OrderCakeCommandApi commandApi;
 
     @Captor
-    private ArgumentCaptor<JsonEnvelope> envelopeCaptor;
+    private ArgumentCaptor<DefaultEnvelope> envelopeCaptor;
 
     @Test
     public void shouldHandleOrderCakeCommand() throws Exception {
@@ -45,7 +42,6 @@ public class OrderCakeCommandApiTest {
     @Test
     public void shouldHandleOrderCakeRequest() {
         commandApi = new OrderCakeCommandApi();
-        commandApi.enveloper = enveloper;
         commandApi.sender = sender;
 
         final JsonEnvelope envelope = envelope()
