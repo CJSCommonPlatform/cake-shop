@@ -10,10 +10,9 @@ import static uk.gov.justice.services.test.utils.core.matchers.HandlerMethodMatc
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
 
-import uk.gov.justice.services.core.enveloper.Enveloper;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.JsonEnvelope;
-import uk.gov.justice.services.test.utils.core.enveloper.EnveloperFactory;
+import uk.gov.justice.services.messaging.spi.DefaultEnvelope;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,17 +28,14 @@ public class RecipeCommandApiTest {
     @Mock
     private Sender sender;
 
-    private Enveloper enveloper = EnveloperFactory.createEnveloper();
-
     private RecipeCommandApi commandApi;
 
     @Captor
-    private ArgumentCaptor<JsonEnvelope> envelopeCaptor;
+    private ArgumentCaptor<DefaultEnvelope> envelopeCaptor;
 
     @Before
     public void setup() {
         commandApi = new RecipeCommandApi();
-        commandApi.enveloper = enveloper;
         commandApi.sender = sender;
     }
 

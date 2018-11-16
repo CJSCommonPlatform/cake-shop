@@ -1,10 +1,10 @@
 package uk.gov.justice.services.example.cakeshop.command.api;
 
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
+import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;
 
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
-import uk.gov.justice.services.core.enveloper.Enveloper;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
@@ -16,11 +16,11 @@ public class OrderCakeCommandApi {
     @Inject
     Sender sender;
 
-    @Inject
-    Enveloper enveloper;
-
     @Handles("example.order-cake")
     public void orderCake(final JsonEnvelope envelope) {
-        sender.send(enveloper.withMetadataFrom(envelope, "example.command.order-cake").apply(envelope.payload()));
+        sender.send(
+                envelop(envelope.payloadAsJsonObject())
+                        .withName("example.command.order-cake")
+                        .withMetadataFrom(envelope));
     }
 }

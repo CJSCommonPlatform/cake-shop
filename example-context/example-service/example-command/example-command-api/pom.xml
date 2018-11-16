@@ -18,12 +18,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>uk.gov.justice.services</groupId>
-            <artifactId>test-utils-enveloper-provider</artifactId>
-            <version>${framework.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
@@ -90,7 +84,12 @@
             <type>pom</type>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>test-utils-enveloper-provider</artifactId>
+            <version>${framework.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -107,11 +106,14 @@
                         </goals>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <generatorName >
+                            <generatorName>
                                 uk.gov.justice.services.clients.messaging.generator.MessagingClientGenerator
                             </generatorName>
-                            <parserName>uk.gov.justice.maven.generator.io.files.parser.RamlFileParser</parserName>
-                            <generatorProperties  implementation="uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties">
+                            <parserName>
+                                uk.gov.justice.maven.generator.io.files.parser.RamlFileParser
+                            </parserName>
+                            <generatorProperties
+                                    implementation="uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties">
                                 <serviceComponent>${cpp.service-component}
                                 </serviceComponent>
                             </generatorProperties>
