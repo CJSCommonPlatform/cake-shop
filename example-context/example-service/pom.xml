@@ -27,6 +27,7 @@
         <module>example-it</module>
         <module>example-liquibase</module>
         <module>example-single</module>
+        <module>example-initialisation-liquibase</module>
     </modules>
 
     <build>
