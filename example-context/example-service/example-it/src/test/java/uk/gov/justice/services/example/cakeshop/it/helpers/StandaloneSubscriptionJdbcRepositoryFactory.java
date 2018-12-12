@@ -1,6 +1,6 @@
 package uk.gov.justice.services.example.cakeshop.it.helpers;
 
-import static uk.gov.justice.services.test.utils.common.reflection.ReflectionUtils.setField;
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
 import uk.gov.justice.services.event.buffer.core.repository.subscription.SubscriptionJdbcRepository;
 import uk.gov.justice.services.jdbc.persistence.JdbcRepositoryHelper;

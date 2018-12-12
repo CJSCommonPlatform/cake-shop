@@ -4,7 +4,7 @@ import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
-import static uk.gov.justice.services.test.utils.common.reflection.ReflectionUtils.setField;
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
 import uk.gov.justice.domain.snapshot.AggregateSnapshot;
 import uk.gov.justice.domain.snapshot.DefaultObjectInputStreamStrategy;

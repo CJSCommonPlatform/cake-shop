@@ -5,6 +5,19 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+### Changed
+- Update framework-api to 3.1.0-M2
+- Update framework to 5.1.0-M3
+- Update framework-domain to 1.1.0-M3
+- Update event-store to 1.1.0-M1
+- Update framework-generators to 1.1.0-M1
+- Update test-utils to 1.19.0
+
+### Added
+- Liquibase script to add events into event_log before startup
+- CakeShopReplayEvents IT to test the replaying of events on startup
+- SubscriptionEventInterceptor into Event Listener to update Subscription event number
+
 ## [1.0.1] - 2018-12-11
 
 ### Changed

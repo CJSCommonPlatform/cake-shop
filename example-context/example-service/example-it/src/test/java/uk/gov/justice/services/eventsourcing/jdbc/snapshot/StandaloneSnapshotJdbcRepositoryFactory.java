@@ -1,6 +1,6 @@
 package uk.gov.justice.services.eventsourcing.jdbc.snapshot;
 
-import static uk.gov.justice.services.test.utils.common.reflection.ReflectionUtils.setField;
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
 import javax.sql.DataSource;
 
