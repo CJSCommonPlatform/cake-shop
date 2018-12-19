@@ -5,6 +5,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [1.0.2] - 2018-12-19
+
+### Changed
+- Update framework to 5.0.5
+- Update framework-domain to 1.0.4
+- Update event-store to 1.0.6
+- Update framework-generators to 1.0.4
+
 ## [1.0.1] - 2018-12-11
 
 ### Changed
