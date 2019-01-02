@@ -1,6 +1,9 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
 import static com.jayway.jsonassert.JsonAssert.with;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 import static java.util.UUID.fromString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -15,6 +18,9 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.test.utils.core.messaging.Poller;
+
+import java.util.Optional;
 
 import javax.ws.rs.client.Client;
 
@@ -27,9 +33,8 @@ public class CakeShopReplayEventsIT {
 
     private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
 
-    private final EventFactory eventFactory = new EventFactory();
-    private final EventFinder eventFinder = new EventFinder(CAKE_SHOP_REPOSITORY_MANAGER);
-    private final CommandFactory commandFactory = new CommandFactory();
+    private final Poller poller = new Poller();
+
 
     private Client client;
     private Querier querier;
@@ -56,14 +61,16 @@ public class CakeShopReplayEventsIT {
         final String recipeId_1 = "489c5e3b-8c0c-4e26-855f-34592604bd98";
         final String recipeId_2 = "8440bcc3-a4d6-4bd1-817c-ab89ffd307ae";
 
-        final ApiResponse response_1 = querier.queryForRecipe(recipeId_1);
-        final ApiResponse response_2 = querier.queryForRecipe(recipeId_2);
+        final Optional<String> response_1 = poller.pollUntilFound(() -> getRecipe(recipeId_1));
+        final Optional<String> response_2 = poller.pollUntilFound(() -> getRecipe(recipeId_2));
+        assertThat(response_1.isPresent(), is(true));
+        assertThat(response_2.isPresent(), is(true));
 
-        with(response_1.body())
+        with(response_1.get())
                 .assertThat("$.id", equalTo(recipeId_1))
                 .assertThat("$.name", equalTo("Turnip Cake"));
 
-        with(response_2.body())
+        with(response_2.get())
                 .assertThat("$.id", equalTo(recipeId_2))
                 .assertThat("$.name", equalTo("Rock Cake"));
 
@@ -71,10 +78,19 @@ public class CakeShopReplayEventsIT {
         assertThat(subscription(recipeId_2).getPosition(), is(2L));
     }
 
+    private Optional<String> getRecipe(final String recipeId) {
+        final String body = querier.queryForRecipe(recipeId).body();
+
+        if (body == null || body.isEmpty()) {
+            return empty();
+        }
+        return of(body);
+    }
+
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     private Subscription subscription(final String recipeId) {
         return CAKE_SHOP_REPOSITORY_MANAGER
-                .getSubscriptionJdbcRepository()
+                .getStreamStatusJdbcRepository()
                 .findByStreamIdAndSource(fromString(recipeId), CONTEXT_NAME)
                 .get();
     }

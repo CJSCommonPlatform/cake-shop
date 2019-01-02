@@ -2,15 +2,15 @@ package uk.gov.justice.services.example.cakeshop.it.helpers;
 
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
-import uk.gov.justice.services.event.buffer.core.repository.subscription.SubscriptionJdbcRepository;
+import uk.gov.justice.services.event.buffer.core.repository.subscription.StreamStatusJdbcRepository;
 import uk.gov.justice.services.jdbc.persistence.JdbcRepositoryHelper;
 
 import javax.sql.DataSource;
 
-public class StandaloneSubscriptionJdbcRepositoryFactory {
+public class StandaloneStreamStatusJdbcRepositoryFactory {
 
-    public SubscriptionJdbcRepository getSnapshotSubscriptionJdbcRepository(final DataSource dataSource) {
-        final SubscriptionJdbcRepository snapshotJdbcRepository = new SubscriptionJdbcRepository();
+    public StreamStatusJdbcRepository getSnapshotSubscriptionJdbcRepository(final DataSource dataSource) {
+        final StreamStatusJdbcRepository snapshotJdbcRepository = new StreamStatusJdbcRepository();
 
         setField(snapshotJdbcRepository, "dataSource", dataSource);
         setField(snapshotJdbcRepository, "jdbcRepositoryHelper", new JdbcRepositoryHelper());
