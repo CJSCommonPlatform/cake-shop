@@ -89,6 +89,12 @@
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.event-store</groupId>
+            <artifactId>subscription-repository-jdbc</artifactId>
+            <version>${event-store.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.event-store</groupId>
             <artifactId>event-buffer-core</artifactId>
             <version>${event-store.version}</version>
             <scope>test</scope>

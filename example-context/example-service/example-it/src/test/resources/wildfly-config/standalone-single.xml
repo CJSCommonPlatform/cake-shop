@@ -105,19 +105,19 @@
                 <append value="true"/>
             </periodic-rotating-file-handler>
             <logger category="com.arjuna">
-                <level name="WARN"/>
+                <level name="INFO"/>
             </logger>
             <logger category="org.jboss.as.config">
-                <level name="WARN"/>
+                <level name="INFO"/>
             </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
             <logger category="uk.gov.justice">
-                <level name="WARN"/>
+                <level name="INFO"/>
             </logger>
             <root-logger>
-                <level name="WARN"/>
+                <level name="INFO"/>
                 <handlers>
                     <handler name="CONSOLE"/>
                     <handler name="FILE"/>
@@ -376,40 +376,120 @@
             </server>
         </subsystem>
 
+        <!-- Data sources -->
         <subsystem xmlns="urn:jboss:domain:datasources:4.0">
             <datasources>
-                <datasource jndi-name="java:/app/example-single/DS.eventstore"
-                            pool-name="DS.example.eventstore" enabled="true"
-                            use-java-context="true">
-                    <connection-url>${db.eventstore.url}</connection-url>
+                
+                <!-- eventstore datasource -->
+                <!--<datasource jndi-name="java:/app/example-single/DS.eventstore"-->
+                            <!--pool-name="DS.example.eventstore" enabled="true"-->
+                            <!--use-java-context="true">-->
+                    <!--<connection-url>${db.eventstore.url}</connection-url>-->
+                    <!--<driver>postgres</driver>-->
+                    <!--<pool>-->
+                        <!--<min-pool-size>3</min-pool-size>-->
+                        <!--<max-pool-size>3</max-pool-size>-->
+                        <!--<prefill>true</prefill>-->
+                    <!--</pool>-->
+                    <!--<security>-->
+                        <!--<user-name>${db.eventstore.userName}</user-name>-->
+                        <!--<password>${db.eventstore.password}</password>-->
+                    <!--</security>-->
+                <!--</datasource>-->
+
+                <xa-datasource jndi-name="java:/app/example-single/DS.eventstore"
+                               pool-name="DS.example.eventstore" enabled="true" spy="true"
+                               statistics-enabled="true" use-java-context="true" use-ccm="true">
                     <driver>postgres</driver>
-                    <pool>
-                        <min-pool-size>3</min-pool-size>
-                        <max-pool-size>3</max-pool-size>
-                        <prefill>true</prefill>
-                    </pool>
+                    <xa-datasource-property name="ServerName">localhost</xa-datasource-property>
+                    <xa-datasource-property name="PortNumber">5432</xa-datasource-property>
+                    <xa-datasource-property name="DatabaseName">frameworkeventstore
+                    </xa-datasource-property>
+                    <xa-datasource-property name="ApplicationName">cake-shop
+                    </xa-datasource-property>
+                    <xa-datasource-property name="CurrentSchema">public</xa-datasource-property>
+                    <xa-datasource-property name="LogLevel">0</xa-datasource-property>
+                    <xa-pool>
+                        <min-pool-size>1</min-pool-size>
+                        <initial-pool-size>20</initial-pool-size>
+                        <max-pool-size>50</max-pool-size>
+                        <allow-multiple-users>true</allow-multiple-users>
+                    </xa-pool>
+                    <timeout>
+                        <xa-resource-timeout>100</xa-resource-timeout>
+                    </timeout>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <statement>
+                        <track-statements>true</track-statements>
+                    </statement>
                     <security>
                         <user-name>${db.eventstore.userName}</user-name>
                         <password>${db.eventstore.password}</password>
                     </security>
-                </datasource>
-                <datasource jndi-name="java:/DS.example" pool-name="DS.example" enabled="true"
-                            use-java-context="true">
-                    <connection-url>${db.example.url}</connection-url>
+                    <validation>
+                        <exception-sorter
+                                class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
+                        <valid-connection-checker
+                                class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+                    </validation>
+                </xa-datasource>
+
+                <!-- viewstore datasource -->
+                <!--<datasource jndi-name="java:/DS.example" pool-name="DS.example" enabled="true"-->
+                            <!--use-java-context="true">-->
+                    <!--<connection-url>${db.example.url}</connection-url>-->
+                    <!--<driver>postgres</driver>-->
+                    <!--<pool>-->
+                        <!--<min-pool-size>3</min-pool-size>-->
+                        <!--<max-pool-size>3</max-pool-size>-->
+                        <!--<prefill>true</prefill>-->
+                    <!--</pool>-->
+                    <!--<security>-->
+                        <!--<user-name>${db.example.userName}</user-name>-->
+                        <!--<password>${db.example.password}</password>-->
+                    <!--</security>-->
+                    <!--<validation>-->
+                        <!--<check-valid-connection-sql>select 1</check-valid-connection-sql>-->
+                    <!--</validation>-->
+                <!--</datasource>-->
+                <xa-datasource jndi-name="java:/DS.example" pool-name="DS.example"
+                               enabled="true" spy="true" statistics-enabled="true"
+                               use-java-context="true" use-ccm="true">
                     <driver>postgres</driver>
-                    <pool>
-                        <min-pool-size>3</min-pool-size>
-                        <max-pool-size>3</max-pool-size>
-                        <prefill>true</prefill>
-                    </pool>
+                    <xa-datasource-property name="ServerName">localhost</xa-datasource-property>
+                    <xa-datasource-property name="PortNumber">5432</xa-datasource-property>
+                    <xa-datasource-property name="DatabaseName">frameworkviewstore
+                    </xa-datasource-property>
+                    <xa-datasource-property name="ApplicationName">cake-shop
+                    </xa-datasource-property>
+                    <xa-datasource-property name="CurrentSchema">public</xa-datasource-property>
+                    <xa-datasource-property name="LogLevel">0</xa-datasource-property>
+                    <xa-pool>
+                        <min-pool-size>0</min-pool-size>
+                        <initial-pool-size>20</initial-pool-size>
+                        <max-pool-size>50</max-pool-size>
+                        <allow-multiple-users>false</allow-multiple-users>
+                    </xa-pool>
+                    <timeout>
+                        <xa-resource-timeout>0</xa-resource-timeout>
+                    </timeout>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <statement>
+                        <track-statements>true</track-statements>
+                    </statement>
                     <security>
                         <user-name>${db.example.userName}</user-name>
                         <password>${db.example.password}</password>
                     </security>
                     <validation>
-                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                        <exception-sorter
+                                class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
+                        <valid-connection-checker
+                                class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
                     </validation>
-                </datasource>
+                </xa-datasource>
+
+                <!-- file service datasource -->
                <datasource jndi-name="java:/DS.fileservice" pool-name="DS.fileservice" enabled="true"
                             use-java-context="true">
                     <connection-url>${db.fileservice.url}</connection-url>
@@ -427,14 +507,19 @@
                         <check-valid-connection-sql>select 1</check-valid-connection-sql>
                     </validation>
                 </datasource>
+
+
                 <drivers>
                     <driver name="postgres" module="org.postgresql">
                         <driver-class>org.postgresql.Driver</driver-class>
                         <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
                     </driver>
                 </drivers>
+
             </datasources>
         </subsystem>
+
+
         <subsystem xmlns="urn:jboss:domain:naming:2.0">
             <bindings>
                 <simple name="java:/app/example-single/audit.blacklist" value="example.*" type="java.lang.String"/>
