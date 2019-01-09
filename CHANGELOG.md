@@ -5,13 +5,18 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [1.1.0] - 2019-01-09
+
 ### Changed
-- Update framework-api to 3.1.0-M2
-- Update framework to 5.1.0-M3
-- Update framework-domain to 1.1.0-M3
-- Update event-store to 1.1.0-M1
-- Update framework-generators to 1.1.0-M1
-- Update test-utils to 1.19.0
+- Update framework-api to 3.1.0
+- Update framework to 5.1.0
+- Update framework-domain to 1.1.0
+- Update event-store to 1.1.0
+- Update framework-generators to 1.1.0
+- Update utilities to 1.16.2
+- Update test-utils to 1.19.1
+- Update file-service to 1.17.2
+- Update json-schema-catalog to 1.4.3
 
 ### Added
 - Liquibase script to add events into event_log before startup
