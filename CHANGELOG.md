@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+### Changed
+- Update event-store to 1.1.1
+- Update framework-generators to 1.1.1
+
 ## [1.1.0] - 2019-01-09
 
 ### Changed
