@@ -114,10 +114,10 @@
                 <level name="WARN"/>
             </logger>
             <logger category="uk.gov.justice">
-                <level name="WARN"/>
+                <level name="INFO"/>
             </logger>
             <root-logger>
-                <level name="WARN"/>
+                <level name="INFO"/>
                 <handlers>
                     <handler name="CONSOLE"/>
                     <handler name="FILE"/>
@@ -439,6 +439,7 @@
             <bindings>
                 <simple name="java:/app/example-single/audit.blacklist" value="example.*" type="java.lang.String"/>
                 <simple name="java:/app/example-single/default.strategy.snapshot.threshold" value="3" type="java.lang.String"/>
+                <simple name="java:/app/example-single/event.catchup.enabled" value="false" type="java.lang.String"/>
                 <simple name="java:global/envelope.validation.exception.handler" value="uk.gov.justice.services.core.envelope.RethrowingValidationExceptionHandler" type="java.lang.String"/>
             </bindings>
             <remote-naming/>
