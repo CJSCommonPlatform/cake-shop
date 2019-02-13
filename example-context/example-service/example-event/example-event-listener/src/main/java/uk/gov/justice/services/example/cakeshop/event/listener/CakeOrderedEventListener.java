@@ -16,7 +16,7 @@ public class CakeOrderedEventListener {
     @Inject
     CakeOrderRepository repository;
 
-    @Handles("example.cake-ordered")
+    @Handles("example.events.cake-ordered")
     public void handle(final Envelope<CakeOrder> envelope) {
         //Best practice is to handle a value object rather than an entity
         //because the event typically would not cover an entire entity.

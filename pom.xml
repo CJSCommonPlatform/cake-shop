@@ -37,7 +37,7 @@
         <framework-domain.version>1.1.1</framework-domain.version>
         <framework-generators.version>1.2.0-M1</framework-generators.version>
         <file.service.version>1.17.4</file.service.version>
-        <framework-api.version>3.2.0</framework-api.version>
+        <framework-api.version>3.3.0</framework-api.version>
         <generator-maven-plugin.version>2.6.2</generator-maven-plugin.version>
         <json-schema-catalog.version>1.4.5</json-schema-catalog.version>
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
@@ -45,6 +45,7 @@
         <raml-maven-plugin.version>1.6.5</raml-maven-plugin.version>
         <test-utils.version>1.22.0</test-utils.version>
         <utilities.version>1.16.4</utilities.version>
+        <annotation-validator-maven-plugin.version>1.0.1</annotation-validator-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -123,7 +124,40 @@
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>uk.gov.justice.maven</groupId>
+                <artifactId>annotation-validator-maven-plugin</artifactId>
+                <version>${annotation-validator-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check-annotations</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <generateReport>true</generateReport>
+                            <!-- Setting the below property to true to break the build if event naming convention not followed-->
+                            <failBuildOnError>true</failBuildOnError>
+                            <validationSkip>false</validationSkip>
+                            <annotations>
+                                <annotation>uk.gov.justice.domain.annotation.Event</annotation>
+                            </annotations>
+                            <validatorProperties>
+                                <serviceName>example</serviceName>
+                            </validatorProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>uk.gov.justice.framework-api</groupId>
+                        <artifactId>framework-api-validator</artifactId>
+                        <version>${framework-api.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
+
     </build>
 
     <profiles>

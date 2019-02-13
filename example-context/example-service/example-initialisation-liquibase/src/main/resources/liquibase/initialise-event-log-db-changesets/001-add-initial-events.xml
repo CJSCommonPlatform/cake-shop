@@ -10,9 +10,9 @@
             <column name="id" value="00b78ee7-5d2c-4b6d-858e-0701d0412515"/>
             <column name="stream_id" value="489c5e3b-8c0c-4e26-855f-34592604bd98"/>
             <column name="position_in_stream" value="1"/>
-            <column name="name" value="example.recipe-added"/>
+            <column name="name" value="example.events.recipe-added"/>
             <column name="payload" value="{&quot;recipeId&quot;:&quot;489c5e3b-8c0c-4e26-855f-34592604bd98&quot;,&quot;name&quot;:&quot;Carrot Cake&quot;,&quot;ingredients&quot;:[{&quot;name&quot;:&quot;someIngredient&quot;,&quot;quantity&quot;:1}],&quot;glutenFree&quot;:false}" />
-            <column name="metadata" value="{&quot;createdAt&quot;:&quot;2018-12-06T16:32:48.725Z&quot;,&quot;id&quot;:&quot;00b78ee7-5d2c-4b6d-858e-0701d0412515&quot;,&quot;name&quot;:&quot;example.recipe-added&quot;,&quot;causation&quot;:[&quot;63bc8905-2705-41f9-892e-946e632b1837&quot;,&quot;ffbf5c08-df37-4203-ad81-f8f12edfed2b&quot;],&quot;stream&quot;:{&quot;id&quot;:&quot;489c5e3b-8c0c-4e26-855f-34592604bd98&quot;,&quot;version&quot;:1},&quot;source&quot;:&quot;event.source&quot;,&quot;event&quot;:{&quot;eventNumber&quot;:1,&quot;previousEventNumber&quot;:0}}"/>
+            <column name="metadata" value="{&quot;createdAt&quot;:&quot;2018-12-06T16:32:48.725Z&quot;,&quot;id&quot;:&quot;00b78ee7-5d2c-4b6d-858e-0701d0412515&quot;,&quot;name&quot;:&quot;example.events.recipe-added&quot;,&quot;causation&quot;:[&quot;63bc8905-2705-41f9-892e-946e632b1837&quot;,&quot;ffbf5c08-df37-4203-ad81-f8f12edfed2b&quot;],&quot;stream&quot;:{&quot;id&quot;:&quot;489c5e3b-8c0c-4e26-855f-34592604bd98&quot;,&quot;version&quot;:1},&quot;source&quot;:&quot;event.source&quot;,&quot;event&quot;:{&quot;eventNumber&quot;:1,&quot;previousEventNumber&quot;:0}}"/>
             <column name="date_created" value="2018-12-06 16:32:48.725+00"/>
             <column name="event_number" value="1"/>
         </insert>
@@ -21,9 +21,9 @@
             <column name="id" value="f05cc199-52ab-40a6-ae88-465f810340f6"/>
             <column name="stream_id" value="8440bcc3-a4d6-4bd1-817c-ab89ffd307ae"/>
             <column name="position_in_stream" value="1"/>
-            <column name="name" value="example.recipe-added"/>
+            <column name="name" value="example.events.recipe-added"/>
             <column name="payload" value="{&quot;recipeId&quot;:&quot;8440bcc3-a4d6-4bd1-817c-ab89ffd307ae&quot;,&quot;name&quot;:&quot;Lemon Drizzle Cake&quot;,&quot;ingredients&quot;:[{&quot;name&quot;:&quot;someIngredient&quot;,&quot;quantity&quot;:1}],&quot;glutenFree&quot;:false}" />
-            <column name="metadata" value="{&quot;createdAt&quot;:&quot;2018-12-07T13:29:54.719Z&quot;,&quot;id&quot;:&quot;f05cc199-52ab-40a6-ae88-465f810340f6&quot;,&quot;name&quot;:&quot;example.recipe-added&quot;,&quot;causation&quot;:[&quot;ed137a6a-551c-4f8e-8ca2-b1a1cafe2e0d&quot;,&quot;c6da75ac-41c2-4994-81b7-1a9705c1550f&quot;],&quot;stream&quot;:{&quot;id&quot;:&quot;8440bcc3-a4d6-4bd1-817c-ab89ffd307ae&quot;,&quot;version&quot;:1},&quot;source&quot;:&quot;event.source&quot;,&quot;event&quot;:{&quot;eventNumber&quot;:2,&quot;previousEventNumber&quot;:1}}"/>
+            <column name="metadata" value="{&quot;createdAt&quot;:&quot;2018-12-07T13:29:54.719Z&quot;,&quot;id&quot;:&quot;f05cc199-52ab-40a6-ae88-465f810340f6&quot;,&quot;name&quot;:&quot;example.events.recipe-added&quot;,&quot;causation&quot;:[&quot;ed137a6a-551c-4f8e-8ca2-b1a1cafe2e0d&quot;,&quot;c6da75ac-41c2-4994-81b7-1a9705c1550f&quot;],&quot;stream&quot;:{&quot;id&quot;:&quot;8440bcc3-a4d6-4bd1-817c-ab89ffd307ae&quot;,&quot;version&quot;:1},&quot;source&quot;:&quot;event.source&quot;,&quot;event&quot;:{&quot;eventNumber&quot;:2,&quot;previousEventNumber&quot;:1}}"/>
             <column name="date_created" value="2018-12-06 16:32:48.725+00"/>
             <column name="event_number" value="2"/>
         </insert>
@@ -32,9 +32,9 @@
             <column name="id" value="a4fd2ad1-1bef-47dc-9ba5-7525dee670b0"/>
             <column name="stream_id" value="489c5e3b-8c0c-4e26-855f-34592604bd98"/>
             <column name="position_in_stream" value="2"/>
-            <column name="name" value="example.recipe-renamed"/>
+            <column name="name" value="example.events.recipe-renamed"/>
             <column name="payload" value="{&quot;recipeId&quot;:&quot;489c5e3b-8c0c-4e26-855f-34592604bd98&quot;,&quot;name&quot;:&quot;Turnip Cake&quot;}" />
-            <column name="metadata" value="{&quot;createdAt&quot;:&quot;2018-12-06T16:32:52.325Z&quot;,&quot;id&quot;:&quot;a4fd2ad1-1bef-47dc-9ba5-7525dee670b0&quot;,&quot;name&quot;:&quot;example.recipe-renamed&quot;,&quot;causation&quot;:[&quot;6d1aa026-85fc-4757-8f67-634d43f74969&quot;,&quot;0868cb11-6fd8-49ac-8f77-69e8ee203ee1&quot;],&quot;stream&quot;:{&quot;id&quot;:&quot;489c5e3b-8c0c-4e26-855f-34592604bd98&quot;,&quot;version&quot;:2},&quot;source&quot;:&quot;event.source&quot;,&quot;event&quot;:{&quot;eventNumber&quot;:3,&quot;previousEventNumber&quot;:2}}"/>
+            <column name="metadata" value="{&quot;createdAt&quot;:&quot;2018-12-06T16:32:52.325Z&quot;,&quot;id&quot;:&quot;a4fd2ad1-1bef-47dc-9ba5-7525dee670b0&quot;,&quot;name&quot;:&quot;example.events.recipe-renamed&quot;,&quot;causation&quot;:[&quot;6d1aa026-85fc-4757-8f67-634d43f74969&quot;,&quot;0868cb11-6fd8-49ac-8f77-69e8ee203ee1&quot;],&quot;stream&quot;:{&quot;id&quot;:&quot;489c5e3b-8c0c-4e26-855f-34592604bd98&quot;,&quot;version&quot;:2},&quot;source&quot;:&quot;event.source&quot;,&quot;event&quot;:{&quot;eventNumber&quot;:3,&quot;previousEventNumber&quot;:2}}"/>
             <column name="date_created" value="2018-12-06 16:32:52.325+00"/>
             <column name="event_number" value="3"/>
         </insert>
@@ -43,9 +43,9 @@
             <column name="id" value="ceeb2594-3d66-4187-b660-4eae72ab6dac"/>
             <column name="stream_id" value="8440bcc3-a4d6-4bd1-817c-ab89ffd307ae"/>
             <column name="position_in_stream" value="2"/>
-            <column name="name" value="example.recipe-renamed"/>
+            <column name="name" value="example.events.recipe-renamed"/>
             <column name="payload" value="{&quot;recipeId&quot;:&quot;8440bcc3-a4d6-4bd1-817c-ab89ffd307ae&quot;,&quot;name&quot;:&quot;Rock Cake&quot;}" />
-            <column name="metadata" value="{&quot;createdAt&quot;:&quot;2018-12-07T13:29:57.250Z&quot;,&quot;id&quot;:&quot;ceeb2594-3d66-4187-b660-4eae72ab6dac&quot;,&quot;name&quot;:&quot;example.recipe-renamed&quot;,&quot;causation&quot;:[&quot;e67cbf7c-ede1-4a17-8966-2da413967849&quot;,&quot;5c31a322-f201-4340-939a-8e0cd4c67836&quot;],&quot;stream&quot;:{&quot;id&quot;:&quot;8440bcc3-a4d6-4bd1-817c-ab89ffd307ae&quot;,&quot;version&quot;:2},&quot;source&quot;:&quot;event.source&quot;,&quot;event&quot;:{&quot;eventNumber&quot;:4,&quot;previousEventNumber&quot;:3}}"/>
+            <column name="metadata" value="{&quot;createdAt&quot;:&quot;2018-12-07T13:29:57.250Z&quot;,&quot;id&quot;:&quot;ceeb2594-3d66-4187-b660-4eae72ab6dac&quot;,&quot;name&quot;:&quot;example.events.recipe-renamed&quot;,&quot;causation&quot;:[&quot;e67cbf7c-ede1-4a17-8966-2da413967849&quot;,&quot;5c31a322-f201-4340-939a-8e0cd4c67836&quot;],&quot;stream&quot;:{&quot;id&quot;:&quot;8440bcc3-a4d6-4bd1-817c-ab89ffd307ae&quot;,&quot;version&quot;:2},&quot;source&quot;:&quot;event.source&quot;,&quot;event&quot;:{&quot;eventNumber&quot;:4,&quot;previousEventNumber&quot;:3}}"/>
             <column name="date_created" value="2018-12-06 16:32:52.325+00"/>
             <column name="event_number" value="4"/>
         </insert>
