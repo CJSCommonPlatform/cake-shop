@@ -45,6 +45,7 @@
         <raml-maven-plugin.version>1.6.5</raml-maven-plugin.version>
         <test-utils.version>1.22.0</test-utils.version>
         <utilities.version>1.16.4</utilities.version>
+        <annotation-validator-maven-plugin.version>1.0.1</annotation-validator-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -126,7 +127,7 @@
             <plugin>
                 <groupId>uk.gov.justice.maven</groupId>
                 <artifactId>annotation-validator-maven-plugin</artifactId>
-                <version>1.0.1</version>
+                <version>${annotation-validator-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
