@@ -125,7 +125,7 @@ public class CakeShopIT {
         await().until(() -> eventFinder.eventsWithPayloadContaining(recipeId).size() == 1);
 
         final Event event = eventFinder.eventsWithPayloadContaining(recipeId).get(0);
-        assertThat(event.getName(), is("example.recipe-added"));
+        assertThat(event.getName(), is("example.events.recipe-added"));
         with(event.getMetadata())
                 .assertEquals("stream.id", recipeId)
                 .assertEquals("stream.version", 1);

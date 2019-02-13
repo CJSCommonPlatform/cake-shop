@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://justice.gov.uk/example/event/example.recipe-renamed.json",
+  "id": "http://justice.gov.uk/example/event/example.events.recipe-photograph-added.json",
   "type": "object",
   "properties": {
     "recipeId": {
@@ -10,15 +10,16 @@
       "name": "id of recipe",
       "title": "id of recipe"
     },
-    "name": {
-      "id": "/name",
+    "photoId": {
+      "id": "/photoId",
       "type": "string",
-      "description": "Name of the recipe",
-      "name": "Name of Cake",
-      "title": "Name of Cake"
+      "description": "Id of photo",
+      "name": "Id of photo",
+      "title": "Id of photo"
     }
   },
   "required": [
-    "name"
+    "recipeId",
+    "photoId"
   ]
 }
