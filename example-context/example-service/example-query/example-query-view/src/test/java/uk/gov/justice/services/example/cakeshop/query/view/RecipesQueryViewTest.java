@@ -233,7 +233,6 @@ public class RecipesQueryViewTest {
 
         assertThat(response.metadata().name(), is("example.get-recipe-photograph"));
         assertThat(response.payload().getFileId(), is(fileId));
-
     }
 
     @Test
@@ -252,7 +251,5 @@ public class RecipesQueryViewTest {
         final Envelope<PhotoView> response = queryView.findRecipePhoto(envelope);
         assertThat(response.metadata().name(), is("example.get-recipe-photograph"));
         assertThat(response.payload(), is(nullValue()));
-
     }
-
 }

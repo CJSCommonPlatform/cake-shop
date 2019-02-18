@@ -5,6 +5,9 @@ import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.core.requester.Requester;
+import uk.gov.justice.services.example.cakeshop.query.api.request.SearchRecipes;
+import uk.gov.justice.services.example.cakeshop.query.api.response.RecipesView;
+import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import javax.inject.Inject;
@@ -26,8 +29,8 @@ public class RecipesQueryApi {
     }
 
     @Handles("example.query-recipes")
-    public JsonEnvelope queryRecipes(final JsonEnvelope query) {
-        return requester.request(query);
+    public Envelope<RecipesView> queryRecipes(final Envelope<SearchRecipes> query) {
+        return requester.request(query, RecipesView.class);
     }
 
     @Handles("example.get-recipe-photograph")
