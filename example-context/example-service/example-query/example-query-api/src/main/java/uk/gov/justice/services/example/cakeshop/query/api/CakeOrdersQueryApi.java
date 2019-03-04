@@ -6,7 +6,9 @@ import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.core.requester.Requester;
-import uk.gov.justice.services.messaging.JsonEnvelope;
+import uk.gov.justice.services.example.cakeshop.query.api.request.SearchCakeOrder;
+import uk.gov.justice.services.example.cakeshop.query.api.response.CakeOrderView;
+import uk.gov.justice.services.messaging.Envelope;
 
 import javax.inject.Inject;
 
@@ -17,7 +19,7 @@ public class CakeOrdersQueryApi {
     Requester requester;
 
     @Handles("example.get-order")
-    public JsonEnvelope getOrder(final JsonEnvelope query) {
-        return requester.request(query);
+    public Envelope<CakeOrderView> getOrder(final Envelope<SearchCakeOrder> query) {
+        return requester.request(query, CakeOrderView.class);
     }
 }

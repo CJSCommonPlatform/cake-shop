@@ -5,10 +5,10 @@ import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;
 import uk.gov.justice.services.core.annotation.Component;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
+import uk.gov.justice.services.example.cakeshop.query.view.request.SearchCakeOrder;
 import uk.gov.justice.services.example.cakeshop.query.view.response.CakeOrderView;
 import uk.gov.justice.services.example.cakeshop.query.view.service.CakeOrderService;
 import uk.gov.justice.services.messaging.Envelope;
-import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import javax.inject.Inject;
 
@@ -19,8 +19,8 @@ public class CakeOrdersQueryView {
     CakeOrderService service;
 
     @Handles("example.get-order")
-    public Envelope<CakeOrderView> findOrder(final JsonEnvelope query) {
-        final String orderId = query.payloadAsJsonObject().getString("orderId");
+    public Envelope<CakeOrderView> findOrder(final Envelope<SearchCakeOrder> query) {
+        final String orderId = query.payload().getOrderId().toString();
 
         return envelop(service.findOrder(orderId))
                 .withName("example.get-order")

@@ -5,11 +5,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_VIEW;
+import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.test.utils.core.matchers.HandlerMatcher.isHandler;
 import static uk.gov.justice.services.test.utils.core.matchers.HandlerMethodMatcher.method;
-import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
 
+import uk.gov.justice.services.example.cakeshop.query.view.request.SearchCakeOrder;
 import uk.gov.justice.services.example.cakeshop.query.view.response.CakeOrderView;
 import uk.gov.justice.services.example.cakeshop.query.view.service.CakeOrderService;
 import uk.gov.justice.services.messaging.Envelope;
@@ -45,11 +46,13 @@ public class CakeOrdersQueryViewTest {
         final UUID recipeId = UUID.randomUUID();
         final ZonedDateTime deliveryDate = ZonedDateTime.now();
 
+        final SearchCakeOrder searchCakeOrder = new SearchCakeOrder(orderId, recipeId, deliveryDate);
+
+        final Envelope<SearchCakeOrder> query = envelopeFrom(metadataWithDefaults(), searchCakeOrder);
+
         when(service.findOrder(orderId.toString())).thenReturn(new CakeOrderView(orderId, recipeId, deliveryDate));
 
-        final Envelope<CakeOrderView> response = queryView.findOrder(
-                envelope().with(metadataWithDefaults())
-                        .withPayloadOf(orderId.toString(), "orderId").build());
+        final Envelope<CakeOrderView> response = queryView.findOrder(query);
 
         assertThat(response.payload().getOrderId(), equalTo(orderId));
         assertThat(response.payload().getRecipeId(), equalTo(recipeId));

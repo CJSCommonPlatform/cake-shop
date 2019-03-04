@@ -50,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
-            <artifactId>test-utils-core</artifactId>
+            <artifactId>test-utils-common</artifactId>
             <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
@@ -75,12 +75,6 @@
             <groupId>uk.gov.justice.schema</groupId>
             <artifactId>schema-service</artifactId>
             <version>${json-schema-catalog.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>uk.gov.justice.services</groupId>
-            <artifactId>core</artifactId>
-            <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

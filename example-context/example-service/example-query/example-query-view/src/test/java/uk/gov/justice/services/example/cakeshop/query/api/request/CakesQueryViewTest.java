@@ -1,4 +1,4 @@
-package uk.gov.justice.services.example.cakeshop.query.view;
+package uk.gov.justice.services.example.cakeshop.query.api.request;
 
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
@@ -11,6 +11,7 @@ import static uk.gov.justice.services.test.utils.core.matchers.HandlerMethodMatc
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
 
+import uk.gov.justice.services.example.cakeshop.query.view.CakesQueryView;
 import uk.gov.justice.services.example.cakeshop.query.view.response.CakeView;
 import uk.gov.justice.services.example.cakeshop.query.view.response.CakesView;
 import uk.gov.justice.services.example.cakeshop.query.view.service.CakeService;
