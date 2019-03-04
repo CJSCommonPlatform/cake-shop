@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://justice.gov.uk/example/event/example.recipe-removed.json",
+  "id": "http://justice.gov.uk/example/event/example.events.recipe-removed.json",
   "type": "object",
   "properties": {
     "recipeId": {

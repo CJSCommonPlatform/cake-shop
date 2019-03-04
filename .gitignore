@@ -66,7 +66,6 @@ sftp-config.json
 
 # OS generated files #
 ######################
-.DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
@@ -84,3 +83,7 @@ conf/login.config
 conf/openejb.xml
 conf/users.properties
 conf/conf.d/
+
+# Annotation validator plugin reports #
+#######################################
+**/annotation-plugin-validation-result*

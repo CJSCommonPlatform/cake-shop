@@ -5,9 +5,9 @@ subscriptions_descriptor:
   subscriptions:
     - name: event processor subscription
       events:
-        - name: example.recipe-added
-          schema_uri: http://justice.gov.uk/example/event/example.recipe-added.json
+        - name: example.events.recipe-added
+          schema_uri: http://justice.gov.uk/example/event/example.events.recipe-added.json
 
-        - name: example.cake-made
-          schema_uri: http://justice.gov.uk/example/event/example.cake-made.json
+        - name: example.events.cake-made
+          schema_uri: http://justice.gov.uk/example/event/example.events.cake-made.json
       event_source_name: private.event.source

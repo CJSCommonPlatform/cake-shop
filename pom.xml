@@ -45,6 +45,7 @@
         <raml-maven-plugin.version>1.6.5</raml-maven-plugin.version>
         <test-utils.version>1.22.0</test-utils.version>
         <utilities.version>1.16.4</utilities.version>
+        <annotation-validator-maven-plugin.version>1.0.1</annotation-validator-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -123,7 +124,40 @@
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>uk.gov.justice.maven</groupId>
+                <artifactId>annotation-validator-maven-plugin</artifactId>
+                <version>${annotation-validator-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check-annotations</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                        <configuration>
+                            <generateReport>true</generateReport>
+                            <!-- Setting the below property to true to break the build if event naming convention not followed-->
+                            <failBuildOnError>true</failBuildOnError>
+                            <validationSkip>false</validationSkip>
+                            <annotations>
+                                <annotation>uk.gov.justice.domain.annotation.Event</annotation>
+                            </annotations>
+                            <validatorProperties>
+                                <serviceName>example</serviceName>
+                            </validatorProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>uk.gov.justice.framework-api</groupId>
+                        <artifactId>framework-api-validator</artifactId>
+                        <version>${framework-api.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
+
     </build>
 
     <profiles>
