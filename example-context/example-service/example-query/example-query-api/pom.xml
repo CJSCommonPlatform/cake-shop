@@ -92,7 +92,7 @@
         <dependency>
             <groupId>uk.gov.justice.services.example</groupId>
             <artifactId>example-persistence</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
