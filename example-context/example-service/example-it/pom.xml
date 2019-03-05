@@ -115,6 +115,11 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>jmx</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
