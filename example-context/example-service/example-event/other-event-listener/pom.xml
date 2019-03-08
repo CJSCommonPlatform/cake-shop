@@ -52,9 +52,9 @@
             <version>${event-store.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.event-store</groupId>
-            <artifactId>event-listener-interceptors</artifactId>
-            <version>${event-store.version}</version>
+            <groupId>uk.gov.justice.framework-api</groupId>
+            <artifactId>framework-api-event-listener-interceptors</artifactId>
+            <version>${framework-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.ejb3</groupId>
