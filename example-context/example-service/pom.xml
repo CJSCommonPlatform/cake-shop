@@ -118,9 +118,9 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>generator-plugin</artifactId>
-                    <groupId>uk.gov.justice.maven.generator</groupId>
-                    <version>${generator-maven-plugin.version}</version>
+                    <groupId>uk.gov.justice.schema</groupId>
+                    <artifactId>catalog-generation-plugin</artifactId>
+                    <version>${json-schema-catalog.version}</version>
                     <executions>
                         <execution>
                             <id>schema-catalog-generation</id>
@@ -140,7 +140,7 @@
                                 </generatorProperties>
                             </configuration>
                             <goals>
-                                <goal>generate</goal>
+                                <goal>generate-schema-catalog</goal>
                             </goals>
                             <phase>generate-sources</phase>
                         </execution>
@@ -160,7 +160,7 @@
                                 </generatorProperties>
                             </configuration>
                             <goals>
-                                <goal>generate</goal>
+                                <goal>generate-schema-catalog</goal>
                             </goals>
                             <phase>generate-sources</phase>
                         </execution>
@@ -336,9 +336,9 @@
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>generator-plugin</artifactId>
-                        <groupId>uk.gov.justice.maven.generator</groupId>
-                        <version>${generator-maven-plugin.version}</version>
+                        <groupId>uk.gov.justice.schema</groupId>
+                        <artifactId>catalog-generation-plugin</artifactId>
+                        <version>${json-schema-catalog.version}</version>
                         <configuration>
                             <parserName>uk.gov.justice.maven.generator.io.files.parser.RamlFileParser
                             </parserName>
@@ -347,14 +347,14 @@
                             <execution>
                                 <id>schema-catalog-generation</id>
                                 <goals>
-                                    <goal>generate</goal>
+                                    <goal>generate-schema-catalog</goal>
                                 </goals>
                                 <phase>generate-sources</phase>
                             </execution>
                             <execution>
                                 <id>raml-schema-catalog-generation</id>
                                 <goals>
-                                    <goal>generate</goal>
+                                    <goal>generate-schema-catalog</goal>
                                 </goals>
                                 <phase>generate-sources</phase>
                             </execution>
