@@ -100,14 +100,14 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>generator-plugin</artifactId>
-                <groupId>uk.gov.justice.maven.generator</groupId>
-                <version>${generator-maven-plugin.version}</version>
+                <groupId>uk.gov.justice.framework-generators</groupId>
+                <artifactId>rest-client-generator-plugin</artifactId>
+                <version>${framework-generators.version}</version>
                 <executions>
                     <execution>
                         <id>external-ramls</id>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>generate-rest-client</goal>
                         </goals>
                         <phase>generate-sources</phase>
                         <configuration>

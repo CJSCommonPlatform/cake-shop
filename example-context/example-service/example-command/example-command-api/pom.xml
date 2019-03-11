@@ -95,14 +95,14 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>generator-plugin</artifactId>
-                <groupId>uk.gov.justice.maven.generator</groupId>
-                <version>${generator-maven-plugin.version}</version>
+                <groupId>uk.gov.justice.framework-generators</groupId>
+                <artifactId>messaging-client-generator-plugin</artifactId>
+                <version>${framework-generators.version}</version>
                 <executions>
                     <execution>
                         <id>external-ramls</id>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>generate-messaging-client</goal>
                         </goals>
                         <phase>generate-sources</phase>
                         <configuration>
@@ -126,6 +126,11 @@
                         <artifactId>example-command-handler</artifactId>
                         <version>${project.version}</version>
                         <classifier>raml</classifier>
+                    </dependency>
+                    <dependency>
+                        <groupId>uk.gov.justice.framework-generators</groupId>
+                        <artifactId>messaging-client-generator</artifactId>
+                        <version>${framework-generators.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
