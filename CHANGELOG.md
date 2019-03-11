@@ -11,6 +11,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Update framework-domain to 1.1.2-M1
 - Update event-store to 1.2.0-M3
 - Update framework-generators to 1.2.0-M2
+- Update plugins to use a single plugin declaration for each plugin rather that one large plugin with multiple configurations
 
 ### Changed
 - Update event-store to 1.1.1

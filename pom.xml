@@ -34,7 +34,7 @@
         <framework.version>6.0.0-M1</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
         <event-store.version>2.0.0-M1</event-store.version>
-        <framework-generators.version>2.0.0-M1</framework-generators.version>
+        <framework-generators.version>2.0.0-M2</framework-generators.version>
         <file.service.version>1.17.4</file.service.version>
         <framework-api.version>4.0.0-M1</framework-api.version>
         <generator-maven-plugin.version>2.6.2</generator-maven-plugin.version>
