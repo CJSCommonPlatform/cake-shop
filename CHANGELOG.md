@@ -6,16 +6,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 
 ### Changed
-- Update framework-api to 3.4.0-M1
-- Update framework to 5.3.0-M3
-- Update framework-domain to 1.1.2-M1
-- Update event-store to 1.2.0-M3
-- Update framework-generators to 1.2.0-M2
+- Update framework-api to 4.0.0-M1
+- Update framework to 6.0.0-M3
+- Update event-store to 2.0.0-M3
+- Update framework-generators to 2.0.0-M4
 - Update plugins to use a single plugin declaration for each plugin rather that one large plugin with multiple configurations
-
-### Changed
-- Update event-store to 1.1.1
-- Update framework-generators to 1.1.1
+- Removed framework-domain
 
 ## [1.1.0] - 2019-01-09
 
