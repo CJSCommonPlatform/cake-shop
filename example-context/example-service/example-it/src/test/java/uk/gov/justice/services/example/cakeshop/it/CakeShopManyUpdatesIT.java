@@ -7,6 +7,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 import static org.junit.Assert.assertNull;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 
+import org.junit.*;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.JmsBootstrapper;
@@ -21,11 +22,7 @@ import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.ws.rs.client.Client;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
+@Ignore
 public class CakeShopManyUpdatesIT {
 
     private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();

@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.CONTEXT_NAME;
 
+import org.junit.*;
 import uk.gov.justice.services.event.buffer.core.repository.subscription.Subscription;
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
@@ -24,11 +25,7 @@ import java.util.Optional;
 
 import javax.ws.rs.client.Client;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
+@Ignore
 public class CakeShopReplayEventsIT {
 
     private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();

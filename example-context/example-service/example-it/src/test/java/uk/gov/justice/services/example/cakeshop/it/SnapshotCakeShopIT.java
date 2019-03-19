@@ -6,6 +6,7 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
+import org.junit.*;
 import uk.gov.justice.domain.snapshot.AggregateSnapshot;
 import uk.gov.justice.domain.snapshot.DefaultObjectInputStreamStrategy;
 import uk.gov.justice.services.core.aggregate.exception.AggregateChangeDetectedException;
@@ -22,11 +23,7 @@ import java.util.UUID;
 
 import javax.ws.rs.client.Client;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
+@Ignore
 public class SnapshotCakeShopIT {
 
     private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();

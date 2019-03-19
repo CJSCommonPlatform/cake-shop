@@ -31,9 +31,9 @@
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
         <common-bom.version>1.29.0</common-bom.version>
-        <framework.version>6.0.0-M3</framework.version>
+        <framework.version>6.0.0-SNAPSHOT</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
-        <event-store.version>2.0.0-M3</event-store.version>
+        <event-store.version>2.0.0-SNAPSHOT</event-store.version>
         <framework-generators.version>2.0.0-M4</framework-generators.version>
         <file.service.version>1.17.4</file.service.version>
         <framework-api.version>4.0.0-M1</framework-api.version>
@@ -177,6 +177,7 @@
                             <systemPropertyVariables>
                                 <random.jms.port>${random-jms-port}</random.jms.port>
                                 <random.http.port>${random-http-port}</random.http.port>
+                                <random.management.port>${random-management-port}</random.management.port>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>

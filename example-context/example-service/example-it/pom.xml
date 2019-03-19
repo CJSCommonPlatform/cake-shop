@@ -115,6 +115,189 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-client-all</artifactId>
+            <version>16.0.0.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss</groupId>
+                    <artifactId>jboss-ejb-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss</groupId>
+                    <artifactId>jboss-remote-naming</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.marshalling</groupId>
+                    <artifactId>jboss-marshalling-river</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.remoting</groupId>
+                    <artifactId>jboss-remoting</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.sasl</groupId>
+                    <artifactId>jboss-sasl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.spec.javax.ejb</groupId>
+                    <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.spec.javax.transaction</groupId>
+                    <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.xnio</groupId>
+                    <artifactId>xnio-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.xnio</groupId>
+                    <artifactId>xnio-nio</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-all</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jgroups</groupId>
+                    <artifactId>jgroups</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>artemis-core-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>artemis-commons</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>artemis-hqclient-protocol</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>jmx</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss</groupId>-->
+            <!--<artifactId>jboss-ejb-client</artifactId>-->
+            <!--&lt;!&ndash;<version>2.0.0.Final</version>&ndash;&gt;-->
+            <!--<version>2.1.1.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss</groupId>-->
+            <!--<artifactId>jboss-remote-naming</artifactId>-->
+            <!--&lt;!&ndash;<version>2.0.4.Final</version>&ndash;&gt;-->
+            <!--<version>2.0.4.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.logging</groupId>-->
+            <!--<artifactId>jboss-logging</artifactId>-->
+            <!--&lt;!&ndash;<version>3.3.0.Final</version>&ndash;&gt;-->
+            <!--<version>3.2.1.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.marshalling</groupId>-->
+            <!--<artifactId>jboss-marshalling-river</artifactId>-->
+            <!--&lt;!&ndash;<version>1.4.3.Final</version>&ndash;&gt;-->
+            <!--<version>1.4.10.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.remoting</groupId>-->
+            <!--<artifactId>jboss-remoting</artifactId>-->
+            <!--&lt;!&ndash;<version>4.0.0.Final</version>&ndash;&gt;-->
+            <!--<version>4.0.9.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.sasl</groupId>-->
+            <!--<artifactId>jboss-sasl</artifactId>-->
+            <!--&lt;!&ndash;<version>1.0.4.Final</version>&ndash;&gt;-->
+            <!--<version>1.0.5.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.spec.javax.ejb</groupId>-->
+            <!--<artifactId>jboss-ejb-api_3.2_spec</artifactId>-->
+            <!--&lt;!&ndash;<version>1.0.1.Final</version>&ndash;&gt;-->
+            <!--<version>1.0.0.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.spec.javax.transaction</groupId>-->
+            <!--<artifactId>jboss-transaction-api_1.2_spec</artifactId>-->
+            <!--&lt;!&ndash;<version>1.0.0.Final</version>&ndash;&gt;-->
+            <!--<version>1.0.0.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.xnio</groupId>-->
+            <!--<artifactId>xnio-api</artifactId>-->
+            <!--&lt;!&ndash;<version>3.2.0.Final</version>&ndash;&gt;-->
+            <!--<version>3.3.1.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.xnio</groupId>-->
+            <!--<artifactId>xnio-nio</artifactId>-->
+            <!--&lt;!&ndash;<version>3.2.0.Final</version>&ndash;&gt;-->
+            <!--<version>3.3.1.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>io.netty</groupId>-->
+            <!--<artifactId>netty-all</artifactId>-->
+            <!--<version>4.1.34.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.hornetq</groupId>-->
+            <!--<artifactId>hornetq-commons</artifactId>-->
+            <!--<version>2.4.7.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.hornetq</groupId>-->
+            <!--<artifactId>hornetq-core-client</artifactId>-->
+            <!--<version>2.4.7.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.hornetq</groupId>-->
+            <!--<artifactId>hornetq-jms-client</artifactId>-->
+            <!--<version>2.4.7.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.marshalling</groupId>-->
+            <!--<artifactId>jboss-marshalling</artifactId>-->
+            <!--<version>1.4.10.Final</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.spec.javax.jms</groupId>-->
+            <!--<artifactId>jboss-jms-api_2.0_spec</artifactId>-->
+            <!--<version>1.0.0.Final</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
+
     </dependencies>
 
     <build>
@@ -347,6 +530,7 @@
                     <timeout>120</timeout>
                     <java-opts>
                         <javaOpt>-DDEFAULT_PORT=${random-http-port}</javaOpt>
+                        <!--to be commentted out-->
                         <!--<java-opt>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8888</java-opt>-->
                     </java-opts>
                     <port>${random-management-port}</port>
