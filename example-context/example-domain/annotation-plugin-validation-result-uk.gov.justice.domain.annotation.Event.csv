@@ -1,0 +1,6 @@
+uk.gov.justice.services.example.cakeshop.domain.event.CakeMade,example.events.cake-made,true
+uk.gov.justice.services.example.cakeshop.domain.event.CakeOrdered,example.events.cake-ordered,true
+uk.gov.justice.services.example.cakeshop.domain.event.RecipeAdded,example.events.recipe-added,true
+uk.gov.justice.services.example.cakeshop.domain.event.RecipePhotographAdded,example.events.recipe-photograph-added,true
+uk.gov.justice.services.example.cakeshop.domain.event.RecipeRemoved,example.events.recipe-removed,true
+uk.gov.justice.services.example.cakeshop.domain.event.RecipeRenamed,example.events.recipe-renamed,true
