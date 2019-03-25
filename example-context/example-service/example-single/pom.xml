@@ -29,12 +29,6 @@
             <version>${project.version}</version>
             <classifier>classes</classifier>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>${project.groupId}</groupId>-->
-            <!--<artifactId>other-event-listener</artifactId>-->
-            <!--<version>${project.version}</version>-->
-            <!--<classifier>classes</classifier>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>example-event-processor</artifactId>
@@ -61,7 +55,7 @@
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.event-store</groupId>
-            <artifactId>event-publisher-process</artifactId>
+            <artifactId>event-publisher-timer</artifactId>
             <version>${event-store.version}</version>
         </dependency>
 
