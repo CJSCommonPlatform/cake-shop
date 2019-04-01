@@ -10,32 +10,31 @@ import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTy
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.CONTEXT_NAME;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 
+import uk.gov.justice.services.event.buffer.core.repository.subscription.StreamStatusJdbcRepository;
 import uk.gov.justice.services.event.buffer.core.repository.subscription.Subscription;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.StandaloneStreamStatusJdbcRepositoryFactory;
 
 import java.util.Optional;
 
+import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CakeShopEventBufferingIT {
 
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
+    private final DataSource viewStoreDatasource = new DatabaseManager().initViewStoreDb();
+    private final StandaloneStreamStatusJdbcRepositoryFactory standaloneStreamStatusJdbcRepositoryFactory = new StandaloneStreamStatusJdbcRepositoryFactory();
+    private final StreamStatusJdbcRepository streamStatusJdbcRepository = standaloneStreamStatusJdbcRepositoryFactory.getStreamStatusJdbcRepository(viewStoreDatasource);
 
     private final CommandFactory commandFactory = new CommandFactory();
 
     private Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
 
     @Before
     public void before() throws Exception {
@@ -61,6 +60,6 @@ public class CakeShopEventBufferingIT {
 
     @SuppressWarnings("SameParameterValue")
     private Optional<Subscription> subscription(final String recipeId) {
-        return CAKE_SHOP_REPOSITORY_MANAGER.getStreamStatusJdbcRepository().findByStreamIdAndSource(fromString(recipeId), CONTEXT_NAME);
+        return streamStatusJdbcRepository.findByStreamIdAndSource(fromString(recipeId), CONTEXT_NAME);
     }
 }

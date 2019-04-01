@@ -13,7 +13,6 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
@@ -24,23 +23,15 @@ import javax.ws.rs.client.Client;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CakeShopFilteringIT {
-
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
 
     private final EventFactory eventFactory = new EventFactory();
 
     private Client client;
     private Querier querier;
     private CommandSender commandSender;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
 
     @Before
     public void before() throws Exception {

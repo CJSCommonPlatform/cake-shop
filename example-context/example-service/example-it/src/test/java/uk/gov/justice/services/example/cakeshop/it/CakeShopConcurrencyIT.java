@@ -17,7 +17,9 @@ import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RE
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.test.utils.core.http.HttpResponsePoller;
@@ -26,26 +28,22 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CakeShopConcurrencyIT {
 
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
+    private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
+    private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
 
     private final HttpResponsePoller httpResponsePoller = new HttpResponsePoller();
-    private final EventFinder eventFinder = new EventFinder(CAKE_SHOP_REPOSITORY_MANAGER);
+    private final EventFinder eventFinder = new EventFinder(eventJdbcRepository);
 
     private Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
 
     @Before
     public void before() throws Exception {

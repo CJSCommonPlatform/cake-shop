@@ -19,33 +19,31 @@ import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMat
 
 import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
+import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CakeShopTimeStampIT {
 
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
+    private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
+    private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
 
     private Client client;
     private Querier querier;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
 
     @Before
     public void before() throws Exception {
@@ -99,7 +97,7 @@ public class CakeShopTimeStampIT {
 
         await().until(() -> querier.queryForOrder(orderId.toString()).httpCode() == OK.getStatusCode());
 
-        final Stream<Event> events = CAKE_SHOP_REPOSITORY_MANAGER.getEventJdbcRepository().findByStreamIdOrderByPositionAsc(orderId);
+        final Stream<Event> events = eventJdbcRepository.findByStreamIdOrderByPositionAsc(orderId);
         final Event event = events.findFirst().get();
 
         assertThat(event.getCreatedAt(), is(notNullValue()));
