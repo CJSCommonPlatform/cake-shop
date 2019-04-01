@@ -6,14 +6,14 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
-import org.junit.*;
 import uk.gov.justice.domain.snapshot.AggregateSnapshot;
 import uk.gov.justice.domain.snapshot.DefaultObjectInputStreamStrategy;
 import uk.gov.justice.services.core.aggregate.exception.AggregateChangeDetectedException;
 import uk.gov.justice.services.eventsourcing.jdbc.snapshot.SnapshotJdbcRepository;
+import uk.gov.justice.services.eventsourcing.jdbc.snapshot.StandaloneSnapshotJdbcRepositoryFactory;
 import uk.gov.justice.services.example.cakeshop.domain.aggregate.Recipe;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
+import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
@@ -21,23 +21,24 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 @Ignore
 public class SnapshotCakeShopIT {
 
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
-
+    private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
+    private final SnapshotJdbcRepository snapshotJdbcRepository = new StandaloneSnapshotJdbcRepositoryFactory().getSnapshotJdbcRepository(eventStoreDataSource);
     private final EventFactory eventFactory = new EventFactory();
 
     private Client client;
     private Querier querier;
     private CommandSender commandSender;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
 
     @Before
     public void before() throws Exception {
@@ -88,13 +89,11 @@ public class SnapshotCakeShopIT {
         final AggregateSnapshot<Recipe> recipeAggregateSnapshot = recipeAggregateSnapshotOf(recipeId).get();
         final Recipe recipe = recipeAggregateSnapshot.getAggregate(new DefaultObjectInputStreamStrategy());
         setField(recipe, "name", newRecipeName);
-        final SnapshotJdbcRepository snapshotJdbcRepository = CAKE_SHOP_REPOSITORY_MANAGER.getSnapshotJdbcRepository();
         snapshotJdbcRepository.removeAllSnapshots(recipeAggregateSnapshot.getStreamId(), Recipe.class);
         snapshotJdbcRepository.storeSnapshot(new AggregateSnapshot(recipeAggregateSnapshot.getStreamId(), recipeAggregateSnapshot.getVersionId(), recipe));
     }
 
     private Optional<AggregateSnapshot<Recipe>> recipeAggregateSnapshotOf(final String recipeId) {
-        final SnapshotJdbcRepository snapshotJdbcRepository = CAKE_SHOP_REPOSITORY_MANAGER.getSnapshotJdbcRepository();
         return snapshotJdbcRepository.getLatestSnapshot(UUID.fromString(recipeId), Recipe.class);
     }
 }

@@ -50,11 +50,11 @@ public class JMXBeanHelper {
     }
 
     public JMXConnector getJMXConnector() throws IOException {
-        int managementPort = Integer.valueOf(System.getProperty(RANDOM_MANAGEMENT_PORT));
+        final int managementPort = Integer.valueOf(System.getProperty(RANDOM_MANAGEMENT_PORT));
 
-        String urlString =
-                System.getProperty("jmx.service.url","service:jmx:remote+http://" + HOST + ":" + managementPort);
-        JMXServiceURL serviceURL = new JMXServiceURL(urlString);
+        final String defaultUrl = "service:jmx:remote+http://" + HOST + ":" + managementPort;
+        final String urlString = System.getProperty("jmx.service.url", defaultUrl);
+        final JMXServiceURL serviceURL = new JMXServiceURL(urlString);
 
         return JMXConnectorFactory.connect(serviceURL, null);
     }

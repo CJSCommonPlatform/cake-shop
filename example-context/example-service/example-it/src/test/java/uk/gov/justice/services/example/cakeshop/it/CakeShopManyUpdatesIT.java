@@ -7,8 +7,6 @@ import static javax.ws.rs.core.Response.Status.OK;
 import static org.junit.Assert.assertNull;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 
-import org.junit.*;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.JmsBootstrapper;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
@@ -22,10 +20,14 @@ import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.ws.rs.client.Client;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 @Ignore
 public class CakeShopManyUpdatesIT {
 
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
     private static final String COMMAND_HANDLER_QUEUE = "example.handler.command";
     private static final String DEAD_LETTER_QUEUE = "DLQ";
 
@@ -34,11 +36,6 @@ public class CakeShopManyUpdatesIT {
     private Querier querier;
 
     private Client client;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
 
     @Before
     public void before() throws Exception {
@@ -52,7 +49,7 @@ public class CakeShopManyUpdatesIT {
     }
 
     @Test
-    public void shouldSucessfullyProcessManyUpdatesToSameRecipeId() throws Exception {
+    public void shouldSuccessfullyProcessManyUpdatesToSameRecipeId() throws Exception {
         jmsBootstrapper.clearDeadLetterQueue();
 
         final String recipeId = randomUUID().toString();

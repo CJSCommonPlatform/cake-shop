@@ -3,24 +3,27 @@ package uk.gov.justice.services.eventsourcing.repository.jdbc.event;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
+import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.AnsiSQLEventLogInsertionStrategy;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.jdbc.persistence.DefaultJdbcDataSourceProvider;
 import uk.gov.justice.services.jdbc.persistence.JdbcRepositoryHelper;
 
 import javax.sql.DataSource;
 
-public class EventRepositoryFactory {
+public class EventStreamJdbsRepositoryFactory {
 
-    public EventJdbcRepository getEventJdbcRepository(final DataSource dataSource) {
-        final EventJdbcRepository eventJdbcRepository = new EventJdbcRepository(
-                new AnsiSQLEventLogInsertionStrategy(),
+    public EventStreamJdbcRepository getEventStreamJdbcRepository(final DataSource dataSource) {
+
+        final EventStreamJdbcRepository eventStreamJdbcRepository = new EventStreamJdbcRepository(
                 new JdbcRepositoryHelper(),
                 new DefaultJdbcDataSourceProvider(),
+                new UtcClock(),
                 null,
-                getLogger(EventJdbcRepository.class));
+                getLogger(EventStreamJdbcRepository.class));
 
-        setField(eventJdbcRepository, "dataSource", dataSource);
+        setField(eventStreamJdbcRepository, "dataSource", dataSource);
 
-        return eventJdbcRepository;
+        return eventStreamJdbcRepository;
     }
 }
