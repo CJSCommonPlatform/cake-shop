@@ -7,6 +7,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [2.0.0-M2] - 2019-04-08
 
+### Added
+- Add Shuttering Integration Test
 ### Changed
 - Update framework-api to 4.0.0-M5
 - Update framework to 6.0.0-M10
