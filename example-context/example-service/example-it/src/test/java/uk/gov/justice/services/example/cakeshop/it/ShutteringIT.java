@@ -3,6 +3,8 @@ package uk.gov.justice.services.example.cakeshop.it;
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.lang.String.format;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -22,6 +24,7 @@ import uk.gov.justice.services.jmx.Shuttering;
 import uk.gov.justice.services.jmx.ShutteringMBean;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.management.InstanceNotFoundException;
 import javax.management.IntrospectionException;
@@ -31,7 +34,6 @@ import javax.management.ObjectName;
 import javax.management.ReflectionException;
 import javax.management.remote.JMXConnector;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.After;
@@ -115,31 +117,40 @@ public class ShutteringIT {
                                    final String recipeName2,
                                    final boolean checkRecipeName,
                                    final Status status) {
+        final Optional<String> recId = of(recipeId);
         await().until(() -> {
-           if(checkRecipeName) {
-               final ApiResponse response = querier.recipesQueryResult();
-               assertThat(response.httpCode(), isStatus(status));
-               logger.info(format("Response: %s", response.httpCode()));
+            if(checkRecipeName) {
+                final ApiResponse response = verifyResponse(empty(), status);
 
-               with(response.body())
-                       .assertThat("$.recipes[?(@.id=='" + recipeId + "')].name", hasItem(recipeName))
-                       .assertThat("$.recipes[?(@.id=='" + recipeId2 + "')].name", hasItem(recipeName2));
-           } else {
-               final ApiResponse response = querier.queryForRecipe(recipeId);
-               logger.info(format("Response: %s", response.httpCode()));
-               assertThat(response.httpCode(), isStatus(status));
-           }
+                verifyResponseBody(recipeId, recipeId2, recipeName, recipeName2, response);
+            } else {
+                verifyResponse(recId, status);
+            }
         });
     }
 
+    private void verifyResponseBody(final String recipeId, final String recipeId2, final String recipeName, final String recipeName2, final ApiResponse response) {
+        with(response.body())
+                .assertThat("$.recipes[?(@.id=='" + recipeId + "')].name", hasItem(recipeName))
+                .assertThat("$.recipes[?(@.id=='" + recipeId2 + "')].name", hasItem(recipeName2));
+    }
+
+    private ApiResponse verifyResponse(final Optional<String> recipeId, final Status status) {
+        final ApiResponse response = recipeId.isPresent() ? querier.queryForRecipe(recipeId.get()):
+                querier.recipesQueryResult();
+
+        logger.info(format("Response: %s", response.httpCode()));
+        assertThat(response.httpCode(), isStatus(status));
+
+        return response;
+    }
+
     private void invokeShuttering(final boolean isShutteringRequired) throws IOException, MalformedObjectNameException, IntrospectionException, InstanceNotFoundException, ReflectionException {
-        try(JMXConnector jmxConnector = mBeanHelper.getJMXConnector()){
+        try(final JMXConnector jmxConnector = mBeanHelper.getJMXConnector()){
 
             final MBeanServerConnection connection = jmxConnector.getMBeanServerConnection();
 
             final ObjectName objectName = new ObjectName("shuttering", "type", Shuttering.class.getSimpleName());
-
-            mBeanHelper.getMbeanOperations(objectName, connection);
 
             if(isShutteringRequired) {
                 mBeanHelper.getMbeanProxy(connection, objectName, ShutteringMBean.class).doShutteringRequested();
