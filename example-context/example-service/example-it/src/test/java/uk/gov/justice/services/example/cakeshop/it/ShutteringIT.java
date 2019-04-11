@@ -160,6 +160,7 @@ public class ShutteringIT {
         }
     }
 
+    
     private String addRecipe(final String cakeName) {
         final String recipeId = randomUUID().toString();
         commandSender.addRecipe(recipeId, cakeName);
