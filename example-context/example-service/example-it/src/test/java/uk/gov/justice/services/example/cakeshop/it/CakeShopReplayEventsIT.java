@@ -1,48 +1,73 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static java.util.UUID.fromString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.CONTEXT_NAME;
+import static org.junit.Assert.fail;
 
-import uk.gov.justice.services.event.buffer.core.repository.subscription.Subscription;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
-import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
+import uk.gov.justice.services.event.buffer.core.repository.subscription.StreamStatusJdbcRepository;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.LinkedEventRepositoryTruncator;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
+import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
+import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
+import uk.gov.justice.services.example.cakeshop.it.helpers.MBeanHelper;
+import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
+import uk.gov.justice.services.example.cakeshop.it.helpers.RecipeTableInspector;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.StandaloneStreamStatusJdbcRepositoryFactory;
+import uk.gov.justice.services.example.cakeshop.persistence.entity.Recipe;
+import uk.gov.justice.services.jmx.Catchup;
+import uk.gov.justice.services.jmx.CatchupMBean;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 
+import javax.management.JMX;
+import javax.management.MBeanServerConnection;
+import javax.management.ObjectName;
+import javax.management.remote.JMXConnector;
+import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CakeShopReplayEventsIT {
 
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
 
-    private final Poller poller = new Poller();
+    private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
+    private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
+    private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
+    private final LinkedEventRepositoryTruncator linkedEventRepositoryTruncator = new LinkedEventRepositoryTruncator(eventStoreDataSource);
 
+    private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
+    private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
+
+    private final StandaloneStreamStatusJdbcRepositoryFactory standaloneStreamStatusJdbcRepositoryFactory = new StandaloneStreamStatusJdbcRepositoryFactory();
+    private final StreamStatusJdbcRepository streamStatusJdbcRepository = standaloneStreamStatusJdbcRepositoryFactory.getStreamStatusJdbcRepository(viewStoreDataSource);
+
+    private final RecipeTableInspector recipeTableInspector = new RecipeTableInspector(viewStoreDataSource);
+
+    private final Poller poller = new Poller(60, 1000L);
 
     private Client client;
-    private Querier querier;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
+    private MBeanHelper mBeanHelper;
 
     @Before
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
-        querier = new Querier(client);
+        mBeanHelper = new MBeanHelper();
     }
 
     @After
@@ -51,42 +76,107 @@ public class CakeShopReplayEventsIT {
     }
 
     @Test
-    public void shouldFindReplayedRecipesInViewStore() {
+    public void shouldReplayAndFindRecipesInViewStore() throws Exception {
 
-        final String recipeId_1 = "489c5e3b-8c0c-4e26-855f-34592604bd98";
-        final String recipeId_2 = "8440bcc3-a4d6-4bd1-817c-ab89ffd307ae";
+        final int numberOfStreams = 6;
+        final int numberOfEventsPerStream = 2;
 
-        final Optional<String> response_1 = poller.pollUntilFound(() -> getRecipe(recipeId_1));
-        final Optional<String> response_2 = poller.pollUntilFound(() -> getRecipe(recipeId_2));
-        assertThat(response_1.isPresent(), is(true));
-        assertThat(response_2.isPresent(), is(true));
+        truncateEventLog();
+        recipeTableInspector.truncateViewstoreTables();
 
-        with(response_1.get())
-                .assertThat("$.id", equalTo(recipeId_1))
-                .assertThat("$.name", equalTo("Turnip Cake"));
+        addEventsToEventLog(numberOfStreams, numberOfEventsPerStream);
 
-        with(response_2.get())
-                .assertThat("$.id", equalTo(recipeId_2))
-                .assertThat("$.name", equalTo("Rock Cake"));
+        System.out.println("Inserted " + numberOfStreams * numberOfEventsPerStream + " events");
 
-        assertThat(subscription(recipeId_1).getPosition(), is(2L));
-        assertThat(subscription(recipeId_2).getPosition(), is(2L));
-    }
+        final Optional<Integer> numberOfRecipesOptional = checkExpectedNumberOfRecipes(numberOfStreams);
 
-    private Optional<String> getRecipe(final String recipeId) {
-        final String body = querier.queryForRecipe(recipeId).body();
-
-        if (body == null || body.isEmpty()) {
-            return empty();
+        if (!numberOfRecipesOptional.isPresent()) {
+            fail();
         }
-        return of(body);
+
+        final List<Recipe> originalRecipes = recipeTableInspector.getAllRecipes();
+
+        recipeTableInspector.truncateViewstoreTables();
+
+        runCatchup();
+
+        final Optional<Integer> numberOfReplayedRecipesOptional = checkExpectedNumberOfRecipes(numberOfStreams);
+
+        if (!numberOfReplayedRecipesOptional.isPresent()) {
+            fail();
+        }
+
+        final List<Recipe> replayedRecipes = recipeTableInspector.getAllRecipes();
+
+
+        assertThat(originalRecipes.size(), is(replayedRecipes.size()));
+
+
+        originalRecipes.forEach(originalRecipe -> {
+
+            final Optional<Recipe> recipe = replayedRecipes.stream()
+                    .filter(replayedRecipe -> originalRecipe.getId().equals(replayedRecipe.getId()))
+                    .findFirst();
+
+            assertThat("Failed to replay recipe " + originalRecipe.getName(), recipe.isPresent(), is(true));
+        });
+
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
-    private Subscription subscription(final String recipeId) {
-        return CAKE_SHOP_REPOSITORY_MANAGER
-                .getStreamStatusJdbcRepository()
-                .findByStreamIdAndSource(fromString(recipeId), CONTEXT_NAME)
-                .get();
+    private void addEventsToEventLog(final int numberOfStreams, final int numberOfEventsPerStream) throws InvalidPositionException {
+        final CakeshopEventGenerator cakeshopEventGenerator = new CakeshopEventGenerator();
+
+
+        for (int seed = 0; seed < numberOfStreams; seed++) {
+
+            final PositionInStreamIterator positionInStreamIterator = new PositionInStreamIterator();
+
+            final Event recipeAddedEvent = cakeshopEventGenerator.createRecipeAddedEvent(seed, positionInStreamIterator);
+            final UUID recipeId = recipeAddedEvent.getStreamId();
+
+            eventStreamJdbcRepository.insert(recipeId);
+            eventJdbcRepository.insert(recipeAddedEvent);
+
+            for (int renameNumber = 1; renameNumber < numberOfEventsPerStream; renameNumber++) {
+                final Event recipeRenamedEvent = cakeshopEventGenerator.createRecipeRenamedEvent(recipeId, seed, renameNumber, positionInStreamIterator);
+                eventJdbcRepository.insert(recipeRenamedEvent);
+            }
+        }
+    }
+
+    private void truncateEventLog() throws SQLException {
+        final Stream<Event> eventStream = eventJdbcRepository.findAll();
+        eventStream.forEach(event -> eventJdbcRepository.clear(event.getStreamId()));
+
+        linkedEventRepositoryTruncator.truncate();
+    }
+
+    private void runCatchup() throws Exception {
+
+        try (final JMXConnector jmxConnector = mBeanHelper.getJMXConnector()) {
+            final MBeanServerConnection connection = jmxConnector.getMBeanServerConnection();
+
+            final ObjectName objectName = new ObjectName("catchup", "type", Catchup.class.getSimpleName());
+
+            mBeanHelper.getMbeanDomains(connection);
+
+            mBeanHelper.getMbeanOperations(objectName, connection);
+
+            final CatchupMBean catchupMBean = JMX.newMBeanProxy(connection, objectName, CatchupMBean.class, true);
+
+            catchupMBean.doCatchupRequested();
+        }
+    }
+
+    private Optional<Integer> checkExpectedNumberOfRecipes(final int numberOfStreams) {
+        return poller.pollUntilFound(() -> {
+            final int numberOfRecipes = recipeTableInspector.countNumberOfRecipes();
+
+            if (numberOfRecipes == numberOfStreams) {
+                return of(numberOfRecipes);
+            }
+
+            return empty();
+        });
     }
 }

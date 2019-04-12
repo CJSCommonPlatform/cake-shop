@@ -16,7 +16,6 @@ import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.JmsBootstrapper;
@@ -37,14 +36,11 @@ import javax.ws.rs.client.Client;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore
 public class MultipleEventListenerCakeShopIT {
-
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
 
     private final EventFactory eventFactory = new EventFactory();
     private final JmsBootstrapper jmsBootstrapper = new JmsBootstrapper();
@@ -52,11 +48,6 @@ public class MultipleEventListenerCakeShopIT {
     private Client client;
     private Querier querier;
     private CommandSender commandSender;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
 
     @Before
     public void before() throws Exception {
@@ -145,6 +136,4 @@ public class MultipleEventListenerCakeShopIT {
             }
         }
     }
-
-
 }

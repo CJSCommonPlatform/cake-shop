@@ -30,10 +30,10 @@
 
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
-        <common-bom.version>1.29.0</common-bom.version>
+        <common-bom.version>1.28.0</common-bom.version>
         <framework.version>6.0.0-M10</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
-        <event-store.version>2.0.0-M10</event-store.version>
+        <event-store.version>2.0.0-M11</event-store.version>
         <framework-generators.version>2.0.0-M8</framework-generators.version>
         <file.service.version>1.17.4</file.service.version>
         <framework-api.version>4.0.0-M5</framework-api.version>

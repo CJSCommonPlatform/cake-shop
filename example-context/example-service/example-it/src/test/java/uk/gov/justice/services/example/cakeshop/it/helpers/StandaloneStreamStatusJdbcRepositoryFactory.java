@@ -9,12 +9,12 @@ import javax.sql.DataSource;
 
 public class StandaloneStreamStatusJdbcRepositoryFactory {
 
-    public StreamStatusJdbcRepository getSnapshotSubscriptionJdbcRepository(final DataSource dataSource) {
-        final StreamStatusJdbcRepository snapshotJdbcRepository = new StreamStatusJdbcRepository();
+    public StreamStatusJdbcRepository getStreamStatusJdbcRepository(final DataSource dataSource) {
+        final StreamStatusJdbcRepository streamStatusJdbcRepository = new StreamStatusJdbcRepository();
 
-        setField(snapshotJdbcRepository, "dataSource", dataSource);
-        setField(snapshotJdbcRepository, "jdbcRepositoryHelper", new JdbcRepositoryHelper());
+        setField(streamStatusJdbcRepository, "dataSource", dataSource);
+        setField(streamStatusJdbcRepository, "jdbcRepositoryHelper", new JdbcRepositoryHelper());
 
-        return snapshotJdbcRepository;
+        return streamStatusJdbcRepository;
     }
 }

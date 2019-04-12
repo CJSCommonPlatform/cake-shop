@@ -5,8 +5,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+### Added
+- Integration Test for Event Catchup
 ### Changed
 - Update Shuttering Integration Test
+
 
 ## [2.0.0-M2] - 2019-04-08
 

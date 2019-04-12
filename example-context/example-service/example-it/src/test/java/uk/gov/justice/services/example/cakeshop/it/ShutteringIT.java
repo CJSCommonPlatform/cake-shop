@@ -14,7 +14,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CakeShopRepositoryManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.MBeanHelper;
@@ -38,13 +37,10 @@ import javax.ws.rs.core.Response.Status;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 
 public class ShutteringIT {
-
-    private static final CakeShopRepositoryManager CAKE_SHOP_REPOSITORY_MANAGER = new CakeShopRepositoryManager();
 
     private static final Logger logger = getLogger(ShutteringIT.class);
     private static final String MARBLE_CAKE = "Marble cake";
@@ -57,11 +53,6 @@ public class ShutteringIT {
     private CommandSender commandSender;
 
     private MBeanHelper mBeanHelper;
-
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        CAKE_SHOP_REPOSITORY_MANAGER.initialise();
-    }
 
     @Before
     public void before() {

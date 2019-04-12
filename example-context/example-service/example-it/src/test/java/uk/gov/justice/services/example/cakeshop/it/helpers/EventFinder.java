@@ -10,15 +10,13 @@ import java.util.stream.Stream;
 
 public class EventFinder {
 
-    private final CakeShopRepositoryManager cakeShopRepositoryManager;
+    private final EventJdbcRepository eventJdbcRepository;
 
-    public EventFinder(final CakeShopRepositoryManager cakeShopRepositoryManager) {
-        this.cakeShopRepositoryManager = cakeShopRepositoryManager;
+    public EventFinder(final EventJdbcRepository eventJdbcRepository) {
+        this.eventJdbcRepository = eventJdbcRepository;
     }
 
     public List<Event> eventsWithPayloadContaining(final String string) {
-
-        final EventJdbcRepository eventJdbcRepository = cakeShopRepositoryManager.getEventJdbcRepository();
         try (final Stream<Event> events = eventJdbcRepository.findAll().filter(e -> e.getPayload().contains(string))) {
             return events.collect(toList());
         }
