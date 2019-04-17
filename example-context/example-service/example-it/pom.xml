@@ -190,7 +190,7 @@
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.event-store</groupId>
-            <artifactId>linked-event-processor</artifactId>
+            <artifactId>published-event-processor</artifactId>
             <version>${event-store.version}</version>
             <scope>test</scope>
         </dependency>
