@@ -24,6 +24,7 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.EventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.test.utils.core.http.HttpResponsePoller;
 
+import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
+import liquibase.exception.LiquibaseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +46,9 @@ public class CakeShopConcurrencyIT {
     private final EventFinder eventFinder = new EventFinder(eventJdbcRepository);
 
     private Client client;
+
+    public CakeShopConcurrencyIT() throws SQLException, LiquibaseException {
+    }
 
     @Before
     public void before() throws Exception {

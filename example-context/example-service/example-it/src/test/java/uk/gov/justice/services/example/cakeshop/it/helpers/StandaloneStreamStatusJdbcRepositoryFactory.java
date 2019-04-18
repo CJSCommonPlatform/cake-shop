@@ -3,7 +3,7 @@ package uk.gov.justice.services.example.cakeshop.it.helpers;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
 import uk.gov.justice.services.event.buffer.core.repository.subscription.StreamStatusJdbcRepository;
-import uk.gov.justice.services.jdbc.persistence.JdbcRepositoryHelper;
+import uk.gov.justice.services.jdbc.persistence.PreparedStatementWrapperFactory;
 
 import javax.sql.DataSource;
 
@@ -13,7 +13,7 @@ public class StandaloneStreamStatusJdbcRepositoryFactory {
         final StreamStatusJdbcRepository streamStatusJdbcRepository = new StreamStatusJdbcRepository();
 
         setField(streamStatusJdbcRepository, "dataSource", dataSource);
-        setField(streamStatusJdbcRepository, "jdbcRepositoryHelper", new JdbcRepositoryHelper());
+        setField(streamStatusJdbcRepository, "preparedStatementWrapperFactory", new PreparedStatementWrapperFactory());
 
         return streamStatusJdbcRepository;
     }

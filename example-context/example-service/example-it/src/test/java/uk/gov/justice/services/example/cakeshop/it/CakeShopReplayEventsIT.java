@@ -39,6 +39,7 @@ import javax.management.remote.JMXConnector;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
+import liquibase.exception.LiquibaseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +64,9 @@ public class CakeShopReplayEventsIT {
 
     private Client client;
     private MBeanHelper mBeanHelper;
+
+    public CakeShopReplayEventsIT() throws SQLException, LiquibaseException {
+    }
 
     @Before
     public void before() {

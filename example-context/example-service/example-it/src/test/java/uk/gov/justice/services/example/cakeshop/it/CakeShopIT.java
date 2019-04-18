@@ -34,10 +34,13 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.EventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
+import liquibase.exception.LiquibaseException;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.After;
 import org.junit.Before;
@@ -55,6 +58,9 @@ public class CakeShopIT {
     private Client client;
     private Querier querier;
     private CommandSender commandSender;
+
+    public CakeShopIT() throws SQLException, LiquibaseException {
+    }
 
     @Before
     public void before() throws Exception {

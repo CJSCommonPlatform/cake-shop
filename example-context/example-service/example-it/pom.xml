@@ -189,12 +189,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.event-store</groupId>
-            <artifactId>linked-event-processor</artifactId>
-            <version>${event-store.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>uk.gov.justice.services.example</groupId>
             <artifactId>example-persistence</artifactId>
             <version>${project.version}</version>

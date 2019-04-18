@@ -5,11 +5,25 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [2.0.0-M3] - 2019-04-24
+
 ### Added
 - Integration Test for Event Catchup
 ### Changed
 - Update Shuttering Integration Test
-
+- Update framework-api to 6.0.0-M15
+- Update event-store to 2.0.0-M15
+- Update framework-generators to 2.0.0-M12
+- Update file-service to 1.17.4-M1
+- Update framework-api to 4.0.0-M9
+- Update generator-maven-plugin to 2.7.0-M1
+- Update json-schema-catalog to 1.6.1-M2
+- Update test-utils to 1.22.0-M1
+- Update utilities to 1.17.0-M2
+- Update annotation-validator-maven-plugin to 1.0.2-M1
+- Update integration tests for refactored submodule linked-event-processor in event-store.
+### Removed
+- Remove deprecated github_token from travis.yml
 
 ## [2.0.0-M2] - 2019-04-08
 

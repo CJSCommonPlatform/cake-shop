@@ -26,6 +26,7 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -33,6 +34,7 @@ import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
+import liquibase.exception.LiquibaseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +46,9 @@ public class CakeShopTimeStampIT {
 
     private Client client;
     private Querier querier;
+
+    public CakeShopTimeStampIT() throws SQLException, LiquibaseException {
+    }
 
     @Before
     public void before() throws Exception {

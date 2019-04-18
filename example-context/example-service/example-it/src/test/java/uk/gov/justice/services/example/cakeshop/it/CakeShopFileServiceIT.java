@@ -33,11 +33,13 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 
+import liquibase.exception.LiquibaseException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -57,6 +59,9 @@ public class CakeShopFileServiceIT {
     private Client client;
     private Querier querier;
     private CommandSender commandSender;
+
+    public CakeShopFileServiceIT() throws SQLException, LiquibaseException {
+    }
 
     @Before
     public void before() throws Exception {
