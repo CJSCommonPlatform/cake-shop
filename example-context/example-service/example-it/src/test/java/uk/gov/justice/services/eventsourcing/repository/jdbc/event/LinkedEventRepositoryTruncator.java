@@ -7,14 +7,14 @@ import javax.sql.DataSource;
 public class LinkedEventRepositoryTruncator {
 
     private final DataSource datasource;
-    private final LinkedEventJdbcRepository linkedEventJdbcRepository;
+    private final PublishedEventInserter publishedEventInserter;
 
     public LinkedEventRepositoryTruncator(final DataSource datasource) {
         this.datasource = datasource;
-        this.linkedEventJdbcRepository = new LinkedEventJdbcRepository();
+        this.publishedEventInserter = new PublishedEventInserter();
     }
 
     public void truncate() throws SQLException {
-        linkedEventJdbcRepository.truncate(datasource.getConnection());
+        publishedEventInserter.truncate(datasource.getConnection());
     }
 }
