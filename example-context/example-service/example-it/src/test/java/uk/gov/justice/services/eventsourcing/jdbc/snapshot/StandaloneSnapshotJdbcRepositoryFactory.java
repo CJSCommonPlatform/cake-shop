@@ -2,10 +2,8 @@ package uk.gov.justice.services.eventsourcing.jdbc.snapshot;
 
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
-import uk.gov.justice.services.eventsourcing.source.core.EventStoreDataSourceProvider;
 import uk.gov.justice.services.test.utils.persistence.SettableEventStoreDataSourceProvider;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;

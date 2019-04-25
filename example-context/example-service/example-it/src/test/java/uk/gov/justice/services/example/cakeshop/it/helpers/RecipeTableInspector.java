@@ -90,4 +90,23 @@ public class RecipeTableInspector {
             throw new RuntimeException("Failed to run query '" + sql + "' against the view store", e);
         }
     }
+
+    public long countEventsPerStream(final UUID streamId) {
+
+        final String sql = "SELECT version FROM stream_status WHERE stream_id = ?";
+
+        try(final Connection connection = viewStoreDataSource.getConnection();
+            final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setObject(1, streamId);
+
+            try(final ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getLong(1);
+            }
+
+        } catch (final SQLException e) {
+            throw new RuntimeException("Failed to run query '" + sql + "' against the event store", e);
+        }
+    }
 }
