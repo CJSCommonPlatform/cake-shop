@@ -5,6 +5,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 ### Added
+- Unifiedsearch indexer module
 - Integration test for event catchup
 - Integration test for PublishedEvent rebuild.
 

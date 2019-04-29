@@ -16,6 +16,7 @@
         <module>example-event-listener</module>
         <module>other-event-listener</module>
         <module>example-event-processor</module>
+        <module>example-event-indexer</module>
     </modules>
 
     <profiles>
@@ -68,7 +69,79 @@
                                     </resources>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>copy-transformer-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>
+                                        ${basedir}/target/generated-resources/transformer
+                                    </outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/transformer</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
                         </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>uk.gov.justice.framework-generators</groupId>
+                        <artifactId>unifiedsearch-client-generator-plugin</artifactId>
+                        <version>${framework-generators.version}</version>
+                        <configuration>
+                            <generatorName>
+                                uk.gov.justice.services.clients.unifiedsearch.generator.UnifiedSearchClientGenerator
+                            </generatorName>
+                            <parserName>
+                                uk.gov.justice.services.clients.unifiedsearch.generator.parser.UnifiedSearchDescriptorFileParserFactory
+                            </parserName>
+                            <sourceDirectory>${basedir}/src/yaml</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-sources
+                            </outputDirectory>
+                            <basePackageName>uk.gov.justice.api</basePackageName>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-for-indexer</id>
+                                <goals>
+                                    <goal>generate-unifiedsearch-client</goal>
+                                </goals>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <includes>
+                                        <include>**/unified-search-descriptor.yaml</include>
+                                    </includes>
+                                    <generatorProperties implementation="uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties">
+                                        <serviceComponent>EVENT_INDEXER</serviceComponent>
+                                    </generatorProperties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <artifactId>unifiedsearch-client-generator</artifactId>
+                                <groupId>uk.gov.justice.framework-generators</groupId>
+                                <version>${framework-generators.version}</version>
+                            </dependency>
+
+                            <dependency>
+                                <groupId>uk.gov.justice.framework-generators</groupId>
+                                <artifactId>generators-commons</artifactId>
+                                <version>${framework-generators.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>javax</groupId>
+                                <artifactId>javaee-api</artifactId>
+                                <version>${javaee-api.version}</version>
+                                <scope>runtime</scope>
+                            </dependency>
+                        </dependencies>
                     </plugin>
 
                     <plugin>

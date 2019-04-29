@@ -45,6 +45,7 @@
         <test-utils.version>1.23.0</test-utils.version>
         <utilities.version>1.18.0</utilities.version>
         <annotation-validator-maven-plugin.version>1.0.1</annotation-validator-maven-plugin.version>
+        <json-transformer.version>1.0.4</json-transformer.version>
     </properties>
 
     <dependencyManagement>

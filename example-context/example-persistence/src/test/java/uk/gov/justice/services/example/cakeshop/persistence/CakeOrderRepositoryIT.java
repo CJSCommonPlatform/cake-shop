@@ -24,7 +24,6 @@ public class CakeOrderRepositoryIT extends BaseTransactionalTest {
     @Inject
     private CakeOrderRepository cakeOrderRepository;
 
-    private CakeOrder cakeOrderA;
 
     @Test
     public void shouldStoreOrder() {
