@@ -93,7 +93,7 @@ public class RecipeTableInspector {
 
     public long countEventsPerStream(final UUID streamId) {
 
-        final String sql = "SELECT version FROM stream_status WHERE stream_id = ?";
+        final String sql = "SELECT position FROM stream_status WHERE stream_id = ?";
 
         try(final Connection connection = viewStoreDataSource.getConnection();
             final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

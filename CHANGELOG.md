@@ -5,6 +5,22 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [2.0.0-M3] - 2019-05-09
+
+### Changed
+- common-bom -> 2.0.2
+- framework -> 6.0.0-M22
+- event-store -> 2.0.0-M22
+- framework-generators -> 2.0.0-M15
+- file.service -> 1.17.7
+- framework-api -> 4.0.0-M18
+- generator-maven-plugin -> 2.7.0
+- json-schema-catalog -> 1.7.0
+- raml-maven-plugin -> 1.6.7
+- test-utils -> 1.23.0
+- utilities -> 1.18.0
+
+
 ### Added
 - Integration Test for Event Catchup
 ### Changed
