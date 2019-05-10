@@ -33,9 +33,9 @@
         <common-bom.version>1.28.0</common-bom.version>
         <framework.version>5.1.2</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
-        <event-store.version>1.1.7</event-store.version>
+        <event-store.version>1.1.9</event-store.version>
         <framework-domain.version>1.1.2</framework-domain.version>
-        <framework-generators.version>1.1.7</framework-generators.version>
+        <framework-generators.version>1.1.9</framework-generators.version>
         <file.service.version>1.17.2</file.service.version>
         <framework-api.version>3.1.1</framework-api.version>
         <generator-maven-plugin.version>2.6.1</generator-maven-plugin.version>
