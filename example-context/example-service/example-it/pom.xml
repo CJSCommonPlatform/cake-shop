@@ -273,6 +273,18 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>shuttering-liquibase</id>
+                        <configuration>
+                            <changeLogFile>liquibase/shuttering-changelog.xml
+                            </changeLogFile>
+                            <url>jdbc:postgresql://localhost:5432/frameworkviewstore</url>
+                        </configuration>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>file-service-liquibase</id>
                         <configuration>
                             <changeLogFile>liquibase/file-service-liquibase-db-changelog.xml
@@ -311,6 +323,11 @@
                         <groupId>uk.gov.justice.services</groupId>
                         <artifactId>file-service-liquibase</artifactId>
                         <version>${file.service.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>uk.gov.justice.services</groupId>
+                        <artifactId>shuttering-liquibase</artifactId>
+                        <version>${framework.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>uk.gov.justice.event-store</groupId>

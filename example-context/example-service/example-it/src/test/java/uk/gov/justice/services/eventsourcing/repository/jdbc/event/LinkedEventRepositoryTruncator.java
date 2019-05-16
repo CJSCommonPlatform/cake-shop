@@ -1,5 +1,7 @@
 package uk.gov.justice.services.eventsourcing.repository.jdbc.event;
 
+import uk.gov.justice.services.eventsourcing.publishedevent.PublishedEventInserter;
+
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
