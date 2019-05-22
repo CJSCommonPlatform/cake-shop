@@ -31,12 +31,12 @@
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
         <common-bom.version>2.0.2</common-bom.version>
-        <framework.version>6.0.0-M24</framework.version>
+        <framework.version>6.0.0-M26</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
-        <event-store.version>2.0.0-M25</event-store.version>
-        <framework-generators.version>2.0.0-M18</framework-generators.version>
+        <event-store.version>2.0.0-M26</event-store.version>
+        <framework-generators.version>2.0.0-M20</framework-generators.version>
         <file.service.version>1.17.7</file.service.version>
-        <framework-api.version>4.0.0-M20</framework-api.version>
+        <framework-api.version>4.0.0-M21</framework-api.version>
         <generator-maven-plugin.version>2.7.0</generator-maven-plugin.version>
         <json-schema-catalog.version>1.7.0</json-schema-catalog.version>
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
