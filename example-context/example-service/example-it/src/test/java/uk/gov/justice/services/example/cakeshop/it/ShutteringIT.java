@@ -71,7 +71,7 @@ public class ShutteringIT {
     }
 
     @Test
-    public void shouldNotReturnRecipesAfterShuttering() throws MalformedObjectNameException, IntrospectionException, ReflectionException, InstanceNotFoundException, IOException {
+    public void shouldNotReturnRecipesAfterShuttering() throws Exception {
         //invoke shuttering
         invokeShuttering(true);
 
@@ -79,18 +79,22 @@ public class ShutteringIT {
         final String recipeId = addRecipe(MARBLE_CAKE);
         final String recipeId2 = addRecipe(CARROT_CAKE);
 
+        Thread.sleep(5000L);
+
         //check recipes have not been added due to shuttering
         verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
     }
 
     @Test
-    public void shouldQueryForRecipesAfterUnShuttering() throws MalformedObjectNameException, IntrospectionException, ReflectionException, InstanceNotFoundException, IOException {
+    public void shouldQueryForRecipesAfterUnShuttering() throws Exception {
         //invoke shuttering
         invokeShuttering(true);
 
         //add more recipes
         final String recipeId = addRecipe(MARBLE_CAKE);
         final String recipeId2 = addRecipe(CARROT_CAKE);
+
+        Thread.sleep(5000L);
 
         //check recipes have not been added due to shuttering
         verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);

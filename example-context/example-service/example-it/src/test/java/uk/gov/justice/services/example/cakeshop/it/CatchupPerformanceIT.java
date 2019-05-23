@@ -9,7 +9,7 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.LinkedEventRepositoryTruncator;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEventTableTruncator;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
@@ -22,8 +22,6 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory
 import uk.gov.justice.services.example.cakeshop.it.helpers.StandaloneStreamStatusJdbcRepositoryFactory;
 import uk.gov.justice.services.jmx.Catchup;
 import uk.gov.justice.services.jmx.CatchupMBean;
-import uk.gov.justice.services.jmx.Shuttering;
-import uk.gov.justice.services.jmx.ShutteringMBean;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 
 import java.sql.SQLException;
@@ -48,7 +46,7 @@ public class CatchupPerformanceIT {
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
     private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
-    private final LinkedEventRepositoryTruncator linkedEventRepositoryTruncator = new LinkedEventRepositoryTruncator(eventStoreDataSource);
+    private final PublishedEventTableTruncator publishedEventTableTruncator = new PublishedEventTableTruncator(eventStoreDataSource);
 
     private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
@@ -74,26 +72,12 @@ public class CatchupPerformanceIT {
         client.close();
     }
 
-    @After
-    public void unShutter() throws Exception {
-
-        try (final JMXConnector jmxConnector = mBeanHelper.getJMXConnector()) {
-            final MBeanServerConnection connection = jmxConnector.getMBeanServerConnection();
-
-            final ObjectName objectName = new ObjectName("shuttering", "type", Shuttering.class.getSimpleName());
-
-            mBeanHelper.getMbeanProxy(connection, objectName, ShutteringMBean.class).doUnshutteringRequested();
-        }
-    }
-
     @Test
     public void shouldReplayAndFindRecipesInViewStore() throws Exception {
 
         final int numberOfStreams = 10;
         final int numberOfEventsPerStream = 100;
         final int totalEvents = numberOfStreams * numberOfEventsPerStream;
-
-        shutter();
 
         truncateEventLog();
         recipeTableInspector.truncateViewstoreTables();
@@ -111,10 +95,25 @@ public class CatchupPerformanceIT {
 
         if (numberOfEvents.isPresent()) {
             System.out.println("Inserted " + numberOfEvents.get() + " events");
-        }   else {
+        } else {
             fail("Failed to insert " + totalEvents + " events");
         }
 
+        for (final UUID streamId : streamIds) {
+
+            final Optional<Long> eventCount = longPoller.pollUntilFound(() -> {
+                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId);
+                if (eventsPerStream == numberOfEventsPerStream) {
+                    return of(eventsPerStream);
+                }
+
+                return empty();
+            });
+
+            if (!eventCount.isPresent()) {
+                fail();
+            }
+        }
 
         recipeTableInspector.truncateViewstoreTables();
 
@@ -127,7 +126,7 @@ public class CatchupPerformanceIT {
         }
 
 
-        for(final UUID streamId: streamIds) {
+        for (final UUID streamId : streamIds) {
 
             final Optional<Long> eventCount = longPoller.pollUntilFound(() -> {
                 final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId);
@@ -138,7 +137,7 @@ public class CatchupPerformanceIT {
                 return empty();
             });
 
-            if (! eventCount.isPresent()) {
+            if (!eventCount.isPresent()) {
                 fail();
             }
         }
@@ -177,18 +176,7 @@ public class CatchupPerformanceIT {
         final Stream<Event> eventStream = eventJdbcRepository.findAll();
         eventStream.forEach(event -> eventJdbcRepository.clear(event.getStreamId()));
 
-        linkedEventRepositoryTruncator.truncate();
-    }
-
-    private void shutter() throws Exception {
-
-        try (final JMXConnector jmxConnector = mBeanHelper.getJMXConnector()) {
-            final MBeanServerConnection connection = jmxConnector.getMBeanServerConnection();
-
-            final ObjectName objectName = new ObjectName("shuttering", "type", Shuttering.class.getSimpleName());
-
-            mBeanHelper.getMbeanProxy(connection, objectName, ShutteringMBean.class).doShutteringRequested();
-        }
+        publishedEventTableTruncator.truncate();
     }
 
     private void runCatchup() throws Exception {

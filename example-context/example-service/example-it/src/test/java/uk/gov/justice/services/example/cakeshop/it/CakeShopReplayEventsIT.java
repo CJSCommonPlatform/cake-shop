@@ -11,7 +11,7 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.LinkedEventRepositoryTruncator;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEventTableTruncator;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
@@ -49,7 +49,7 @@ public class CakeShopReplayEventsIT {
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
     private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
-    private final LinkedEventRepositoryTruncator linkedEventRepositoryTruncator = new LinkedEventRepositoryTruncator(eventStoreDataSource);
+    private final PublishedEventTableTruncator publishedEventTableTruncator = new PublishedEventTableTruncator(eventStoreDataSource);
 
     private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
@@ -148,7 +148,7 @@ public class CakeShopReplayEventsIT {
         final Stream<Event> eventStream = eventJdbcRepository.findAll();
         eventStream.forEach(event -> eventJdbcRepository.clear(event.getStreamId()));
 
-        linkedEventRepositoryTruncator.truncate();
+        publishedEventTableTruncator.truncate();
     }
 
     private void runCatchup() throws Exception {
