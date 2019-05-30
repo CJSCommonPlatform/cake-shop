@@ -1,6 +1,8 @@
 package uk.gov.justice.services.example.cakeshop.it.helpers;
 
 
+import static java.lang.String.format;
+
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Recipe;
 
 import java.sql.Connection;
@@ -91,18 +93,22 @@ public class RecipeTableInspector {
         }
     }
 
-    public long countEventsPerStream(final UUID streamId) {
+    public long countEventsPerStream(final UUID streamId, final String componentName) {
 
-        final String sql = "SELECT position FROM stream_status WHERE stream_id = ?";
+        final String sql = "SELECT position FROM stream_status WHERE stream_id = ? AND component = ?";
 
         try(final Connection connection = viewStoreDataSource.getConnection();
             final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setObject(1, streamId);
+            preparedStatement.setString(2, componentName);
 
             try(final ResultSet resultSet = preparedStatement.executeQuery()) {
-                resultSet.next();
-                return resultSet.getLong(1);
+                if(resultSet.next()) {
+                    return resultSet.getLong(1);
+                } else {
+                    throw new RuntimeException(format("No results returned from query '%s'", sql));
+                }
             }
 
         } catch (final SQLException e) {

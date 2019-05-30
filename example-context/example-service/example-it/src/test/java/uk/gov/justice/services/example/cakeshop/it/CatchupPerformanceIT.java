@@ -19,7 +19,6 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamItera
 import uk.gov.justice.services.example.cakeshop.it.helpers.PublishedEventCounter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RecipeTableInspector;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.StandaloneStreamStatusJdbcRepositoryFactory;
 import uk.gov.justice.services.jmx.Catchup;
 import uk.gov.justice.services.jmx.CatchupMBean;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
@@ -51,8 +50,6 @@ public class CatchupPerformanceIT {
     private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
 
-    private final StandaloneStreamStatusJdbcRepositoryFactory standaloneStreamStatusJdbcRepositoryFactory = new StandaloneStreamStatusJdbcRepositoryFactory();
-
     private final RecipeTableInspector recipeTableInspector = new RecipeTableInspector(viewStoreDataSource);
     private final PublishedEventCounter publishedEventCounter = new PublishedEventCounter(eventStoreDataSource);
 
@@ -78,6 +75,7 @@ public class CatchupPerformanceIT {
         final int numberOfStreams = 10;
         final int numberOfEventsPerStream = 100;
         final int totalEvents = numberOfStreams * numberOfEventsPerStream;
+        final String componentName = "EVENT_LISTENER";
 
         truncateEventLog();
         recipeTableInspector.truncateViewstoreTables();
@@ -102,7 +100,7 @@ public class CatchupPerformanceIT {
         for (final UUID streamId : streamIds) {
 
             final Optional<Long> eventCount = longPoller.pollUntilFound(() -> {
-                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId);
+                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId, componentName);
                 if (eventsPerStream == numberOfEventsPerStream) {
                     return of(eventsPerStream);
                 }
@@ -129,7 +127,7 @@ public class CatchupPerformanceIT {
         for (final UUID streamId : streamIds) {
 
             final Optional<Long> eventCount = longPoller.pollUntilFound(() -> {
-                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId);
+                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId, componentName);
                 if (eventsPerStream == numberOfEventsPerStream) {
                     return of(eventsPerStream);
                 }
