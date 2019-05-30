@@ -60,6 +60,6 @@ public class CakeShopEventBufferingIT {
 
     @SuppressWarnings("SameParameterValue")
     private Optional<Subscription> subscription(final String recipeId) {
-        return streamStatusJdbcRepository.findByStreamIdAndSource(fromString(recipeId), CONTEXT_NAME);
+        return streamStatusJdbcRepository.findByStreamIdAndSource(fromString(recipeId), CONTEXT_NAME, "EVENT_LISTENER");
     }
 }

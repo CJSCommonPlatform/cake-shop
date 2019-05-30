@@ -58,7 +58,7 @@ public class RebuildIT {
         commandSender = new CommandSender(client, eventFactory);
 
         databaseCleaner.cleanEventStoreTables("framework");
-        databaseCleaner.cleanViewStoreTables("framework", "cake", "cake_order", "recipe", "ingredient");
+        databaseCleaner.cleanViewStoreTables("framework", "cake", "cake_order", "recipe", "ingredient", "processed_event");
     }
 
     @Test

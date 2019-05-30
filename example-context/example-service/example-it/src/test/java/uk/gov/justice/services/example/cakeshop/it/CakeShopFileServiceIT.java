@@ -29,6 +29,7 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class CakeShopFileServiceIT {
 
     @Before
     public void before() throws Exception {
+        new DatabaseCleaner().cleanViewStoreTables("framework", "cake", "cake_order", "recipe", "ingredient", "processed_event");
         client = new RestEasyClientFactory().createResteasyClient();
         querier = new Querier(client);
         commandSender = new CommandSender(client, new EventFactory());
