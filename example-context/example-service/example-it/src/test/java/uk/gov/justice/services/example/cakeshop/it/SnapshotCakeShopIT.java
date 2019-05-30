@@ -88,7 +88,7 @@ public class SnapshotCakeShopIT {
         final Recipe recipe = recipeAggregateSnapshot.getAggregate(new DefaultObjectInputStreamStrategy());
         setField(recipe, "name", newRecipeName);
         snapshotJdbcRepository.removeAllSnapshots(recipeAggregateSnapshot.getStreamId(), Recipe.class);
-        snapshotJdbcRepository.storeSnapshot(new AggregateSnapshot(recipeAggregateSnapshot.getStreamId(), recipeAggregateSnapshot.getVersionId(), recipe));
+        snapshotJdbcRepository.storeSnapshot(new AggregateSnapshot(recipeAggregateSnapshot.getStreamId(), recipeAggregateSnapshot.getPositionInStream(), recipe));
     }
 
     private Optional<AggregateSnapshot<Recipe>> recipeAggregateSnapshotOf(final String recipeId) {

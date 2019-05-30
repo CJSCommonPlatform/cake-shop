@@ -4,6 +4,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Integration test for event catchup
+- Integration test for PublishedEvent rebuild.
 
 ## [2.0.0-M3] - 2019-05-09
 
