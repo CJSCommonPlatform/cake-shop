@@ -20,4 +20,5 @@ public class CakeShopMediaTypes {
     public static final String QUERY_CAKES_MEDIA_TYPE = PREFIX + "cakes+json";
     public static final String QUERY_ORDER_MEDIA_TYPE = PREFIX + "order+json";
     public static final String POST_RECIPES_QUERY_MEDIA_TYPE = PREFIX + "query-recipes+json";
+    public static final String QUERY_INDEX_MEDIA_TYPE = PREFIX + "index+json";
 }

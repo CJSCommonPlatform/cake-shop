@@ -31,6 +31,12 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>example-event-indexer</artifactId>
+            <version>${project.version}</version>
+            <classifier>classes</classifier>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>example-event-processor</artifactId>
             <version>${project.version}</version>
             <classifier>classes</classifier>
@@ -58,6 +64,7 @@
             <artifactId>event-publisher-timer</artifactId>
             <version>${event-store.version}</version>
         </dependency>
+
 
         <!-- Test Dependencies -->
         <dependency>

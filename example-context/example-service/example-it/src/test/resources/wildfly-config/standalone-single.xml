@@ -510,7 +510,7 @@
                     <location name="/" handler="welcome-content"/>
                     <filter-ref name="server-header"/>
                     <filter-ref name="x-powered-by-header"/>
-                    <filter-ref name="example-single" predicate="path-prefix('/example-command-api/') or path-prefix('/example-command-controller/') or path-prefix('/example-command-handler/') or path-prefix('/example-event-api/') or path-prefix('/example-event-listener/') or path-prefix('/example-event-processor/') or path-prefix('/example-query-api/') or path-prefix('/example-query-controller/') or path-prefix('/example-query-view/') or path-prefix('/example-custom-api/')" />
+                    <filter-ref name="example-single" predicate="path-prefix('/example-command-api/') or path-prefix('/example-command-controller/') or path-prefix('/example-command-handler/') or path-prefix('/example-event-api/') or path-prefix('/example-event-listener/') or path-prefix('/example-event-indexer/') or path-prefix('/example-event-processor/') or path-prefix('/example-query-api/') or path-prefix('/example-query-controller/') or path-prefix('/example-query-view/') or path-prefix('/example-custom-api/')" />
                 </host>
             </server>
             <servlet-container name="default">

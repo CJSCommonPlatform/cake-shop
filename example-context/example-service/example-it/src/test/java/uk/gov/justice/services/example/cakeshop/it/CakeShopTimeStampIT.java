@@ -1,6 +1,7 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
 import static com.jayway.awaitility.Awaitility.await;
+import static com.jayway.awaitility.Duration.*;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static java.util.UUID.randomUUID;
@@ -33,9 +34,11 @@ import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
+import com.jayway.awaitility.Duration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class CakeShopTimeStampIT {
 

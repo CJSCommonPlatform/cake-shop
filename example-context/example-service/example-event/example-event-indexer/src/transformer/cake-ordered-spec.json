@@ -1,0 +1,12 @@
+{
+  "operations": [
+    {
+      "operation": "shift",
+      "spec": {
+        "cakeId": "cakeId",
+        "recipeId": "recipeId",
+        "deliveryDate": "deliveryDate"
+      }
+    }
+  ]
+}

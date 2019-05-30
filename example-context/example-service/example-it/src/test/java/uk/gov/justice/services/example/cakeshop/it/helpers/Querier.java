@@ -6,10 +6,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.fail;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_CAKES_MEDIA_TYPE;
+import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_INDEX_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_ORDER_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_RECIPES_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_RECIPE_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.CAKES_RESOURCE_QUERY_URI;
+import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.INDEXES_RESOURCE_QUERY_URI;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.ORDERS_RESOURCE_QUERY_URI;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_QUERY_URI;
 
@@ -41,6 +43,10 @@ public class Querier {
         return ApiResponse.from(jaxrsResponse);
     }
 
+    public ApiResponse queryForIndex(final String recipeId) {
+        final Response jaxrsResponse = client.target(INDEXES_RESOURCE_QUERY_URI + recipeId).request().accept(QUERY_INDEX_MEDIA_TYPE).get();
+        return ApiResponse.from(jaxrsResponse);
+    }
     public ApiResponse recipesQueryResult() {
         return recipesQueryResult(singletonList(new BasicNameValuePair("pagesize", "50")));
     }

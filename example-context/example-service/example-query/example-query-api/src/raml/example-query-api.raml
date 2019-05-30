@@ -111,3 +111,19 @@ protocols: [ HTTP, HTTPS ]
       200:
         body:
           application/octet-stream:
+
+/index/{indexId}:
+  description: return a index
+  get:
+    description: |
+        ...
+        (mapping):
+            responseType: application/vnd.example.index+json
+            name: example.get-index
+        ...
+    responses:
+      200:
+        body:
+          application/vnd.example.index+json:
+            schema: !include json/schema/example.search-index.json
+            example: !include json/index.json
