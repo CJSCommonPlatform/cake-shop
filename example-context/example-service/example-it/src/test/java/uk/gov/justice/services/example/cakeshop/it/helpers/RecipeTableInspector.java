@@ -1,8 +1,6 @@
 package uk.gov.justice.services.example.cakeshop.it.helpers;
 
 
-import static java.lang.String.format;
-
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Recipe;
 
 import java.sql.Connection;
@@ -21,34 +19,6 @@ public class RecipeTableInspector {
 
     public RecipeTableInspector(final DataSource viewStoreDataSource) {
         this.viewStoreDataSource = viewStoreDataSource;
-    }
-
-    public void truncateViewstoreTables() {
-
-        final List<String> tableNames = new ArrayList<>();
-
-        tableNames.add("ingredient");
-        tableNames.add("recipe");
-        tableNames.add("cake");
-        tableNames.add("cake_order");
-        tableNames.add("processed_event");
-        tableNames.add("stream_buffer");
-        tableNames.add("stream_status");
-
-        tableNames.forEach(this::truncateTable);
-    }
-
-    private void truncateTable(final String tableName) {
-
-        final String sql = "DELETE FROM " + tableName;
-
-        try(final Connection connection = viewStoreDataSource.getConnection();
-            final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.executeUpdate();
-        } catch (final SQLException e) {
-            throw new RuntimeException("Failed to run query '" + sql + "' against the view store", e);
-        }
     }
 
     public int countNumberOfRecipes() {
@@ -107,7 +77,7 @@ public class RecipeTableInspector {
                 if(resultSet.next()) {
                     return resultSet.getLong(1);
                 } else {
-                    throw new RuntimeException(format("No results returned from query '%s'", sql));
+                    return 0L;
                 }
             }
 

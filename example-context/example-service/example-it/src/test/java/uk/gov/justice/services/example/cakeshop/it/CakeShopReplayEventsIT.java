@@ -6,41 +6,33 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import uk.gov.justice.services.event.buffer.core.repository.subscription.StreamStatusJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEventTableTruncator;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
+import uk.gov.justice.services.eventstore.management.catchup.commands.CatchupCommand;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
-import uk.gov.justice.services.example.cakeshop.it.helpers.MBeanHelper;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RecipeTableInspector;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.StandaloneStreamStatusJdbcRepositoryFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.SystemCommandMBeanClient;
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Recipe;
-import uk.gov.justice.services.jmx.Catchup;
-import uk.gov.justice.services.jmx.CatchupMBean;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
-import javax.management.JMX;
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class CakeShopReplayEventsIT {
@@ -49,30 +41,36 @@ public class CakeShopReplayEventsIT {
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
     private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
-    private final PublishedEventTableTruncator publishedEventTableTruncator = new PublishedEventTableTruncator(eventStoreDataSource);
 
     private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
-
-    private final StandaloneStreamStatusJdbcRepositoryFactory standaloneStreamStatusJdbcRepositoryFactory = new StandaloneStreamStatusJdbcRepositoryFactory();
-    private final StreamStatusJdbcRepository streamStatusJdbcRepository = standaloneStreamStatusJdbcRepositoryFactory.getStreamStatusJdbcRepository(viewStoreDataSource);
 
     private final RecipeTableInspector recipeTableInspector = new RecipeTableInspector(viewStoreDataSource);
 
     private final Poller poller = new Poller(60, 1000L);
 
+    private final SystemCommandMBeanClient systemCommandMBeanClient = new SystemCommandMBeanClient();
+    private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
+
     private Client client;
-    private MBeanHelper mBeanHelper;
 
     @Before
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
-        mBeanHelper = new MBeanHelper();
+
+        final String contextName = "framework";
+
+        databaseCleaner.cleanEventStoreTables(contextName);
+        cleanViewstoreTables();
+
+        databaseCleaner.cleanStreamBufferTable(contextName);
+        databaseCleaner.cleanStreamStatusTable(contextName);
     }
 
     @After
     public void cleanup() {
         client.close();
+        systemCommandMBeanClient.close();
     }
 
     @Test
@@ -80,9 +78,6 @@ public class CakeShopReplayEventsIT {
 
         final int numberOfStreams = 6;
         final int numberOfEventsPerStream = 2;
-
-        truncateEventLog();
-        recipeTableInspector.truncateViewstoreTables();
 
         addEventsToEventLog(numberOfStreams, numberOfEventsPerStream);
 
@@ -96,9 +91,9 @@ public class CakeShopReplayEventsIT {
 
         final List<Recipe> originalRecipes = recipeTableInspector.getAllRecipes();
 
-        recipeTableInspector.truncateViewstoreTables();
+        cleanViewstoreTables();
 
-        runCatchup();
+        systemCommandMBeanClient.getMbeanProxy().runCommand(new CatchupCommand());
 
         final Optional<Integer> numberOfReplayedRecipesOptional = checkExpectedNumberOfRecipes(numberOfStreams);
 
@@ -144,30 +139,6 @@ public class CakeShopReplayEventsIT {
         }
     }
 
-    private void truncateEventLog() throws SQLException {
-        final Stream<Event> eventStream = eventJdbcRepository.findAll();
-        eventStream.forEach(event -> eventJdbcRepository.clear(event.getStreamId()));
-
-        publishedEventTableTruncator.truncate();
-    }
-
-    private void runCatchup() throws Exception {
-
-        try (final JMXConnector jmxConnector = mBeanHelper.getJMXConnector()) {
-            final MBeanServerConnection connection = jmxConnector.getMBeanServerConnection();
-
-            final ObjectName objectName = new ObjectName("catchup", "type", Catchup.class.getSimpleName());
-
-            mBeanHelper.getMbeanDomains(connection);
-
-            mBeanHelper.getMbeanOperations(objectName, connection);
-
-            final CatchupMBean catchupMBean = JMX.newMBeanProxy(connection, objectName, CatchupMBean.class, true);
-
-            catchupMBean.doCatchupRequested();
-        }
-    }
-
     private Optional<Integer> checkExpectedNumberOfRecipes(final int numberOfStreams) {
         return poller.pollUntilFound(() -> {
             final int numberOfRecipes = recipeTableInspector.countNumberOfRecipes();
@@ -178,5 +149,20 @@ public class CakeShopReplayEventsIT {
 
             return empty();
         });
+    }
+
+    private void cleanViewstoreTables() {
+
+        final String contextName = "framework";
+
+        databaseCleaner.cleanViewStoreTables(contextName,
+                "ingredient",
+                "recipe",
+                "cake",
+                "cake_order",
+                "processed_event",
+                "shuttered_command_store",
+                "stream_status"
+        );
     }
 }

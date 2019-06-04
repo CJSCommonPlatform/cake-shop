@@ -51,13 +51,17 @@ public class MBeanHelper {
         mbeanOperations.forEach(mBeanOperationInfo -> logger.info(mBeanOperationInfo.getName()));
     }
 
-    public JMXConnector getJMXConnector() throws IOException {
-        final int managementPort = valueOf(getProperty(RANDOM_MANAGEMENT_PORT));
+    public JMXConnector getJMXConnector()  {
+        try {
+            final int managementPort = valueOf(getProperty(RANDOM_MANAGEMENT_PORT));
 
-        final String urlString =
-                getProperty("jmx.service.url","service:jmx:remote+http://" + HOST + ":" + managementPort);
-        final JMXServiceURL serviceURL = new JMXServiceURL(urlString);
+            final String urlString =
+                    getProperty("jmx.service.url","service:jmx:remote+http://" + HOST + ":" + managementPort);
+            final JMXServiceURL serviceURL = new JMXServiceURL(urlString);
 
-        return connect(serviceURL, null);
+            return connect(serviceURL, null);
+        } catch (final IOException e) {
+            throw new MBeanClientException("Failed to connect to JMX", e);
+        }
     }
 }

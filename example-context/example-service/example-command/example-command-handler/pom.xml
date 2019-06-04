@@ -84,6 +84,11 @@
             <artifactId>aggregate</artifactId>
             <version>${framework.version}</version>
         </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.event-store</groupId>
+            <artifactId>event-store-management</artifactId>
+            <version>${event-store.version}</version>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
