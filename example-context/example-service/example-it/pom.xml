@@ -204,6 +204,25 @@
             <groupId>uk.gov.justice.event-store</groupId>
             <artifactId>test-utils-event</artifactId>
             <version>${event-store.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.event-store</groupId>
+            <artifactId>subscription-manager</artifactId>
+            <version>${event-store.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.event-store</groupId>
+            <artifactId>event-store-management</artifactId>
+            <version>${event-store.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>framework-management</artifactId>
+            <version>${framework.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

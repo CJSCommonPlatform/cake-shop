@@ -2,7 +2,6 @@ package uk.gov.justice.services.example.cakeshop.it;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static javax.management.JMX.newMBeanProxy;
 import static org.junit.Assert.fail;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
@@ -12,27 +11,22 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJd
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEventTableTruncator;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
+import uk.gov.justice.services.eventstore.management.catchup.commands.CatchupCommand;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
-import uk.gov.justice.services.example.cakeshop.it.helpers.MBeanHelper;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PublishedEventCounter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RecipeTableInspector;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.Catchup;
-import uk.gov.justice.services.jmx.CatchupMBean;
+import uk.gov.justice.services.example.cakeshop.it.helpers.SystemCommandMBeanClient;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
@@ -53,20 +47,27 @@ public class CatchupPerformanceIT {
     private final RecipeTableInspector recipeTableInspector = new RecipeTableInspector(viewStoreDataSource);
     private final PublishedEventCounter publishedEventCounter = new PublishedEventCounter(eventStoreDataSource);
 
+    private final SystemCommandMBeanClient systemCommandMBeanClient = new SystemCommandMBeanClient();
+    private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
+
     private final Poller longPoller = new Poller(1200, 1000L);
 
     private Client client;
-    private MBeanHelper mBeanHelper;
 
     @Before
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
-        mBeanHelper = new MBeanHelper();
+
+        final String contextName = "framework";
+
+        databaseCleaner.cleanEventStoreTables(contextName);
+        cleanViewstoreTables();
     }
 
     @After
     public void cleanup() {
         client.close();
+        systemCommandMBeanClient.close();
     }
 
     @Test
@@ -76,9 +77,6 @@ public class CatchupPerformanceIT {
         final int numberOfEventsPerStream = 100;
         final int totalEvents = numberOfStreams * numberOfEventsPerStream;
         final String componentName = "EVENT_LISTENER";
-
-        truncateEventLog();
-        recipeTableInspector.truncateViewstoreTables();
 
         final List<UUID> streamIds = addEventsToEventLog(numberOfStreams, numberOfEventsPerStream);
 
@@ -109,11 +107,11 @@ public class CatchupPerformanceIT {
             });
 
             if (!eventCount.isPresent()) {
-                fail();
+                fail("Expected " + numberOfEventsPerStream + " events but found " + recipeTableInspector.countEventsPerStream(streamId, componentName) + " in stream " + streamId);
             }
         }
 
-        recipeTableInspector.truncateViewstoreTables();
+        cleanViewstoreTables();
 
         runCatchup();
 
@@ -170,28 +168,10 @@ public class CatchupPerformanceIT {
         return streamIds;
     }
 
-    private void truncateEventLog() throws SQLException {
-        final Stream<Event> eventStream = eventJdbcRepository.findAll();
-        eventStream.forEach(event -> eventJdbcRepository.clear(event.getStreamId()));
-
-        publishedEventTableTruncator.truncate();
-    }
-
     private void runCatchup() throws Exception {
 
-        try (final JMXConnector jmxConnector = mBeanHelper.getJMXConnector()) {
-            final MBeanServerConnection connection = jmxConnector.getMBeanServerConnection();
+        systemCommandMBeanClient.getMbeanProxy().runCommand(new CatchupCommand());
 
-            final ObjectName objectName = new ObjectName("catchup", "type", Catchup.class.getSimpleName());
-
-            mBeanHelper.getMbeanDomains(connection);
-
-            mBeanHelper.getMbeanOperations(objectName, connection);
-
-            final CatchupMBean catchupMBean = newMBeanProxy(connection, objectName, CatchupMBean.class, true);
-
-            catchupMBean.doCatchupRequested();
-        }
     }
 
     private Optional<Integer> checkExpectedNumberOfRecipes(final int numberOfStreams) {
@@ -205,4 +185,22 @@ public class CatchupPerformanceIT {
             return empty();
         });
     }
+
+    private void cleanViewstoreTables() {
+
+        final String contextName = "framework";
+
+        databaseCleaner.cleanViewStoreTables(contextName,
+                "ingredient",
+                "recipe",
+                "cake",
+                "cake_order",
+                "processed_event",
+                "shuttered_command_store"
+        );
+
+        databaseCleaner.cleanStreamBufferTable(contextName);
+        databaseCleaner.cleanStreamStatusTable(contextName);
+    }
+
 }

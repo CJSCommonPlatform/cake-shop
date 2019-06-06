@@ -11,13 +11,12 @@ import static org.junit.Assert.fail;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
+import uk.gov.justice.services.eventstore.management.rebuild.commands.RebuildCommand;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.MBeanHelper;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.Rebuild;
-import uk.gov.justice.services.jmx.RebuildMBean;
+import uk.gov.justice.services.example.cakeshop.it.helpers.SystemCommandMBeanClient;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.events.TestEventInserter;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
@@ -29,13 +28,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.management.MBeanServerConnection;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RebuildIT {
@@ -47,10 +44,10 @@ public class RebuildIT {
 
     private CommandSender commandSender;
     private final SequenceSetter sequenceSetter = new SequenceSetter();
-    private final MBeanHelper mBeanHelper = new MBeanHelper();
 
     private final Poller poller = new Poller();
 
+    private final SystemCommandMBeanClient systemCommandMBeanClient = new SystemCommandMBeanClient();
 
     @Before
     public void before() throws Exception {
@@ -101,14 +98,7 @@ public class RebuildIT {
     }
 
     private void invokeRebuild() throws Exception {
-        try (final JMXConnector jmxConnector = mBeanHelper.getJMXConnector()) {
-
-            final MBeanServerConnection connection = jmxConnector.getMBeanServerConnection();
-            final ObjectName objectName = new ObjectName("rebuild", "type", Rebuild.class.getSimpleName());
-            final RebuildMBean rebuildMBean = mBeanHelper.getMbeanProxy(connection, objectName, RebuildMBean.class);
-
-            rebuildMBean.doRebuildRequested();
-        }
+        systemCommandMBeanClient.getMbeanProxy().runCommand(new RebuildCommand());
     }
 
     private List<PublishedEvent> getPublishedEvents() {

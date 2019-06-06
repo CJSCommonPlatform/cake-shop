@@ -16,22 +16,20 @@ import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMat
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.MBeanHelper;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.Shuttering;
-import uk.gov.justice.services.jmx.ShutteringMBean;
+import uk.gov.justice.services.example.cakeshop.it.helpers.SystemCommandMBeanClient;
+import uk.gov.justice.services.jmx.command.SystemCommanderMBean;
+import uk.gov.justice.services.management.shuttering.command.ShutterSystemCommand;
+import uk.gov.justice.services.management.shuttering.command.UnshutterSystemCommand;
 
 import java.io.IOException;
 import java.util.Optional;
 
 import javax.management.InstanceNotFoundException;
 import javax.management.IntrospectionException;
-import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
 import javax.management.ReflectionException;
-import javax.management.remote.JMXConnector;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response.Status;
 
@@ -52,28 +50,33 @@ public class ShutteringIT {
     private Querier querier;
     private CommandSender commandSender;
 
-    private MBeanHelper mBeanHelper;
+    private final SystemCommandMBeanClient systemCommandMBeanClient = new SystemCommandMBeanClient();
 
     @Before
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
         querier = new Querier(client);
         commandSender = new CommandSender(client, eventFactory);
-        mBeanHelper = new MBeanHelper();
     }
 
     @After
     public void cleanup() throws MalformedObjectNameException, IntrospectionException, ReflectionException, InstanceNotFoundException, IOException {
         client.close();
 
+        final SystemCommanderMBean systemCommanderMBean = systemCommandMBeanClient.getMbeanProxy();
+
         //invoke unshuttering - Always ensure unshutter is invoked as we cannot guarantee order of execution for other Cakeeshop IT's
-        invokeShuttering(false);
+        systemCommanderMBean.runCommand(new UnshutterSystemCommand());
+        systemCommandMBeanClient.close();
     }
 
     @Test
     public void shouldNotReturnRecipesAfterShuttering() throws Exception {
+
+        final SystemCommanderMBean systemCommanderMBean = systemCommandMBeanClient.getMbeanProxy();
+
         //invoke shuttering
-        invokeShuttering(true);
+        systemCommanderMBean.runCommand(new ShutterSystemCommand());
 
         //add 2 recipes
         final String recipeId = addRecipe(MARBLE_CAKE);
@@ -87,8 +90,11 @@ public class ShutteringIT {
 
     @Test
     public void shouldQueryForRecipesAfterUnShuttering() throws Exception {
+
+        final SystemCommanderMBean systemCommanderMBean = systemCommandMBeanClient.getMbeanProxy();
+
         //invoke shuttering
-        invokeShuttering(true);
+        systemCommanderMBean.runCommand(new ShutterSystemCommand());
 
         //add more recipes
         final String recipeId = addRecipe(MARBLE_CAKE);
@@ -100,10 +106,10 @@ public class ShutteringIT {
         verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
         //invoke unshuttering
-        invokeShuttering(false);
+        systemCommanderMBean.runCommand(new UnshutterSystemCommand());
 
         ////check new recipes have been added successfully after unshuttering
-        verifyRecipeAdded(recipeId, recipeId2, MARBLE_CAKE, CARROT_CAKE,true, OK);
+        verifyRecipeAdded(recipeId, recipeId2, MARBLE_CAKE, CARROT_CAKE, true, OK);
     }
 
     private void verifyRecipeAdded(final String recipeId,
@@ -114,7 +120,7 @@ public class ShutteringIT {
                                    final Status status) {
         final Optional<String> recId = of(recipeId);
         await().until(() -> {
-            if(checkRecipeName) {
+            if (checkRecipeName) {
                 final ApiResponse response = verifyResponse(empty(), status);
 
                 verifyResponseBody(recipeId, recipeId2, recipeName, recipeName2, response);
@@ -131,7 +137,7 @@ public class ShutteringIT {
     }
 
     private ApiResponse verifyResponse(final Optional<String> recipeId, final Status status) {
-        final ApiResponse response = recipeId.isPresent() ? querier.queryForRecipe(recipeId.get()):
+        final ApiResponse response = recipeId.isPresent() ? querier.queryForRecipe(recipeId.get()) :
                 querier.recipesQueryResult();
 
         logger.info(format("Response: %s", response.httpCode()));
@@ -140,20 +146,6 @@ public class ShutteringIT {
         return response;
     }
 
-    private void invokeShuttering(final boolean isShutteringRequired) throws IOException, MalformedObjectNameException, IntrospectionException, InstanceNotFoundException, ReflectionException {
-        try(final JMXConnector jmxConnector = mBeanHelper.getJMXConnector()){
-
-            final MBeanServerConnection connection = jmxConnector.getMBeanServerConnection();
-
-            final ObjectName objectName = new ObjectName("shuttering", "type", Shuttering.class.getSimpleName());
-
-            if(isShutteringRequired) {
-                mBeanHelper.getMbeanProxy(connection, objectName, ShutteringMBean.class).doShutteringRequested();
-            } else {
-                mBeanHelper.getMbeanProxy(connection, objectName, ShutteringMBean.class).doUnshutteringRequested();
-            }
-        }
-    }
 
     private String addRecipe(final String cakeName) {
         final String recipeId = randomUUID().toString();
