@@ -32,7 +32,6 @@ import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RebuildIT {

@@ -76,7 +76,6 @@ public class CatchupPerformanceIT {
         final int numberOfStreams = 10;
         final int numberOfEventsPerStream = 100;
         final int totalEvents = numberOfStreams * numberOfEventsPerStream;
-        final String componentName = "EVENT_LISTENER";
 
         final List<UUID> streamIds = addEventsToEventLog(numberOfStreams, numberOfEventsPerStream);
 
@@ -98,7 +97,7 @@ public class CatchupPerformanceIT {
         for (final UUID streamId : streamIds) {
 
             final Optional<Long> eventCount = longPoller.pollUntilFound(() -> {
-                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId, componentName);
+                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId);
                 if (eventsPerStream == numberOfEventsPerStream) {
                     return of(eventsPerStream);
                 }
@@ -107,7 +106,7 @@ public class CatchupPerformanceIT {
             });
 
             if (!eventCount.isPresent()) {
-                fail("Expected " + numberOfEventsPerStream + " events but found " + recipeTableInspector.countEventsPerStream(streamId, componentName) + " in stream " + streamId);
+                fail("Expected " + numberOfEventsPerStream + " events but found " + recipeTableInspector.countEventsPerStream(streamId) + " in stream " + streamId);
             }
         }
 
@@ -125,7 +124,7 @@ public class CatchupPerformanceIT {
         for (final UUID streamId : streamIds) {
 
             final Optional<Long> eventCount = longPoller.pollUntilFound(() -> {
-                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId, componentName);
+                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId);
                 if (eventsPerStream == numberOfEventsPerStream) {
                     return of(eventsPerStream);
                 }
@@ -202,5 +201,4 @@ public class CatchupPerformanceIT {
         databaseCleaner.cleanStreamBufferTable(contextName);
         databaseCleaner.cleanStreamStatusTable(contextName);
     }
-
 }

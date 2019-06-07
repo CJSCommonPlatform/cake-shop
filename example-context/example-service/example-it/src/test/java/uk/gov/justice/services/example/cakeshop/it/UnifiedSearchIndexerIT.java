@@ -16,6 +16,7 @@ import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMat
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
 import java.util.UUID;
 
@@ -26,16 +27,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class UnifiedSearchIndexerIT {
 
-    private Client client;
-    private Querier querier;
+    private final Client client = new RestEasyClientFactory().createResteasyClient();
+    private final Querier querier = new Querier(client);
+
+    private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
     @Before
     public void before() throws Exception {
-        client = new RestEasyClientFactory().createResteasyClient();
-        querier = new Querier(client);
+
+        final String contextName = "framework";
+
+        databaseCleaner.cleanEventStoreTables(contextName);
+        cleanViewstoreTables();
     }
 
     @After
@@ -68,5 +73,22 @@ public class UnifiedSearchIndexerIT {
         with(queryResponse.body())
                 .assertThat("$.indexId", equalTo(recipeId.toString()))
                 .assertThat("$.deliveryDate", equalTo("2016-01-21T16:42:03.522Z"));
+    }
+
+    private void cleanViewstoreTables() {
+
+        final String contextName = "framework";
+
+        databaseCleaner.cleanViewStoreTables(contextName,
+                "ingredient",
+                "recipe",
+                "cake",
+                "cake_order",
+                "processed_event",
+                "shuttered_command_store"
+        );
+
+        databaseCleaner.cleanStreamBufferTable(contextName);
+        databaseCleaner.cleanStreamStatusTable(contextName);
     }
 }
