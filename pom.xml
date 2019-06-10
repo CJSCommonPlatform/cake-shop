@@ -33,7 +33,7 @@
         <common-bom.version>2.0.2</common-bom.version>
         <framework.version>6.0.0-M28</framework.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
-        <event-store.version>2.0.0-M33</event-store.version>
+        <event-store.version>2.0.0-M34</event-store.version>
         <framework-generators.version>2.0.0-M22</framework-generators.version>
         <file.service.version>1.17.7</file.service.version>
         <framework-api.version>4.0.0-M22</framework-api.version>

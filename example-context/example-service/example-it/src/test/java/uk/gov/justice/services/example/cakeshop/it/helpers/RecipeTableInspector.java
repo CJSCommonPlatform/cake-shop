@@ -63,7 +63,7 @@ public class RecipeTableInspector {
         }
     }
 
-    public long countEventsPerStream(final UUID streamId, final String componentName) {
+    public long countEventsPerStream(final UUID streamId) {
 
         final String sql = "SELECT position FROM stream_status WHERE stream_id = ? AND component = ?";
 
@@ -71,7 +71,7 @@ public class RecipeTableInspector {
             final PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setObject(1, streamId);
-            preparedStatement.setString(2, componentName);
+            preparedStatement.setString(2, "EVENT_LISTENER");
 
             try(final ResultSet resultSet = preparedStatement.executeQuery()) {
                 if(resultSet.next()) {
