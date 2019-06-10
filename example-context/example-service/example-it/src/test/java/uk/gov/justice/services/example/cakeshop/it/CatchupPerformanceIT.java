@@ -1,14 +1,16 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
+import static java.lang.Integer.valueOf;
+import static java.lang.System.getProperty;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.junit.Assert.fail;
+import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEventTableTruncator;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
 import uk.gov.justice.services.eventstore.management.catchup.commands.CatchupCommand;
@@ -18,7 +20,8 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamItera
 import uk.gov.justice.services.example.cakeshop.it.helpers.PublishedEventCounter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RecipeTableInspector;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.SystemCommandMBeanClient;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
@@ -39,7 +42,6 @@ public class CatchupPerformanceIT {
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
     private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
-    private final PublishedEventTableTruncator publishedEventTableTruncator = new PublishedEventTableTruncator(eventStoreDataSource);
 
     private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
@@ -47,7 +49,11 @@ public class CatchupPerformanceIT {
     private final RecipeTableInspector recipeTableInspector = new RecipeTableInspector(viewStoreDataSource);
     private final PublishedEventCounter publishedEventCounter = new PublishedEventCounter(eventStoreDataSource);
 
-    private final SystemCommandMBeanClient systemCommandMBeanClient = new SystemCommandMBeanClient();
+    private static final String HOST = getHost();
+    private static final int PORT = valueOf(getProperty("random.management.port"));
+
+
+    private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
     private final Poller longPoller = new Poller(1200, 1000L);
@@ -67,7 +73,6 @@ public class CatchupPerformanceIT {
     @After
     public void cleanup() {
         client.close();
-        systemCommandMBeanClient.close();
     }
 
     @Test
@@ -169,8 +174,10 @@ public class CatchupPerformanceIT {
 
     private void runCatchup() throws Exception {
 
-        systemCommandMBeanClient.getMbeanProxy().runCommand(new CatchupCommand());
+        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(HOST, PORT)) {
 
+            systemCommanderClient.getRemote().call(new CatchupCommand());
+        }
     }
 
     private Optional<Integer> checkExpectedNumberOfRecipes(final int numberOfStreams) {

@@ -185,7 +185,7 @@
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
-            <artifactId>jmx</artifactId>
+            <artifactId>jmx-command-handling</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -221,6 +221,12 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>framework-management</artifactId>
+            <version>${framework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>jmx-command-client</artifactId>
             <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
@@ -297,9 +303,9 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>shuttering-liquibase</id>
+                        <id>framework-system-liquibase</id>
                         <configuration>
-                            <changeLogFile>liquibase/shuttering-changelog.xml
+                            <changeLogFile>liquibase/framework-system-changelog.xml
                             </changeLogFile>
                             <url>jdbc:postgresql://localhost:5432/frameworkviewstore</url>
                         </configuration>
@@ -350,7 +356,7 @@
                     </dependency>
                     <dependency>
                         <groupId>uk.gov.justice.services</groupId>
-                        <artifactId>shuttering-liquibase</artifactId>
+                        <artifactId>framework-system-liquibase</artifactId>
                         <version>${framework.version}</version>
                     </dependency>
                     <dependency>

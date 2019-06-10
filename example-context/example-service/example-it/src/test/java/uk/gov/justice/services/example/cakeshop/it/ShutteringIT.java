@@ -2,7 +2,9 @@ package uk.gov.justice.services.example.cakeshop.it;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
+import static java.lang.Integer.valueOf;
 import static java.lang.String.format;
+import static java.lang.System.getProperty;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
@@ -11,6 +13,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.slf4j.LoggerFactory.getLogger;
+import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
@@ -18,18 +21,14 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.SystemCommandMBeanClient;
 import uk.gov.justice.services.jmx.command.SystemCommanderMBean;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.management.shuttering.command.ShutterSystemCommand;
 import uk.gov.justice.services.management.shuttering.command.UnshutterSystemCommand;
 
-import java.io.IOException;
 import java.util.Optional;
 
-import javax.management.InstanceNotFoundException;
-import javax.management.IntrospectionException;
-import javax.management.MalformedObjectNameException;
-import javax.management.ReflectionException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response.Status;
 
@@ -50,7 +49,10 @@ public class ShutteringIT {
     private Querier querier;
     private CommandSender commandSender;
 
-    private final SystemCommandMBeanClient systemCommandMBeanClient = new SystemCommandMBeanClient();
+    private static final String HOST = getHost();
+    private static final int PORT = valueOf(getProperty("random.management.port"));
+
+    private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
 
     @Before
     public void before() {
@@ -60,23 +62,25 @@ public class ShutteringIT {
     }
 
     @After
-    public void cleanup() throws MalformedObjectNameException, IntrospectionException, ReflectionException, InstanceNotFoundException, IOException {
+    public void cleanup() throws Exception {
         client.close();
 
-        final SystemCommanderMBean systemCommanderMBean = systemCommandMBeanClient.getMbeanProxy();
+        //invoke unshuttering - Always ensure unshutter is invoked as we cannot guarantee order of execution for other Cakeshop IT's
+        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(HOST, PORT)) {
 
-        //invoke unshuttering - Always ensure unshutter is invoked as we cannot guarantee order of execution for other Cakeeshop IT's
-        systemCommanderMBean.runCommand(new UnshutterSystemCommand());
-        systemCommandMBeanClient.close();
+            systemCommanderClient
+                    .getRemote()
+                    .call(new UnshutterSystemCommand());
+        }
     }
 
     @Test
     public void shouldNotReturnRecipesAfterShuttering() throws Exception {
 
-        final SystemCommanderMBean systemCommanderMBean = systemCommandMBeanClient.getMbeanProxy();
-
         //invoke shuttering
-        systemCommanderMBean.runCommand(new ShutterSystemCommand());
+        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(HOST, PORT)) {
+            systemCommanderClient.getRemote().call(new ShutterSystemCommand());
+        }
 
         //add 2 recipes
         final String recipeId = addRecipe(MARBLE_CAKE);
@@ -91,25 +95,28 @@ public class ShutteringIT {
     @Test
     public void shouldQueryForRecipesAfterUnShuttering() throws Exception {
 
-        final SystemCommanderMBean systemCommanderMBean = systemCommandMBeanClient.getMbeanProxy();
+        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(HOST, PORT)) {
 
-        //invoke shuttering
-        systemCommanderMBean.runCommand(new ShutterSystemCommand());
+            final SystemCommanderMBean systemCommander = systemCommanderClient.getRemote();
 
-        //add more recipes
-        final String recipeId = addRecipe(MARBLE_CAKE);
-        final String recipeId2 = addRecipe(CARROT_CAKE);
+            //invoke shuttering
+            systemCommander.call(new ShutterSystemCommand());
 
-        Thread.sleep(5000L);
+            //add more recipes
+            final String recipeId = addRecipe(MARBLE_CAKE);
+            final String recipeId2 = addRecipe(CARROT_CAKE);
 
-        //check recipes have not been added due to shuttering
-        verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
+            Thread.sleep(5000L);
 
-        //invoke unshuttering
-        systemCommanderMBean.runCommand(new UnshutterSystemCommand());
+            //check recipes have not been added due to shuttering
+            verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
-        ////check new recipes have been added successfully after unshuttering
-        verifyRecipeAdded(recipeId, recipeId2, MARBLE_CAKE, CARROT_CAKE, true, OK);
+            //invoke unshuttering
+            systemCommander.call(new UnshutterSystemCommand());
+
+            //check new recipes have been added successfully after unshuttering
+            verifyRecipeAdded(recipeId, recipeId2, MARBLE_CAKE, CARROT_CAKE, true, OK);
+        }
     }
 
     private void verifyRecipeAdded(final String recipeId,

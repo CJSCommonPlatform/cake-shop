@@ -1,7 +1,7 @@
 package uk.gov.justice.services.example.cakeshop.persistence.entity;
 
 import static java.time.ZonedDateTime.now;
-import static java.util.UUID.*;
+import static java.util.UUID.randomUUID;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

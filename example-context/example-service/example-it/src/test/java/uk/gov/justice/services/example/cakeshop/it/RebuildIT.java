@@ -1,5 +1,7 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
+import static java.lang.Integer.valueOf;
+import static java.lang.System.getProperty;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
@@ -8,6 +10,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
@@ -16,7 +19,8 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.SystemCommandMBeanClient;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.events.TestEventInserter;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
@@ -46,7 +50,10 @@ public class RebuildIT {
 
     private final Poller poller = new Poller();
 
-    private final SystemCommandMBeanClient systemCommandMBeanClient = new SystemCommandMBeanClient();
+    private static final String HOST = getHost();
+    private static final int PORT = valueOf(getProperty("random.management.port"));
+
+    private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
 
     @Before
     public void before() throws Exception {
@@ -97,7 +104,10 @@ public class RebuildIT {
     }
 
     private void invokeRebuild() throws Exception {
-        systemCommandMBeanClient.getMbeanProxy().runCommand(new RebuildCommand());
+
+        try(final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(HOST, PORT)) {
+            systemCommanderClient.getRemote().call(new RebuildCommand());
+        }
     }
 
     private List<PublishedEvent> getPublishedEvents() {
