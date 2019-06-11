@@ -1,10 +1,13 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
+import static java.lang.Integer.valueOf;
+import static java.lang.System.getProperty;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
@@ -18,8 +21,9 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RecipeTableInspector;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.SystemCommandMBeanClient;
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Recipe;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
@@ -45,11 +49,14 @@ public class CakeShopReplayEventsIT {
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
 
     private final RecipeTableInspector recipeTableInspector = new RecipeTableInspector(viewStoreDataSource);
+    private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
     private final Poller poller = new Poller(60, 1000L);
 
-    private final SystemCommandMBeanClient systemCommandMBeanClient = new SystemCommandMBeanClient();
-    private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
+    private static final String HOST = getHost();
+    private static final int PORT = valueOf(getProperty("random.management.port"));
+
+    private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
 
     private Client client;
 
@@ -69,7 +76,6 @@ public class CakeShopReplayEventsIT {
     @After
     public void cleanup() {
         client.close();
-        systemCommandMBeanClient.close();
     }
 
     @Test
@@ -92,7 +98,10 @@ public class CakeShopReplayEventsIT {
 
         cleanViewstoreTables();
 
-        systemCommandMBeanClient.getMbeanProxy().runCommand(new CatchupCommand());
+        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(HOST, PORT)) {
+            systemCommanderClient.getRemote().call(new CatchupCommand());
+
+        }
 
         final Optional<Integer> numberOfReplayedRecipesOptional = checkExpectedNumberOfRecipes(numberOfStreams);
 

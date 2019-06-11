@@ -1,7 +1,7 @@
 package uk.gov.justice.services.example.cakeshop.query.view.service;
 
 import static java.time.ZonedDateTime.now;
-import static java.util.UUID.*;
+import static java.util.UUID.randomUUID;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
