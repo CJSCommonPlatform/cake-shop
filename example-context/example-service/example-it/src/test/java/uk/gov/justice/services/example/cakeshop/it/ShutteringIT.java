@@ -26,6 +26,7 @@ import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.management.shuttering.command.ShutterSystemCommand;
 import uk.gov.justice.services.management.shuttering.command.UnshutterSystemCommand;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
 import java.util.Optional;
 
@@ -53,12 +54,15 @@ public class ShutteringIT {
     private static final int PORT = valueOf(getProperty("random.management.port"));
 
     private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
+    private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
     @Before
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
         querier = new Querier(client);
         commandSender = new CommandSender(client, eventFactory);
+
+        databaseCleaner.cleanSystemTables("framework");
     }
 
     @After
