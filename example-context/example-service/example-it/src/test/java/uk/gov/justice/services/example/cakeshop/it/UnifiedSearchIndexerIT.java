@@ -84,8 +84,7 @@ public class UnifiedSearchIndexerIT {
                 "recipe",
                 "cake",
                 "cake_order",
-                "processed_event",
-                "shuttered_command_store"
+                "processed_event"
         );
 
         databaseCleaner.cleanStreamBufferTable(contextName);

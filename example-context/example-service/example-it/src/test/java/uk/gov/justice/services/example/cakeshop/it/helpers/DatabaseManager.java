@@ -14,14 +14,19 @@ public class DatabaseManager {
                 "db.eventstore.password");
     }
 
-    public DataSource initFileServiceDb()  {
-        return initDatabase("db.fileservice.url", "db.fileservice.userName",
-                "db.fileservice.password");
-    }
-
     public DataSource initViewStoreDb()  {
         return initDatabase("db.example.url", "db.example.userName",
                 "db.example.password");
+    }
+
+    public DataSource initSystemDb()  {
+        return initDatabase("db.system.url", "db.system.userName",
+                "db.system.password");
+    }
+
+    public DataSource initFileServiceDb()  {
+        return initDatabase("db.fileservice.url", "db.fileservice.userName",
+                "db.fileservice.password");
     }
 
     private static DataSource initDatabase(final String dbUrlPropertyName,

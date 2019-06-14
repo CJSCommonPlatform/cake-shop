@@ -34,7 +34,6 @@
         <extension module="org.wildfly.iiop-openjdk"/>
     </extensions>
 
-
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
@@ -110,6 +109,9 @@
             <logger category="org.jboss.as.config">
                 <level name="WARN"/>
             </logger>
+            <logger category="uk.gov.justice.schema.catalog">
+                <level name="ERROR"/>
+            </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
@@ -124,10 +126,10 @@
                 </handlers>
             </root-logger>
             <formatter name="PATTERN">
-                <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{1}] %X{frameworkRequestData} %s%e%n"/>
+                <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{1}] %s%e%n"/>
             </formatter>
             <formatter name="COLOR-PATTERN">
-                <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c{1}] %X{frameworkRequestData} %s%e%n"/>
+                <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c{1}] %s%e%n"/>
             </formatter>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:batch-jberet:1.0">
@@ -378,6 +380,8 @@
 
         <subsystem xmlns="urn:jboss:domain:datasources:4.0">
             <datasources>
+
+                <!-- event store data source -->
                 <datasource jndi-name="java:/app/example-single/DS.eventstore"
                             pool-name="DS.example.eventstore" enabled="true"
                             use-java-context="true">
@@ -393,6 +397,8 @@
                         <password>${db.eventstore.password}</password>
                     </security>
                 </datasource>
+
+                <!-- view store data source -->
                 <datasource jndi-name="java:/DS.example" pool-name="DS.example" enabled="true"
                             use-java-context="true">
                     <connection-url>${db.example.url}</connection-url>
@@ -410,6 +416,28 @@
                         <check-valid-connection-sql>select 1</check-valid-connection-sql>
                     </validation>
                 </datasource>
+
+
+                <!-- system data source -->
+                <datasource jndi-name="java:/app/example/DS.system" pool-name="DS.example.system" enabled="true"
+                            use-java-context="true">
+                    <connection-url>jdbc:postgresql://localhost:5432/frameworksystem</connection-url>
+                    <driver>postgres</driver>
+                    <pool>
+                        <min-pool-size>3</min-pool-size>
+                        <max-pool-size>3</max-pool-size>
+                        <prefill>true</prefill>
+                    </pool>
+                    <security>
+                        <user-name>framework</user-name>
+                        <password>framework</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                    </validation>
+                </datasource>
+
+                <!-- file store data source -->
                <datasource jndi-name="java:/DS.fileservice" pool-name="DS.fileservice" enabled="true"
                             use-java-context="true">
                     <connection-url>${db.fileservice.url}</connection-url>
