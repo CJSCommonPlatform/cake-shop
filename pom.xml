@@ -30,13 +30,13 @@
 
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
-        
+
         <framework-api.version>4.0.0-M25</framework-api.version>
-        <framework.version>6.0.0-M35</framework.version>
-        <event-store.version>2.0.0-M39</event-store.version>
-        <framework-generators.version>2.0.0-M27</framework-generators.version>
+        <framework.version>6.0.0-M37</framework.version>
+        <event-store.version>2.0.0-M41</event-store.version>
+        <framework-generators.version>2.0.0-M28</framework-generators.version>
         <file.service.version>1.17.8</file.service.version>
-        
+
         <common-bom.version>2.0.2</common-bom.version>
         <utilities.version>1.19.0</utilities.version>
         <test-utils.version>1.23.0</test-utils.version>

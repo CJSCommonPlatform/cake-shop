@@ -13,20 +13,17 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventReposito
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
-import uk.gov.justice.services.eventstore.management.catchup.commands.CatchupCommand;
+import uk.gov.justice.services.eventstore.management.shuttercatchup.commands.ShutterCatchupCommand;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
-import uk.gov.justice.services.example.cakeshop.it.helpers.PublishedEventCounter;
-import uk.gov.justice.services.example.cakeshop.it.helpers.RecipeTableInspector;
+import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,8 +43,7 @@ public class CatchupPerformanceIT {
     private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
 
-    private final RecipeTableInspector recipeTableInspector = new RecipeTableInspector(viewStoreDataSource);
-    private final PublishedEventCounter publishedEventCounter = new PublishedEventCounter(eventStoreDataSource);
+    private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
 
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
@@ -68,6 +64,7 @@ public class CatchupPerformanceIT {
 
         databaseCleaner.cleanEventStoreTables(contextName);
         cleanViewstoreTables();
+        databaseCleaner.cleanSystemTables(contextName);
     }
 
     @After
@@ -82,10 +79,10 @@ public class CatchupPerformanceIT {
         final int numberOfEventsPerStream = 100;
         final int totalEvents = numberOfStreams * numberOfEventsPerStream;
 
-        final List<UUID> streamIds = addEventsToEventLog(numberOfStreams, numberOfEventsPerStream);
+        addEventsToEventLog(numberOfStreams, numberOfEventsPerStream);
 
         final Optional<Integer> numberOfEvents = longPoller.pollUntilFound(() -> {
-            final int eventCount = publishedEventCounter.countPublishedEvents();
+            final int eventCount = processedEventCounter.countProcessedEvents();
             if (eventCount == totalEvents) {
                 return of(eventCount);
             }
@@ -99,57 +96,38 @@ public class CatchupPerformanceIT {
             fail("Failed to insert " + totalEvents + " events");
         }
 
-        for (final UUID streamId : streamIds) {
-
-            final Optional<Long> eventCount = longPoller.pollUntilFound(() -> {
-                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId);
-                if (eventsPerStream == numberOfEventsPerStream) {
-                    return of(eventsPerStream);
-                }
-
-                return empty();
-            });
-
-            if (!eventCount.isPresent()) {
-                fail("Expected " + numberOfEventsPerStream + " events but found " + recipeTableInspector.countEventsPerStream(streamId) + " in stream " + streamId);
-            }
-        }
-
         cleanViewstoreTables();
+
+        longPoller.pollUntilFound(() -> {
+            final int eventCount = processedEventCounter.countProcessedEvents();
+            if (eventCount == 0) {
+                return of(eventCount);
+            }
+
+            return empty();
+        });
 
         runCatchup();
 
-        final Optional<Integer> numberOfReplayedRecipesOptional = checkExpectedNumberOfRecipes(numberOfStreams);
-
-        if (!numberOfReplayedRecipesOptional.isPresent()) {
-            fail();
-        }
-
-
-        for (final UUID streamId : streamIds) {
-
-            final Optional<Long> eventCount = longPoller.pollUntilFound(() -> {
-                final long eventsPerStream = recipeTableInspector.countEventsPerStream(streamId);
-                if (eventsPerStream == numberOfEventsPerStream) {
-                    return of(eventsPerStream);
-                }
-
-                return empty();
-            });
-
-            if (!eventCount.isPresent()) {
-                fail();
+        final Optional<Integer> numberOfReplayedEvents = longPoller.pollUntilFound(() -> {
+            final int eventCount = processedEventCounter.countProcessedEvents();
+            if (eventCount == totalEvents) {
+                return of(eventCount);
             }
-        }
 
-        publishedEventCounter.truncatePublishQueue();
+            return empty();
+        });
+
+        if (numberOfReplayedEvents.isPresent()) {
+            System.out.println("Successfully caught up " + numberOfEvents.get() + " events");
+        } else {
+            fail("Failed to catchup " + totalEvents + " events.");
+        }
     }
 
-    private List<UUID> addEventsToEventLog(final int numberOfStreams, final int numberOfEventsPerStream) throws InvalidPositionException {
+    private void addEventsToEventLog(final int numberOfStreams, final int numberOfEventsPerStream) throws InvalidPositionException {
 
         final CakeshopEventGenerator cakeshopEventGenerator = new CakeshopEventGenerator();
-
-        final List<UUID> streamIds = new ArrayList<>();
 
         for (int seed = 0; seed < numberOfStreams; seed++) {
 
@@ -157,8 +135,6 @@ public class CatchupPerformanceIT {
 
             final Event recipeAddedEvent = cakeshopEventGenerator.createRecipeAddedEvent(seed, positionInStreamIterator);
             final UUID recipeId = recipeAddedEvent.getStreamId();
-
-            streamIds.add(recipeId);
 
             eventStreamJdbcRepository.insert(recipeId);
             eventJdbcRepository.insert(recipeAddedEvent);
@@ -168,28 +144,14 @@ public class CatchupPerformanceIT {
                 eventJdbcRepository.insert(recipeRenamedEvent);
             }
         }
-
-        return streamIds;
     }
 
     private void runCatchup() throws Exception {
 
         try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(HOST, PORT)) {
 
-            systemCommanderClient.getRemote().call(new CatchupCommand());
+            systemCommanderClient.getRemote().call(new ShutterCatchupCommand());
         }
-    }
-
-    private Optional<Integer> checkExpectedNumberOfRecipes(final int numberOfStreams) {
-        return longPoller.pollUntilFound(() -> {
-            final int numberOfRecipes = recipeTableInspector.countNumberOfRecipes();
-
-            if (numberOfRecipes == numberOfStreams) {
-                return of(numberOfRecipes);
-            }
-
-            return empty();
-        });
     }
 
     private void cleanViewstoreTables() {
