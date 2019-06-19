@@ -30,20 +30,23 @@
 
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
+        
+        <framework-api.version>4.0.0-M25</framework-api.version>
+        <framework.version>6.0.0-M35</framework.version>
+        <event-store.version>2.0.0-M39</event-store.version>
+        <framework-generators.version>2.0.0-M27</framework-generators.version>
+        <file.service.version>1.17.8</file.service.version>
+        
         <common-bom.version>2.0.2</common-bom.version>
-        <framework.version>6.0.0-M32</framework.version>
-        <embedded-artemis.version>1.2.0</embedded-artemis.version>
-        <event-store.version>2.0.0-M37</event-store.version>
-        <framework-generators.version>2.0.0-M25</framework-generators.version>
-        <file.service.version>1.17.7</file.service.version>
-        <framework-api.version>4.0.0-M24</framework-api.version>
-        <generator-maven-plugin.version>2.7.0</generator-maven-plugin.version>
+        <utilities.version>1.19.0</utilities.version>
+        <test-utils.version>1.23.0</test-utils.version>
+
         <json-schema-catalog.version>1.7.0</json-schema-catalog.version>
+        <embedded-artemis.version>1.2.0</embedded-artemis.version>
+        <generator-maven-plugin.version>2.7.0</generator-maven-plugin.version>
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
         <jboss-vfs.version>3.2.12.Final</jboss-vfs.version>
         <raml-maven-plugin.version>1.6.7</raml-maven-plugin.version>
-        <test-utils.version>1.23.0</test-utils.version>
-        <utilities.version>1.18.0</utilities.version>
         <annotation-validator-maven-plugin.version>1.0.1</annotation-validator-maven-plugin.version>
         <json-transformer.version>1.0.4</json-transformer.version>
     </properties>
