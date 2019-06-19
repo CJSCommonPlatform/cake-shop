@@ -292,9 +292,9 @@
                     </execution>
 
                     <execution>
-                        <id>subscription-repository-liquibase</id>
+                        <id>event-tracking-liquibase</id>
                         <configuration>
-                            <changeLogFile>liquibase/subscription-repository-changelog.xml</changeLogFile>
+                            <changeLogFile>liquibase/event-tracking-changelog.xml</changeLogFile>
                             <url>jdbc:postgresql://localhost:5432/frameworkviewstore</url>
                         </configuration>
                         <phase>pre-integration-test</phase>
@@ -363,7 +363,7 @@
                     </dependency>
                     <dependency>
                         <groupId>uk.gov.justice.event-store</groupId>
-                        <artifactId>subscription-repository-liquibase</artifactId>
+                        <artifactId>event-tracking-liquibase</artifactId>
                         <version>${event-store.version}</version>
                     </dependency>
                     <dependency>
