@@ -4,10 +4,21 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
 ### Added
 - Unifiedsearch indexer module
 - Integration test for event catchup
 - Integration test for PublishedEvent rebuild.
+- Update to framework 6.0.0 release candidates
+- Update framework-api to 4.0.0
+- Update framework to 6.0.0-RC1
+- Update event-store to 2.0.0-RC2
+- Update framework-generators to 2.0.0-RC1
+- Update file.service to 1.17.9
+- Update common-bom to 2.3.0
+- Update utilities to 1.20.0
+- Update test-utils to 1.24.2
+- Update json-schema-catalog to 1.7.2
 
 ## [2.0.0-M3] - 2019-05-09
 

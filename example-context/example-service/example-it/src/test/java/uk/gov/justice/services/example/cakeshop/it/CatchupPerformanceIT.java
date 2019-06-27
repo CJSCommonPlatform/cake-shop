@@ -4,6 +4,8 @@ import static java.lang.Integer.valueOf;
 import static java.lang.System.getProperty;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
@@ -13,7 +15,7 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventReposito
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
-import uk.gov.justice.services.eventstore.management.shuttercatchup.commands.ShutterCatchupCommand;
+import uk.gov.justice.services.eventstore.management.catchup.commands.CatchupCommand;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
@@ -24,6 +26,9 @@ import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFa
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -107,6 +112,18 @@ public class CatchupPerformanceIT {
             return empty();
         });
 
+        try (final Connection connection = eventStoreDataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT (*) FROM publish_queue");
+             final ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            int eventCount = -1;
+            if (resultSet.next()) {
+              eventCount = resultSet.getInt(1);
+            }
+
+            assertThat(eventCount, is(0));
+        }
+
         runCatchup();
 
         final Optional<Integer> numberOfReplayedEvents = longPoller.pollUntilFound(() -> {
@@ -150,7 +167,7 @@ public class CatchupPerformanceIT {
 
         try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(HOST, PORT)) {
 
-            systemCommanderClient.getRemote().call(new ShutterCatchupCommand());
+            systemCommanderClient.getRemote().call(new CatchupCommand());
         }
     }
 
