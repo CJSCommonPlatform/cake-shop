@@ -63,6 +63,7 @@ public class ShutteringIT {
         commandSender = new CommandSender(client, eventFactory);
 
         databaseCleaner.cleanSystemTables("framework");
+        databaseCleaner.cleanEventStoreTables("framework");
     }
 
     @After
