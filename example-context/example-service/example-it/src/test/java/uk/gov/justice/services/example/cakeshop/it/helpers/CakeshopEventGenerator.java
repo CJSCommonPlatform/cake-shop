@@ -97,4 +97,44 @@ public class CakeshopEventGenerator {
                 recipeRename,
                 now);
     }
+
+    public Event createCakeOrderedEvent(final PositionInStreamIterator positionInStreamIterator) {
+
+        //Create events to replay
+        final ZonedDateTime now = clock.now();
+
+
+        final long position = positionInStreamIterator.nextPosition();
+        final UUID orderId = randomUUID();
+
+        final Metadata metadata = metadataBuilder()
+                .createdAt(now)
+                .withId(randomUUID())
+                .withName("example.events.cake-ordered")
+                .withCausation(randomUUID(), randomUUID())
+                .withStreamId(orderId)
+                .withPosition(position)
+                .withSource(EVENT_SOURCE)
+                .build();
+
+        final UUID recipeId = randomUUID();
+
+        final String cakeOrdered = createObjectBuilder()
+                .add("orderId", orderId.toString())
+                .add("recipeId", recipeId.toString())
+                .add("deliveryDate", clock.now().toString())
+                .build()
+                .toString();
+
+        return new Event(
+                randomUUID(),
+                recipeId,
+                position,
+                "example.events.cake-ordered",
+                metadata.asJsonObject().toString(),
+                cakeOrdered,
+                now);
+    }
+
+
 }

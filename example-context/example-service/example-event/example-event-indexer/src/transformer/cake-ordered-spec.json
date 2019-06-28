@@ -3,7 +3,7 @@
     {
       "operation": "shift",
       "spec": {
-        "cakeId": "cakeId",
+        "orderId": "orderId",
         "recipeId": "recipeId",
         "deliveryDate": "deliveryDate"
       }
