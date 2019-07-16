@@ -8,16 +8,16 @@ import static org.junit.Assert.assertThat;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
-import uk.gov.justice.services.eventstore.management.catchup.commands.CatchupCommand;
-import uk.gov.justice.services.eventstore.management.indexer.commands.IndexerCatchupCommand;
-import uk.gov.justice.services.eventstore.management.rebuild.commands.RebuildCommand;
-import uk.gov.justice.services.jmx.command.SystemCommand;
+import uk.gov.justice.services.jmx.api.command.CatchupCommand;
+import uk.gov.justice.services.jmx.api.command.IndexerCatchupCommand;
+import uk.gov.justice.services.jmx.api.command.PingSystemCommand;
+import uk.gov.justice.services.jmx.api.command.RebuildCommand;
+import uk.gov.justice.services.jmx.api.command.ShutterSystemCommand;
+import uk.gov.justice.services.jmx.api.command.SystemCommand;
+import uk.gov.justice.services.jmx.api.command.UnshutterSystemCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
-import uk.gov.justice.services.management.ping.command.PingSystemCommand;
-import uk.gov.justice.services.management.shuttering.command.ShutterSystemCommand;
-import uk.gov.justice.services.management.shuttering.command.UnshutterSystemCommand;
 
 import java.util.List;
 

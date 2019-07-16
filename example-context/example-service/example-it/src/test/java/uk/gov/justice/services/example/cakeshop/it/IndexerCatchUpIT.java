@@ -16,13 +16,13 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventReposito
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.exception.InvalidPositionException;
-import uk.gov.justice.services.eventstore.management.indexer.commands.IndexerCatchupCommand;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.IndexerTableInspector;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.jmx.api.command.IndexerCatchupCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
