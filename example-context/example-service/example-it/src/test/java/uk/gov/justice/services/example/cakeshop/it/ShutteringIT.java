@@ -26,7 +26,8 @@ import uk.gov.justice.services.jmx.api.command.ShutterSystemCommand;
 import uk.gov.justice.services.jmx.api.command.UnshutterSystemCommand;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
-import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
+import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
+import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
@@ -55,7 +56,7 @@ public class ShutteringIT {
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
 
-    private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
+    private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
     @Before
@@ -74,13 +75,15 @@ public class ShutteringIT {
 
         //invoke unshuttering - Always ensure unshutter is invoked as we cannot guarantee order of execution for other Cakeshop ITs
 
-        final JmxParametersBuilder jmxParameters = jmxParameters()
+        final String contextName = "example-single";
+        final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
-                .withPort(PORT);
-        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
+                .withPort(PORT)
+                .build();
+        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
             systemCommanderClient
-                    .getRemote()
+                    .getRemote(contextName)
                     .call(new UnshutterSystemCommand());
         }
     }
@@ -89,11 +92,13 @@ public class ShutteringIT {
     public void shouldNotReturnRecipesAfterShuttering() throws Exception {
 
         //invoke shuttering
-        final JmxParametersBuilder jmxParameters = jmxParameters()
+        final String contextName = "example-single";
+        final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
-                .withPort(PORT);
-        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
-            systemCommanderClient.getRemote().call(new ShutterSystemCommand());
+                .withPort(PORT)
+                .build();
+        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
+            systemCommanderClient.getRemote(contextName).call(new ShutterSystemCommand());
         }
 
         //add 2 recipes
@@ -109,12 +114,14 @@ public class ShutteringIT {
     @Test
     public void shouldQueryForRecipesAfterUnShuttering() throws Exception {
 
-        final JmxParametersBuilder jmxParameters = jmxParameters()
+        final String contextName = "example-single";
+        final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
-                .withPort(PORT);
-        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
+                .withPort(PORT)
+                .build();
+        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            final SystemCommanderMBean systemCommander = systemCommanderClient.getRemote();
+            final SystemCommanderMBean systemCommander = systemCommanderClient.getRemote(contextName);
 
             //invoke shuttering
             systemCommander.call(new ShutterSystemCommand());

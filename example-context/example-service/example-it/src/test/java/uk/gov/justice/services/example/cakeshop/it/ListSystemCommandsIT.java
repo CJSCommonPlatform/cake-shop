@@ -16,8 +16,8 @@ import uk.gov.justice.services.jmx.api.command.ShutterSystemCommand;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.command.UnshutterSystemCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
-import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
+import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
+import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 
 import java.util.List;
 
@@ -29,18 +29,20 @@ public class ListSystemCommandsIT {
     private static final int PORT = valueOf(getProperty("random.management.port"));
 
 
-    private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
+    private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
 
     @Test
     public void shouldListAllSystemCommands() throws Exception {
 
-        final JmxParametersBuilder jmxParameters = jmxParameters()
+        final String contextName = "example-single";
+        final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
-                .withPort(PORT);
+                .withPort(PORT)
+                .build();
 
-        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters.build())) {
+        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            final List<SystemCommand> systemCommands = systemCommanderClient.getRemote().listCommands();
+            final List<SystemCommand> systemCommands = systemCommanderClient.getRemote(contextName).listCommands();
 
             assertThat(systemCommands.size(), is(6));
             assertThat(systemCommands, hasItem(new PingSystemCommand()));

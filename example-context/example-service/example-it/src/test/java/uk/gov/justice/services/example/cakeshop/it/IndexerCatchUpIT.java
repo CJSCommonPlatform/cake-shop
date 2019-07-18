@@ -24,7 +24,8 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.api.command.IndexerCatchupCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
-import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
+import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
+import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
@@ -58,7 +59,7 @@ public class IndexerCatchUpIT {
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
 
-    private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
+    private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
     private final Poller longPoller = new Poller(1200, 1000L);
@@ -162,13 +163,15 @@ public class IndexerCatchUpIT {
 
     private void runCatchup() throws Exception {
 
-        final JmxParametersBuilder jmxParameters = jmxParameters()
+        final String contextName = "example-single";
+        final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
-                .withPort(PORT);
+                .withPort(PORT)
+                .build();
 
-        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
+        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            systemCommanderClient.getRemote().call(new IndexerCatchupCommand());
+            systemCommanderClient.getRemote(contextName).call(new IndexerCatchupCommand());
         }
     }
 

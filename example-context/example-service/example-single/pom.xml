@@ -75,6 +75,11 @@
             <classifier>yaml</classifier>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>jmx-api</artifactId>
+            <version>${framework.version}</version>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
