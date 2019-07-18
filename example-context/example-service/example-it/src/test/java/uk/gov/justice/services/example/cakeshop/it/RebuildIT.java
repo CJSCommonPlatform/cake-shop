@@ -21,7 +21,8 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.api.command.RebuildCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
-import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
+import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
+import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.events.TestEventInserter;
@@ -55,7 +56,7 @@ public class RebuildIT {
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
 
-    private final SystemCommanderClientFactory systemCommanderClientFactory = new SystemCommanderClientFactory();
+    private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
 
     @Before
     public void before() throws Exception {
@@ -107,12 +108,14 @@ public class RebuildIT {
 
     private void invokeRebuild() throws Exception {
 
-        final JmxParametersBuilder jmxParameters = jmxParameters()
+        final String contextName = "example-single";
+        final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
-                .withPort(PORT);
+                .withPort(PORT)
+                .build();
 
-        try(final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
-            systemCommanderClient.getRemote().call(new RebuildCommand());
+        try(final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
+            systemCommanderClient.getRemote(contextName).call(new RebuildCommand());
         }
     }
 

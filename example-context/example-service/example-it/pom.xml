@@ -173,6 +173,12 @@
             <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>test-utils-jmx</artifactId>
+            <version>${framework.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
