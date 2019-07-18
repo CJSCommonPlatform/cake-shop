@@ -22,12 +22,12 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.command.SystemCommanderMBean;
+import uk.gov.justice.services.jmx.api.command.ShutterSystemCommand;
+import uk.gov.justice.services.jmx.api.command.UnshutterSystemCommand;
+import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
-import uk.gov.justice.services.management.shuttering.command.ShutterSystemCommand;
-import uk.gov.justice.services.management.shuttering.command.UnshutterSystemCommand;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
 import java.util.Optional;
