@@ -23,9 +23,8 @@ import uk.gov.justice.services.jmx.api.command.RebuildCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
-import uk.gov.justice.services.test.utils.events.TestEventInserter;
+import uk.gov.justice.services.test.utils.events.EventStoreDataAccess;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 import uk.gov.justice.services.test.utils.persistence.SequenceSetter;
 
@@ -46,7 +45,7 @@ public class RebuildIT {
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final EventFactory eventFactory = new EventFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
-    private final TestEventInserter testEventInserter = new TestEventInserter(eventStoreDataSource);
+    private final EventStoreDataAccess eventStoreDataAccess = new EventStoreDataAccess(eventStoreDataSource);
 
     private CommandSender commandSender;
     private final SequenceSetter sequenceSetter = new SequenceSetter();
@@ -143,7 +142,7 @@ public class RebuildIT {
 
     private List<PublishedEvent> doGetPublishedEvents()  {
         try {
-            return testEventInserter.findAllPublishedEventsOrderedByEventNumber();
+            return eventStoreDataAccess.findAllPublishedEventsOrderedByEventNumber();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to get published events", e);
         }

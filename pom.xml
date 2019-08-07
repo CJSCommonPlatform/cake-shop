@@ -33,7 +33,7 @@
 
         <framework-api.version>4.0.1</framework-api.version>
         <framework.version>6.0.0-RC9</framework.version>
-        <event-store.version>2.0.0-RC10</event-store.version>
+        <event-store.version>2.0.0-RC11</event-store.version>
         <framework-generators.version>2.0.0-RC7</framework-generators.version>
         <file.service.version>1.17.10</file.service.version>
 
