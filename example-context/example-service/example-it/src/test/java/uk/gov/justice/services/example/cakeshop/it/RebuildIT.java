@@ -28,7 +28,6 @@ import uk.gov.justice.services.test.utils.events.EventStoreDataAccess;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 import uk.gov.justice.services.test.utils.persistence.SequenceSetter;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -122,7 +121,7 @@ public class RebuildIT {
 
         final Optional<List<PublishedEvent>> publishedEvents = poller.pollUntilFound(() -> {
 
-            final List<PublishedEvent> events = doGetPublishedEvents();
+            final List<PublishedEvent> events = eventStoreDataAccess.findAllPublishedEventsOrderedByEventNumber();
 
             if (events.size() == 3) {
                 return of(events);
@@ -138,14 +137,6 @@ public class RebuildIT {
         fail();
 
         return new ArrayList<>();
-    }
-
-    private List<PublishedEvent> doGetPublishedEvents()  {
-        try {
-            return eventStoreDataAccess.findAllPublishedEventsOrderedByEventNumber();
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to get published events", e);
-        }
     }
 
     private boolean eventNumbersLinkedCorrectly(final List<PublishedEvent> publishedEvents) {

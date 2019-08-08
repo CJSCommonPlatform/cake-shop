@@ -11,6 +11,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Integration test for PublishedEvent rebuild.
 - Update to framework 6.0.0 release candidates
 - Update framework-api to 4.0.1
+- Update event-store to 2.0.0-RC12
 - Update file.service to 1.17.10
 - Update common-bom to 2.4.0
 - Update utilities to 1.20.1
