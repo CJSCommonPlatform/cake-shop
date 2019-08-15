@@ -145,9 +145,9 @@
                     </plugin>
 
                     <plugin>
-                        <artifactId>generator-plugin</artifactId>
-                        <groupId>uk.gov.justice.maven.generator</groupId>
-                        <version>${generator-maven-plugin.version}</version>
+                        <groupId>uk.gov.justice.schema</groupId>
+                        <artifactId>catalog-generation-plugin</artifactId>
+                        <version>${json-schema-catalog.version}</version>
                         <executions>
                             <execution>
                                 <id>schema-catalog-generation</id>
@@ -174,14 +174,28 @@
                                     </generatorProperties>
                                 </configuration>
                                 <goals>
-                                    <goal>generate</goal>
+                                    <goal>generate-schema-catalog</goal>
                                 </goals>
                                 <phase>generate-sources</phase>
                             </execution>
-                            <execution>
-                                <id>generate-messaging-adapters</id>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>uk.gov.justice.schema</groupId>
+                                <artifactId>catalog-generation</artifactId>
+                                <version>${json-schema-catalog.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>uk.gov.justice.framework-generators</groupId>
+                        <artifactId>messaging-adapter-generator-plugin</artifactId>
+                        <version>${framework-generators.version}</version>
+                        <executions>
+                        <execution>
+                                <id>generate-yaml-messaging-adapters</id>
                                 <goals>
-                                    <goal>generate</goal>
+                                    <goal>generate-messaging-adapter</goal>
                                 </goals>
                                 <phase>generate-sources</phase>
                                 <configuration>
@@ -189,7 +203,7 @@
                                         uk.gov.justice.subscription.jms.core.SubscriptionJmsEndpointGeneratorFactory
                                     </generatorName>
                                     <parserName>
-                                        uk.gov.justice.subscription.jms.parser.SubscriptionWrapperFileParserFactory
+                                        uk.gov.justice.services.generators.subscription.parser.SubscriptionWrapperFileParserFactory
                                     </parserName>
                                     <sourceDirectory>${basedir}/src/yaml</sourceDirectory>
                                     <outputDirectory>${project.build.directory}/generated-sources
@@ -209,25 +223,58 @@
                         </executions>
                         <dependencies>
                             <dependency>
+                                <groupId>uk.gov.justice.framework-generators</groupId>
+                                <artifactId>messaging-adapter-generator</artifactId>
+                                <version>${framework-generators.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>uk.gov.justice.services.example</groupId>
+                                <artifactId>example-event-source</artifactId>
+                                <classifier>yaml</classifier>
+                                <version>${project.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>uk.gov.justice.framework-generators</groupId>
+                        <artifactId>messaging-client-generator-plugin</artifactId>
+                        <version>${framework-generators.version}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-from-yaml</id>
+                                <goals>
+                                    <goal>generate-messaging-client</goal>
+                                </goals>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <basePackageName>uk.gov.justice.api</basePackageName>
+                                    <generatorName>
+                                        uk.gov.justice.services.clients.messaging.subscription.generator.SubscriptionMessagingClientGeneratorFactory
+                                    </generatorName>
+                                    <parserName>uk.gov.justice.services.generators.subscription.parser.SubscriptionWrapperFileParserFactory</parserName>
+                                    <sourceDirectory>${basedir}/src/yaml</sourceDirectory>
+                                    <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+                                    <includes>
+                                        <include>**/public-subscriptions-descriptor.yaml</include>
+                                        <include>**/event-sources.yaml</include>
+                                    </includes>
+                                    <generatorProperties implementation="uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties">
+                                        <serviceComponent>${cpp.service-component}</serviceComponent>
+                                    </generatorProperties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
                                 <groupId>javax</groupId>
                                 <artifactId>javaee-api</artifactId>
                                 <version>${javaee-api.version}</version>
                                 <scope>runtime</scope>
                             </dependency>
                             <dependency>
-                                <groupId>uk.gov.justice.schema</groupId>
-                                <artifactId>catalog-generation</artifactId>
-                                <version>${json-schema-catalog.version}</version>
-                            </dependency>
-                            <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>
-                                <artifactId>messaging-adapter-generator</artifactId>
+                                <artifactId>messaging-client-generator</artifactId>
                                 <version>${framework-generators.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>uk.gov.justice.services</groupId>
-                                <artifactId>event-subscription</artifactId>
-                                <version>${framework.version}</version>
                             </dependency>
                             <dependency>
                                 <groupId>uk.gov.justice.services.example</groupId>

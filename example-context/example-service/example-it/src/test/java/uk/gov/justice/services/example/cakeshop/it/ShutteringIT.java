@@ -38,9 +38,11 @@ import javax.ws.rs.core.Response.Status;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 
+@Ignore
 public class ShutteringIT {
 
     private static final Logger logger = getLogger(ShutteringIT.class);

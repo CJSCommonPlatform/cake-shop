@@ -417,7 +417,7 @@
                         <version>${framework-generators.version}</version>
                            <executions>
                             <execution>
-                                <id>generate-messaging-adapters</id>
+                                <id>generate-raml-messaging-adapters</id>
                                 <goals>
                                     <goal>generate-messaging-adapter</goal>
                                 </goals>

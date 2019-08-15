@@ -141,11 +141,7 @@ public class RebuildIT {
     }
 
     private List<PublishedEvent> doGetPublishedEvents()  {
-        try {
-            return eventStoreDataAccess.findAllPublishedEventsOrderedByEventNumber();
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to get published events", e);
-        }
+        return eventStoreDataAccess.findAllPublishedEventsOrderedByEventNumber();
     }
 
     private boolean eventNumbersLinkedCorrectly(final List<PublishedEvent> publishedEvents) {
