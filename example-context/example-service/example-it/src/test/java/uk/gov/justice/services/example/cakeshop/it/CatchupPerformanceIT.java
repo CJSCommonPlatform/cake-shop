@@ -25,7 +25,6 @@ import uk.gov.justice.services.jmx.api.command.CatchupCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 

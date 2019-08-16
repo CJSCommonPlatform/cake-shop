@@ -5,17 +5,20 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [2.0.0] - 2019-08-19
 ### Added
-- Unifiedsearch indexer module
+- Update to framework 6.0.6
+- Unified Search indexer module
 - Integration test for event catchup
 - Integration test for PublishedEvent rebuild.
-- Update to framework 6.0.0 release candidates
+- Update to event-store 2.0.6
+- Update to framework-generators 2.0.4
 - Update framework-api to 4.0.1
-- Update file.service to 1.17.10
-- Update common-bom to 2.4.0
-- Update utilities to 1.20.1
+- Update file.service to 1.17.11
+- Update common-bom to 2.4.1
+- Update utilities to 1.20.2
 - Update test-utils to 1.24.3
-- Update json-schema-catalog to 1.7.3
+- Update json-schema-catalog to 1.7.4
 
 ### Changed
 - Use a single event-source.yaml in example-event-source module

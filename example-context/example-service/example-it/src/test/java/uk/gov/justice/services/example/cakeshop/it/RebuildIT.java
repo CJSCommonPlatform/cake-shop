@@ -28,7 +28,6 @@ import uk.gov.justice.services.test.utils.events.EventStoreDataAccess;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 import uk.gov.justice.services.test.utils.persistence.SequenceSetter;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
