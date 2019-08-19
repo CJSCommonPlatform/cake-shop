@@ -2,6 +2,7 @@ package uk.gov.justice.services.example.cakeshop.it;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
+import static java.lang.Integer.parseInt;
 import static java.lang.Integer.valueOf;
 import static java.lang.String.format;
 import static java.lang.System.getProperty;
@@ -10,9 +11,12 @@ import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
+import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.slf4j.LoggerFactory.getLogger;
+import static uk.gov.justice.services.jmx.api.state.ApplicationManagementState.SHUTTERED;
+import static uk.gov.justice.services.jmx.api.state.ApplicationManagementState.UNSHUTTERED;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
@@ -25,10 +29,11 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory
 import uk.gov.justice.services.jmx.api.command.ShutterSystemCommand;
 import uk.gov.justice.services.jmx.api.command.UnshutterSystemCommand;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
+import uk.gov.justice.services.jmx.api.state.ApplicationManagementState;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder;
+import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
 import java.util.Optional;
@@ -54,10 +59,11 @@ public class ShutteringIT {
     private CommandSender commandSender;
 
     private static final String HOST = getHost();
-    private static final int PORT = valueOf(getProperty("random.management.port"));
+    private static final int PORT = parseInt(getProperty("random.management.port"));
 
     private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
+    private final Poller poller = new Poller();
 
     @Before
     public void before() {
@@ -82,9 +88,22 @@ public class ShutteringIT {
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            systemCommanderClient
-                    .getRemote(contextName)
-                    .call(new UnshutterSystemCommand());
+            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(contextName);
+
+            systemCommanderMBean.call(new UnshutterSystemCommand());
+
+            final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
+                final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();
+                if (applicationState == UNSHUTTERED) {
+                    return of(applicationState);
+                }
+
+                return empty();
+            });
+
+            if (! applicationManagementState.isPresent()) {
+                fail();
+            }
         }
     }
 
@@ -98,7 +117,22 @@ public class ShutteringIT {
                 .withPort(PORT)
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
-            systemCommanderClient.getRemote(contextName).call(new ShutterSystemCommand());
+            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(contextName);
+            systemCommanderMBean.call(new ShutterSystemCommand());
+
+            final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
+                final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();
+
+                if (applicationState == SHUTTERED) {
+                    return of(applicationState);
+                }
+
+                return empty();
+            });
+
+            if(! applicationManagementState.isPresent()) {
+                fail();
+            }
         }
 
         //add 2 recipes
@@ -121,10 +155,23 @@ public class ShutteringIT {
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            final SystemCommanderMBean systemCommander = systemCommanderClient.getRemote(contextName);
+            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(contextName);
 
             //invoke shuttering
-            systemCommander.call(new ShutterSystemCommand());
+            systemCommanderMBean.call(new ShutterSystemCommand());
+
+            final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
+                final ApplicationManagementState applicationState1 = systemCommanderMBean.getApplicationState();
+                if (applicationState1 == SHUTTERED) {
+                    return of(applicationState1);
+                }
+
+                return empty();
+            });
+            
+            if(! applicationManagementState.isPresent()) {
+                fail();
+            }
 
             //add more recipes
             final String recipeId = addRecipe(MARBLE_CAKE);
@@ -136,7 +183,21 @@ public class ShutteringIT {
             verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
             //invoke unshuttering
-            systemCommander.call(new UnshutterSystemCommand());
+            systemCommanderMBean.call(new UnshutterSystemCommand());
+
+            final Optional<ApplicationManagementState> otherApplicationManagementState = poller.pollUntilFound(() -> {
+                final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();
+
+                if (applicationState == UNSHUTTERED) {
+                    return of(applicationState);
+                }
+
+                return empty();
+            });
+
+            if(! otherApplicationManagementState.isPresent()) {
+                fail();
+            }
 
             //check new recipes have been added successfully after unshuttering
             verifyRecipeAdded(recipeId, recipeId2, MARBLE_CAKE, CARROT_CAKE, true, OK);
