@@ -19,6 +19,15 @@
         <module>example-event-indexer</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>uk.gov.justice.services.example</groupId>
+            <artifactId>example-event-source</artifactId>
+            <classifier>yaml</classifier>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <profiles>
         <profile>
             <id>framework-generation</id>
@@ -199,6 +208,7 @@
                                 </goals>
                                 <phase>generate-sources</phase>
                                 <configuration>
+                                    <generationPath>SOURCE_AND_CLASS_PATH</generationPath>
                                     <generatorName>
                                         uk.gov.justice.subscription.jms.core.SubscriptionJmsEndpointGeneratorFactory
                                     </generatorName>
@@ -227,12 +237,6 @@
                                 <artifactId>messaging-adapter-generator</artifactId>
                                 <version>${framework-generators.version}</version>
                             </dependency>
-                            <dependency>
-                                <groupId>uk.gov.justice.services.example</groupId>
-                                <artifactId>example-event-source</artifactId>
-                                <classifier>yaml</classifier>
-                                <version>${project.version}</version>
-                            </dependency>
                         </dependencies>
                     </plugin>
                     <plugin>
@@ -247,6 +251,7 @@
                                 </goals>
                                 <phase>generate-sources</phase>
                                 <configuration>
+                                    <generationPath>SOURCE_AND_CLASS_PATH</generationPath>
                                     <basePackageName>uk.gov.justice.api</basePackageName>
                                     <generatorName>
                                         uk.gov.justice.services.clients.messaging.subscription.generator.SubscriptionMessagingClientGeneratorFactory
@@ -275,12 +280,6 @@
                                 <groupId>uk.gov.justice.framework-generators</groupId>
                                 <artifactId>messaging-client-generator</artifactId>
                                 <version>${framework-generators.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>uk.gov.justice.services.example</groupId>
-                                <artifactId>example-event-source</artifactId>
-                                <classifier>yaml</classifier>
-                                <version>${project.version}</version>
                             </dependency>
                         </dependencies>
                     </plugin>

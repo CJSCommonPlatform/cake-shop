@@ -34,7 +34,7 @@
         <framework-api.version>4.0.1</framework-api.version>
         <framework.version>6.0.6</framework.version>
         <event-store.version>2.0.6</event-store.version>
-        <framework-generators.version>2.0.4</framework-generators.version>
+        <framework-generators.version>2.1.0-SNAPSHOT</framework-generators.version>
         <file.service.version>1.17.11</file.service.version>
 
         <common-bom.version>2.4.0</common-bom.version>
@@ -43,7 +43,7 @@
 
         <json-schema-catalog.version>1.7.4</json-schema-catalog.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
-        <generator-maven-plugin.version>2.7.2</generator-maven-plugin.version>
+        <generator-maven-plugin.version>2.8.0-SNAPSHOT</generator-maven-plugin.version>
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
         <jboss-vfs.version>3.2.12.Final</jboss-vfs.version>
         <raml-maven-plugin.version>1.6.9</raml-maven-plugin.version>
