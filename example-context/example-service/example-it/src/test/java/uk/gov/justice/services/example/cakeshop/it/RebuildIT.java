@@ -41,6 +41,7 @@ import org.junit.Test;
 
 public class RebuildIT {
 
+    private static final String CONTEXT_NAME = "example";
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final EventFactory eventFactory = new EventFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
@@ -106,14 +107,13 @@ public class RebuildIT {
 
     private void invokeRebuild() throws Exception {
 
-        final String contextName = "example-single";
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
                 .withPort(PORT)
                 .build();
 
         try(final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
-            systemCommanderClient.getRemote(contextName).call(new RebuildCommand());
+            systemCommanderClient.getRemote(CONTEXT_NAME).call(new RebuildCommand());
         }
     }
 

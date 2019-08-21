@@ -43,6 +43,8 @@ import org.junit.Test;
 
 public class CatchupPerformanceIT {
 
+    private static final String CONTEXT_NAME = "example";
+
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
     private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
@@ -166,7 +168,6 @@ public class CatchupPerformanceIT {
 
     private void runCatchup() throws Exception {
 
-        final String contextName = "example-single";
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
                 .withPort(PORT)
@@ -174,7 +175,7 @@ public class CatchupPerformanceIT {
 
         try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
 
-            systemCommanderClient.getRemote(contextName).call(new CatchupCommand());
+            systemCommanderClient.getRemote(CONTEXT_NAME).call(new CatchupCommand());
         }
     }
 

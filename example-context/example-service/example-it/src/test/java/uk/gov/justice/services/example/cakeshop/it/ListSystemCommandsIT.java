@@ -10,11 +10,11 @@ import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.ge
 
 import uk.gov.justice.services.jmx.api.command.CatchupCommand;
 import uk.gov.justice.services.jmx.api.command.IndexerCatchupCommand;
-import uk.gov.justice.services.jmx.api.command.PingSystemCommand;
+import uk.gov.justice.services.jmx.api.command.PingCommand;
 import uk.gov.justice.services.jmx.api.command.RebuildCommand;
-import uk.gov.justice.services.jmx.api.command.ShutterSystemCommand;
+import uk.gov.justice.services.jmx.api.command.ShutterCommand;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
-import uk.gov.justice.services.jmx.api.command.UnshutterSystemCommand;
+import uk.gov.justice.services.jmx.api.command.UnshutterCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
@@ -27,6 +27,7 @@ public class ListSystemCommandsIT {
 
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
+    private static final String CONTEXT_NAME = "example";
 
 
     private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
@@ -34,7 +35,6 @@ public class ListSystemCommandsIT {
     @Test
     public void shouldListAllSystemCommands() throws Exception {
 
-        final String contextName = "example-single";
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
                 .withPort(PORT)
@@ -42,12 +42,12 @@ public class ListSystemCommandsIT {
 
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            final List<SystemCommand> systemCommands = systemCommanderClient.getRemote(contextName).listCommands();
+            final List<SystemCommand> systemCommands = systemCommanderClient.getRemote(CONTEXT_NAME).listCommands();
 
             assertThat(systemCommands.size(), is(6));
-            assertThat(systemCommands, hasItem(new PingSystemCommand()));
-            assertThat(systemCommands, hasItem(new ShutterSystemCommand()));
-            assertThat(systemCommands, hasItem(new UnshutterSystemCommand()));
+            assertThat(systemCommands, hasItem(new PingCommand()));
+            assertThat(systemCommands, hasItem(new ShutterCommand()));
+            assertThat(systemCommands, hasItem(new UnshutterCommand()));
             assertThat(systemCommands, hasItem(new RebuildCommand()));
             assertThat(systemCommands, hasItem(new CatchupCommand()));
             assertThat(systemCommands, hasItem(new IndexerCatchupCommand()));

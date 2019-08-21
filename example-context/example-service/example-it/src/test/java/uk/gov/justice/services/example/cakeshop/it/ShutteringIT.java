@@ -3,7 +3,6 @@ package uk.gov.justice.services.example.cakeshop.it;
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.lang.Integer.parseInt;
-import static java.lang.Integer.valueOf;
 import static java.lang.String.format;
 import static java.lang.System.getProperty;
 import static java.util.Optional.empty;
@@ -26,8 +25,8 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.api.command.ShutterSystemCommand;
-import uk.gov.justice.services.jmx.api.command.UnshutterSystemCommand;
+import uk.gov.justice.services.jmx.api.command.ShutterCommand;
+import uk.gov.justice.services.jmx.api.command.UnshutterCommand;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import uk.gov.justice.services.jmx.api.state.ApplicationManagementState;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
@@ -47,6 +46,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 
 public class ShutteringIT {
+
+    private static final String CONTEXT_NAME = "example";
 
     private static final Logger logger = getLogger(ShutteringIT.class);
     private static final String MARBLE_CAKE = "Marble cake";
@@ -81,16 +82,15 @@ public class ShutteringIT {
 
         //invoke unshuttering - Always ensure unshutter is invoked as we cannot guarantee order of execution for other Cakeshop ITs
 
-        final String contextName = "example-single";
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
                 .withPort(PORT)
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(contextName);
+            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
-            systemCommanderMBean.call(new UnshutterSystemCommand());
+            systemCommanderMBean.call(new UnshutterCommand());
 
             final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
                 final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();
@@ -111,14 +111,13 @@ public class ShutteringIT {
     public void shouldNotReturnRecipesAfterShuttering() throws Exception {
 
         //invoke shuttering
-        final String contextName = "example-single";
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
                 .withPort(PORT)
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
-            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(contextName);
-            systemCommanderMBean.call(new ShutterSystemCommand());
+            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
+            systemCommanderMBean.call(new ShutterCommand());
 
             final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
                 final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();
@@ -148,17 +147,16 @@ public class ShutteringIT {
     @Test
     public void shouldQueryForRecipesAfterUnShuttering() throws Exception {
 
-        final String contextName = "example-single";
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
                 .withPort(PORT)
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(contextName);
+            final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
             //invoke shuttering
-            systemCommanderMBean.call(new ShutterSystemCommand());
+            systemCommanderMBean.call(new ShutterCommand());
 
             final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
                 final ApplicationManagementState applicationState1 = systemCommanderMBean.getApplicationState();
@@ -183,7 +181,7 @@ public class ShutteringIT {
             verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
             //invoke unshuttering
-            systemCommanderMBean.call(new UnshutterSystemCommand());
+            systemCommanderMBean.call(new UnshutterCommand());
 
             final Optional<ApplicationManagementState> otherApplicationManagementState = poller.pollUntilFound(() -> {
                 final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();

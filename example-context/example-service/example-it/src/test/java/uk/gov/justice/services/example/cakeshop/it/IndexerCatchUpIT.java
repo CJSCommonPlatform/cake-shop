@@ -45,6 +45,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class IndexerCatchUpIT {
+
+    private static final String CONTEXT_NAME = "example";
+
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
     private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
@@ -162,7 +165,6 @@ public class IndexerCatchUpIT {
 
     private void runCatchup() throws Exception {
 
-        final String contextName = "example-single";
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
                 .withPort(PORT)
@@ -170,7 +172,7 @@ public class IndexerCatchUpIT {
 
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            systemCommanderClient.getRemote(contextName).call(new IndexerCatchupCommand());
+            systemCommanderClient.getRemote(CONTEXT_NAME).call(new IndexerCatchupCommand());
         }
     }
 
