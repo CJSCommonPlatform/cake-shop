@@ -22,6 +22,6 @@ subscriptions_descriptor:
 
         - name: example.events.recipe-photograph-added
           schema_uri: http://justice.gov.uk/example/event/example.events.recipe-photograph-added.json
-      event_source_name: event.source
+      event_source_name: example
 
 

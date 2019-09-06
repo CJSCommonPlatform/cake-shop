@@ -21,7 +21,7 @@ public class CakeshopEventGenerator {
 
     private final Clock clock = new UtcClock();
 
-    private static final String EVENT_SOURCE = "event.source";
+    private static final String EVENT_SOURCE = "example";
 
     public Event createRecipeAddedEvent(final long seed, final PositionInStreamIterator positionInStreamIterator) {
 
