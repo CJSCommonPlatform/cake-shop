@@ -1,5 +1,5 @@
 event_sources:
-  - name: event.source
+  - name: example
     is_default: true
     location:
       jms_uri:  jms:topic:example.event

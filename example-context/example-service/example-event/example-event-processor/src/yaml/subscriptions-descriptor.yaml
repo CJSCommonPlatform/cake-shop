@@ -10,4 +10,4 @@ subscriptions_descriptor:
 
         - name: example.events.cake-made
           schema_uri: http://justice.gov.uk/example/event/example.events.cake-made.json
-      event_source_name: event.source
+      event_source_name: example
