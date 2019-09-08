@@ -76,7 +76,7 @@ public class RebuildIT {
         commandSender.addRecipe(randomUUID().toString(), "cake 2");
         commandSender.addRecipe(randomUUID().toString(), "cake 3");
 
-        final List<PublishedEvent> publishedEvents = getPublishedEvents();
+        final List<PublishedEvent> publishedEvents = getPublishedEvents(startNumber);
 
         assertThat(publishedEvents.size(), is(3));
         assertThat(publishedEvents.get(0).getEventNumber(), is(of(startNumber)));
@@ -89,14 +89,15 @@ public class RebuildIT {
 
         invokeRebuild();
 
-        final List<PublishedEvent> rebuiltEvents = getPublishedEvents();
+        final long newStartNumber = 1L;
+        final List<PublishedEvent> rebuiltEvents = getPublishedEvents(newStartNumber);
         assertThat(rebuiltEvents.size(), is(3));
 
         final List<UUID> rebuiltEventIds = rebuiltEvents.stream()
                 .map(Event::getId)
                 .collect(toList());
 
-        assertThat(rebuiltEvents.get(0).getEventNumber(), is(of(1L)));
+        assertThat(rebuiltEvents.get(0).getEventNumber(), is(of(newStartNumber)));
 
         assertThat(rebuiltEventIds, hasItem(eventIds.get(0)));
         assertThat(rebuiltEventIds, hasItem(eventIds.get(1)));
@@ -117,14 +118,19 @@ public class RebuildIT {
         }
     }
 
-    private List<PublishedEvent> getPublishedEvents() {
+    private List<PublishedEvent> getPublishedEvents(final long startNumber) {
 
         final Optional<List<PublishedEvent>> publishedEvents = poller.pollUntilFound(() -> {
 
             final List<PublishedEvent> events = doGetPublishedEvents();
 
             if (events.size() == 3) {
-                return of(events);
+                final Optional<Long> eventNumber = events.get(0).getEventNumber();
+                if(eventNumber.isPresent()) {
+                    if (eventNumber.get() == startNumber) {
+                        return of(events);
+                    }
+                }
             }
 
             return empty();
