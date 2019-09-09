@@ -468,8 +468,8 @@
                 <simple name="java:/app/example-single/audit.blacklist" value="example.*" type="java.lang.String"/>
                 <simple name="java:/app/example-single/default.strategy.snapshot.threshold" value="3" type="java.lang.String"/>
                 <simple name="java:global/envelope.validation.exception.handler" value="uk.gov.justice.services.core.envelope.RethrowingValidationExceptionHandler" type="java.lang.String"/>
-                <simple name="java:global/pre.publish.timer.max.runtime.milliseconds" value="485" type="java.lang.String"/>
-                <simple name="java:global/event.dequer.timer.max.runtime.milliseconds" value="485" type="java.lang.String"/>
+                <simple name="java:global/pre.publish.timer.max.runtime.milliseconds" value="450" type="java.lang.String"/>
+                <simple name="java:global/event.dequer.timer.max.runtime.milliseconds" value="450" type="java.lang.String"/>
             </bindings>
             <remote-naming/>
         </subsystem>
