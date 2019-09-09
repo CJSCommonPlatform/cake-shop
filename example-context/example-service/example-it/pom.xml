@@ -431,8 +431,15 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>stop-server</id>
+                        <id>undeploy</id>
                         <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>undeploy</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-server</id>
+                        <phase>install</phase>
                         <goals>
                             <goal>shutdown</goal>
                         </goals>
