@@ -5,6 +5,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+### Changed
+- Reduced the maximum runtime for each iteration of the publishing beans in the IT tests to 450 milliseconds
+
 ## [2.0.0] - 2019-08-19
 ### Added
 - Update to framework 6.0.6
