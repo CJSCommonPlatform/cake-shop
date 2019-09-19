@@ -8,13 +8,16 @@ import static org.junit.Assert.assertThat;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
+import uk.gov.justice.services.jmx.api.command.AddTriggerCommand;
 import uk.gov.justice.services.jmx.api.command.CatchupCommand;
 import uk.gov.justice.services.jmx.api.command.IndexerCatchupCommand;
 import uk.gov.justice.services.jmx.api.command.PingCommand;
 import uk.gov.justice.services.jmx.api.command.RebuildCommand;
+import uk.gov.justice.services.jmx.api.command.RemoveTriggerCommand;
 import uk.gov.justice.services.jmx.api.command.ShutterCommand;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.command.UnshutterCommand;
+import uk.gov.justice.services.jmx.api.command.ValidateCatchupCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
@@ -44,13 +47,16 @@ public class ListSystemCommandsIT {
 
             final List<SystemCommand> systemCommands = systemCommanderClient.getRemote(CONTEXT_NAME).listCommands();
 
-            assertThat(systemCommands.size(), is(6));
+            assertThat(systemCommands.size(), is(9));
             assertThat(systemCommands, hasItem(new PingCommand()));
             assertThat(systemCommands, hasItem(new ShutterCommand()));
             assertThat(systemCommands, hasItem(new UnshutterCommand()));
             assertThat(systemCommands, hasItem(new RebuildCommand()));
             assertThat(systemCommands, hasItem(new CatchupCommand()));
             assertThat(systemCommands, hasItem(new IndexerCatchupCommand()));
+            assertThat(systemCommands, hasItem(new AddTriggerCommand()));
+            assertThat(systemCommands, hasItem(new RemoveTriggerCommand()));
+            assertThat(systemCommands, hasItem(new ValidateCatchupCommand()));
         }
     }
 }
