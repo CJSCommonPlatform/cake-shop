@@ -17,7 +17,7 @@ import uk.gov.justice.services.jmx.api.command.RemoveTriggerCommand;
 import uk.gov.justice.services.jmx.api.command.ShutterCommand;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.command.UnshutterCommand;
-import uk.gov.justice.services.jmx.api.command.ValidateCatchupCommand;
+import uk.gov.justice.services.jmx.api.command.VerifyCatchupCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
@@ -56,7 +56,7 @@ public class ListSystemCommandsIT {
             assertThat(systemCommands, hasItem(new IndexerCatchupCommand()));
             assertThat(systemCommands, hasItem(new AddTriggerCommand()));
             assertThat(systemCommands, hasItem(new RemoveTriggerCommand()));
-            assertThat(systemCommands, hasItem(new ValidateCatchupCommand()));
+            assertThat(systemCommands, hasItem(new VerifyCatchupCommand()));
         }
     }
 }
