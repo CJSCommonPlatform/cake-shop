@@ -81,7 +81,7 @@
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.event-store</groupId>
-            <artifactId>event-store-management</artifactId>
+            <artifactId>event-store-management-core</artifactId>
             <version>${event-store.version}</version>
         </dependency>
 
