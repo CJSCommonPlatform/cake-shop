@@ -14,8 +14,7 @@ import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.slf4j.LoggerFactory.getLogger;
-import static uk.gov.justice.services.jmx.api.state.ApplicationManagementState.SHUTTERED;
-import static uk.gov.justice.services.jmx.api.state.ApplicationManagementState.UNSHUTTERED;
+import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
@@ -27,8 +26,8 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.api.command.ShutterCommand;
 import uk.gov.justice.services.jmx.api.command.UnshutterCommand;
+import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
-import uk.gov.justice.services.jmx.api.state.ApplicationManagementState;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
@@ -36,6 +35,7 @@ import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response.Status;
@@ -90,18 +90,18 @@ public class ShutteringIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
-            systemCommanderMBean.call(new UnshutterCommand());
+            final UUID commandId = systemCommanderMBean.call(new UnshutterCommand());
 
-            final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
-                final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();
-                if (applicationState == UNSHUTTERED) {
-                    return of(applicationState);
+            final Optional<SystemCommandStatus> unshutterStatus = poller.pollUntilFound(() -> {
+                final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
+                if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
+                    return of(commandStatus);
                 }
 
                 return empty();
             });
 
-            if (! applicationManagementState.isPresent()) {
+            if (!unshutterStatus.isPresent()) {
                 fail();
             }
         }
@@ -117,19 +117,19 @@ public class ShutteringIT {
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
-            systemCommanderMBean.call(new ShutterCommand());
+            final UUID commandId = systemCommanderMBean.call(new ShutterCommand());
 
-            final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
-                final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();
-
-                if (applicationState == SHUTTERED) {
-                    return of(applicationState);
+            final Optional<SystemCommandStatus> shutterStatus = poller.pollUntilFound(() -> {
+                final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
+                if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
+                    return of(commandStatus);
                 }
+
 
                 return empty();
             });
 
-            if(! applicationManagementState.isPresent()) {
+            if (!shutterStatus.isPresent()) {
                 fail();
             }
         }
@@ -156,18 +156,19 @@ public class ShutteringIT {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
             //invoke shuttering
-            systemCommanderMBean.call(new ShutterCommand());
+            final UUID shutterCommandId = systemCommanderMBean.call(new ShutterCommand());
 
-            final Optional<ApplicationManagementState> applicationManagementState = poller.pollUntilFound(() -> {
-                final ApplicationManagementState applicationState1 = systemCommanderMBean.getApplicationState();
-                if (applicationState1 == SHUTTERED) {
-                    return of(applicationState1);
+            final Optional<SystemCommandStatus> shutterStatus = poller.pollUntilFound(() -> {
+                final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(shutterCommandId);
+                if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
+                    return of(commandStatus);
                 }
+
 
                 return empty();
             });
-            
-            if(! applicationManagementState.isPresent()) {
+
+            if (!shutterStatus.isPresent()) {
                 fail();
             }
 
@@ -181,19 +182,19 @@ public class ShutteringIT {
             verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
             //invoke unshuttering
-            systemCommanderMBean.call(new UnshutterCommand());
+            final UUID unshutterCommandId = systemCommanderMBean.call(new UnshutterCommand());
 
-            final Optional<ApplicationManagementState> otherApplicationManagementState = poller.pollUntilFound(() -> {
-                final ApplicationManagementState applicationState = systemCommanderMBean.getApplicationState();
-
-                if (applicationState == UNSHUTTERED) {
-                    return of(applicationState);
+            final Optional<SystemCommandStatus> unshutterStatus = poller.pollUntilFound(() -> {
+                final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(unshutterCommandId);
+                if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
+                    return of(commandStatus);
                 }
+
 
                 return empty();
             });
 
-            if(! otherApplicationManagementState.isPresent()) {
+            if (!unshutterStatus.isPresent()) {
                 fail();
             }
 
