@@ -32,9 +32,9 @@
         <cpp.repo.name>cake-shop</cpp.repo.name>
 
         <framework-api.version>4.1.0</framework-api.version>
-        <framework.version>6.2.0-M3</framework.version>
-        <event-store.version>2.2.0-M3</event-store.version>
-        <framework-generators.version>2.2.0-M2</framework-generators.version>
+        <framework.version>6.2.0-M4</framework.version>
+        <event-store.version>2.2.0-M4</event-store.version>
+        <framework-generators.version>2.2.0-M3</framework-generators.version>
         <file.service.version>1.17.11</file.service.version>
 
         <common-bom.version>2.4.0</common-bom.version>

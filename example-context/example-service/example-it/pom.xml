@@ -179,6 +179,12 @@
             <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.event-store</groupId>
+            <artifactId>event-domain</artifactId>
+            <version>${event-store.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

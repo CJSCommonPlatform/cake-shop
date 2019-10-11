@@ -1,5 +1,6 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.Integer.valueOf;
 import static java.lang.System.getProperty;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -9,7 +10,7 @@ import static uk.gov.justice.services.jmx.system.command.client.connection.JmxPa
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.jmx.api.command.AddTriggerCommand;
-import uk.gov.justice.services.jmx.api.command.CatchupCommand;
+import uk.gov.justice.services.jmx.api.command.EventCatchupCommand;
 import uk.gov.justice.services.jmx.api.command.IndexerCatchupCommand;
 import uk.gov.justice.services.jmx.api.command.PingCommand;
 import uk.gov.justice.services.jmx.api.command.RebuildCommand;
@@ -29,9 +30,8 @@ import org.junit.Test;
 public class ListSystemCommandsIT {
 
     private static final String HOST = getHost();
-    private static final int PORT = valueOf(getProperty("random.management.port"));
+    private static final int PORT = parseInt(getProperty("random.management.port"));
     private static final String CONTEXT_NAME = "example";
-
 
     private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
 
@@ -52,7 +52,7 @@ public class ListSystemCommandsIT {
             assertThat(systemCommands, hasItem(new ShutterCommand()));
             assertThat(systemCommands, hasItem(new UnshutterCommand()));
             assertThat(systemCommands, hasItem(new RebuildCommand()));
-            assertThat(systemCommands, hasItem(new CatchupCommand()));
+            assertThat(systemCommands, hasItem(new EventCatchupCommand()));
             assertThat(systemCommands, hasItem(new IndexerCatchupCommand()));
             assertThat(systemCommands, hasItem(new AddTriggerCommand()));
             assertThat(systemCommands, hasItem(new RemoveTriggerCommand()));
