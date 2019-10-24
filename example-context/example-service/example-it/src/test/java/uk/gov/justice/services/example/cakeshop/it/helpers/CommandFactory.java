@@ -16,4 +16,16 @@ public class CommandFactory {
                         ).build())
                 .build().toString();
     }
+
+    public String addRecipeCommandByName(final String recipeName) {
+        return createObjectBuilder()
+                .add("name", recipeName)
+                .add("glutenFree", false)
+                .add("ingredients", createArrayBuilder()
+                        .add(createObjectBuilder()
+                                .add("name", "ingredient")
+                                .add("quantity", 1)
+                        ).build())
+                .build().toString();
+    }
 }
