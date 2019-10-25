@@ -1,7 +1,6 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
 import static java.lang.Integer.parseInt;
-import static java.lang.Integer.valueOf;
 import static java.lang.System.getProperty;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
@@ -10,6 +9,8 @@ import static uk.gov.justice.services.jmx.system.command.client.connection.JmxPa
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.jmx.api.command.AddTriggerCommand;
+import uk.gov.justice.services.jmx.api.command.DisablePublishingCommand;
+import uk.gov.justice.services.jmx.api.command.EnablePublishingCommand;
 import uk.gov.justice.services.jmx.api.command.EventCatchupCommand;
 import uk.gov.justice.services.jmx.api.command.IndexerCatchupCommand;
 import uk.gov.justice.services.jmx.api.command.PingCommand;
@@ -47,15 +48,17 @@ public class ListSystemCommandsIT {
 
             final List<SystemCommand> systemCommands = systemCommanderClient.getRemote(CONTEXT_NAME).listCommands();
 
-            assertThat(systemCommands.size(), is(9));
-            assertThat(systemCommands, hasItem(new PingCommand()));
-            assertThat(systemCommands, hasItem(new ShutterCommand()));
-            assertThat(systemCommands, hasItem(new UnshutterCommand()));
-            assertThat(systemCommands, hasItem(new RebuildCommand()));
+            assertThat(systemCommands.size(), is(11));
+            assertThat(systemCommands, hasItem(new AddTriggerCommand()));
+            assertThat(systemCommands, hasItem(new DisablePublishingCommand()));
+            assertThat(systemCommands, hasItem(new EnablePublishingCommand()));
             assertThat(systemCommands, hasItem(new EventCatchupCommand()));
             assertThat(systemCommands, hasItem(new IndexerCatchupCommand()));
-            assertThat(systemCommands, hasItem(new AddTriggerCommand()));
+            assertThat(systemCommands, hasItem(new PingCommand()));
+            assertThat(systemCommands, hasItem(new RebuildCommand()));
             assertThat(systemCommands, hasItem(new RemoveTriggerCommand()));
+            assertThat(systemCommands, hasItem(new ShutterCommand()));
+            assertThat(systemCommands, hasItem(new UnshutterCommand()));
             assertThat(systemCommands, hasItem(new VerifyCatchupCommand()));
         }
     }
