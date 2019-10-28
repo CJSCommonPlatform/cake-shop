@@ -32,8 +32,8 @@
         <cpp.repo.name>cake-shop</cpp.repo.name>
 
         <framework-api.version>4.1.0</framework-api.version>
-        <framework.version>6.2.2</framework.version>
-        <event-store.version>2.2.4</event-store.version>
+        <framework.version>6.2.4</framework.version>
+        <event-store.version>2.2.7</event-store.version>
         <framework-generators.version>2.2.2</framework-generators.version>
         <file.service.version>1.17.12</file.service.version>
 
@@ -117,6 +117,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
+                        <!--suppress MavenModelInspection -->
                         <argLine>${argLine} -Xmx64m</argLine>
                     </configuration>
                 </plugin>
