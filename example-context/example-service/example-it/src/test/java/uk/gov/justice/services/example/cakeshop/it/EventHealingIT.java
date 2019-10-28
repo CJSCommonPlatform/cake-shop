@@ -127,13 +127,13 @@ public class EventHealingIT {
 
         removeRecipesFromViewStore(3, findRecipeIdForEventNumber(3));
         removeRecipesFromViewStore(5, findRecipeIdForEventNumber(5));
+        removeRecipesFromViewStore(6, findRecipeIdForEventNumber(6));
+        removeRecipesFromViewStore(7, findRecipeIdForEventNumber(7));
 
         runCatchup();
 
         final Optional<Integer> numberOfEventsInProcessedEventTable = poller.pollUntilFound(() -> {
             final int eventCount = processedEventCounter.countProcessedEvents();
-
-            System.out.println("Number of events in processed_event: " + eventCount);
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
