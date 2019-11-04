@@ -19,6 +19,7 @@ import uk.gov.justice.services.jmx.api.command.RemoveTriggerCommand;
 import uk.gov.justice.services.jmx.api.command.ShutterCommand;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.command.UnshutterCommand;
+import uk.gov.justice.services.jmx.api.command.ValidatePublishedEventsCommand;
 import uk.gov.justice.services.jmx.api.command.VerifyCatchupCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
@@ -48,7 +49,7 @@ public class ListSystemCommandsIT {
 
             final List<SystemCommand> systemCommands = systemCommanderClient.getRemote(CONTEXT_NAME).listCommands();
 
-            assertThat(systemCommands.size(), is(11));
+            assertThat(systemCommands.size(), is(12));
             assertThat(systemCommands, hasItem(new AddTriggerCommand()));
             assertThat(systemCommands, hasItem(new DisablePublishingCommand()));
             assertThat(systemCommands, hasItem(new EnablePublishingCommand()));
@@ -59,6 +60,7 @@ public class ListSystemCommandsIT {
             assertThat(systemCommands, hasItem(new RemoveTriggerCommand()));
             assertThat(systemCommands, hasItem(new ShutterCommand()));
             assertThat(systemCommands, hasItem(new UnshutterCommand()));
+            assertThat(systemCommands, hasItem(new ValidatePublishedEventsCommand()));
             assertThat(systemCommands, hasItem(new VerifyCatchupCommand()));
         }
     }

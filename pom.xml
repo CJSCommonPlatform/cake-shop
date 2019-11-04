@@ -32,16 +32,16 @@
         <cpp.repo.name>cake-shop</cpp.repo.name>
 
         <framework-api.version>4.1.0</framework-api.version>
-        <framework.version>6.2.2</framework.version>
-        <event-store.version>2.2.4</event-store.version>
-        <framework-generators.version>2.2.2</framework-generators.version>
+        <framework.version>6.2.5</framework.version>
+        <event-store.version>2.2.7</event-store.version>
+        <framework-generators.version>2.2.3</framework-generators.version>
         <file.service.version>1.17.12</file.service.version>
 
         <common-bom.version>2.4.0</common-bom.version>
         <utilities.version>1.20.3</utilities.version>
         <test-utils.version>1.24.3</test-utils.version>
 
-        <json-schema-catalog.version>1.7.5</json-schema-catalog.version>
+        <json-schema-catalog.version>1.7.6</json-schema-catalog.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
         <generator-maven-plugin.version>2.7.2</generator-maven-plugin.version>
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
@@ -117,6 +117,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
+                        <!--suppress MavenModelInspection -->
                         <argLine>${argLine} -Xmx64m</argLine>
                     </configuration>
                 </plugin>
