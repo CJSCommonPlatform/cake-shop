@@ -100,8 +100,6 @@ public class CatchupPerformanceIT {
 
         longPoller.pollUntilFound(() -> {
             final int eventCount = processedEventCounter.countProcessedEvents();
-            System.out.println(format("%s events in processed_event table", eventCount));
-
             if (eventCount == 0) {
                 return of(eventCount);
             }
