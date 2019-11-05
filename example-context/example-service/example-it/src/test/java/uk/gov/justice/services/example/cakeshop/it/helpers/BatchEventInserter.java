@@ -50,7 +50,7 @@ public class BatchEventInserter {
 
                 preparedStatement.addBatch();
 
-                if (i % batchSize == 0) {
+                if (i > 0 && i % batchSize == 0) {
                     preparedStatement.executeBatch();
                     System.out.println(format("Inserted %d events into event_log...", i));
                 }
