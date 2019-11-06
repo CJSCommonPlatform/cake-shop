@@ -185,6 +185,12 @@
             <version>${event-store.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.event-store</groupId>
+            <artifactId>event-store-management-commands</artifactId>
+            <version>${event-store.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

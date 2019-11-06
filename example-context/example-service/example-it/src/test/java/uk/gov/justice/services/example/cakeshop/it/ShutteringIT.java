@@ -16,6 +16,8 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
+import static uk.gov.justice.services.management.shuttering.commands.ShutterCommand.SHUTTER;
+import static uk.gov.justice.services.management.shuttering.commands.UnshutterCommand.UNSHUTTER;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
@@ -24,8 +26,6 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.api.command.ShutterCommand;
-import uk.gov.justice.services.jmx.api.command.UnshutterCommand;
 import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
@@ -90,7 +90,7 @@ public class ShutteringIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
-            final UUID commandId = systemCommanderMBean.call(new UnshutterCommand());
+            final UUID commandId = systemCommanderMBean.call(UNSHUTTER);
 
             final Optional<SystemCommandStatus> unshutterStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
@@ -117,7 +117,7 @@ public class ShutteringIT {
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
-            final UUID commandId = systemCommanderMBean.call(new ShutterCommand());
+            final UUID commandId = systemCommanderMBean.call(SHUTTER);
 
             final Optional<SystemCommandStatus> shutterStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
@@ -156,7 +156,7 @@ public class ShutteringIT {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
             //invoke shuttering
-            final UUID shutterCommandId = systemCommanderMBean.call(new ShutterCommand());
+            final UUID shutterCommandId = systemCommanderMBean.call(SHUTTER);
 
             final Optional<SystemCommandStatus> shutterStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(shutterCommandId);
@@ -182,7 +182,7 @@ public class ShutteringIT {
             verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
             //invoke unshuttering
-            final UUID unshutterCommandId = systemCommanderMBean.call(new UnshutterCommand());
+            final UUID unshutterCommandId = systemCommanderMBean.call(UNSHUTTER);
 
             final Optional<SystemCommandStatus> unshutterStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(unshutterCommandId);

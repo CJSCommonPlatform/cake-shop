@@ -14,13 +14,13 @@ import static uk.gov.justice.services.jmx.system.command.client.connection.JmxPa
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
+import uk.gov.justice.services.eventstore.management.commands.ValidatePublishedEventsCommand;
 import uk.gov.justice.services.example.cakeshop.it.helpers.BatchEventInserter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PublishedEventCounter;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
-import uk.gov.justice.services.jmx.api.command.ValidatePublishedEventsCommand;
 import uk.gov.justice.services.jmx.api.domain.CommandState;
 import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
@@ -151,7 +151,7 @@ public class EventValidationIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
             final UUID commandId = systemCommanderMBean
-                    .call(systemCommand);
+                    .call(systemCommand.getName());
 
             return poller.pollUntilFound(() -> commandNoLongerInProgress(systemCommanderMBean, commandId));
         }
