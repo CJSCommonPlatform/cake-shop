@@ -8,6 +8,7 @@ import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
@@ -18,7 +19,6 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.api.command.EventCatchupCommand;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
@@ -96,28 +96,20 @@ public class CatchupPerformanceIT {
 
         System.out.println("Inserted " + totalEvents + " events into event_log");
         System.out.println("Waiting for events to publish...");
-        cleanViewstoreTables();
 
-        longPoller.pollUntilFound(() -> {
+        final Optional<Integer> processedEventCount = longPoller.pollUntilFound(() -> {
             final int eventCount = processedEventCounter.countProcessedEvents();
-            if (eventCount == 0) {
+            if (eventCount == totalEvents) {
                 return of(eventCount);
             }
 
             return empty();
         });
 
-        try (final Connection connection = eventStoreDataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT (*) FROM publish_queue");
-             final ResultSet resultSet = preparedStatement.executeQuery()) {
+        assertThat(processedEventCount, is(of(totalEvents)));
 
-            int eventCount = -1;
-            if (resultSet.next()) {
-                eventCount = resultSet.getInt(1);
-            }
 
-            assertThat(eventCount, is(0));
-        }
+        cleanViewstoreTables();
 
         System.out.println("Running catchup...");
         runCatchup();
@@ -180,7 +172,7 @@ public class CatchupPerformanceIT {
 
         try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
 
-            systemCommanderClient.getRemote(CONTEXT_NAME).call(new EventCatchupCommand());
+            systemCommanderClient.getRemote(CONTEXT_NAME).call(CATCHUP);
         }
     }
 

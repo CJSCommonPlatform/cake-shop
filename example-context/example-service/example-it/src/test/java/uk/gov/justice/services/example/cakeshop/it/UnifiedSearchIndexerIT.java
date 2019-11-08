@@ -68,8 +68,6 @@ public class UnifiedSearchIndexerIT {
 
         final ApiResponse queryResponse = querier.queryForIndex(recipeId.toString());
 
-        System.out.println(queryResponse.body());
-
         with(queryResponse.body())
                 .assertThat("$.indexId", equalTo(recipeId.toString()))
                 .assertThat("$.deliveryDate", equalTo("2016-01-21T16:42:03.522Z"));
