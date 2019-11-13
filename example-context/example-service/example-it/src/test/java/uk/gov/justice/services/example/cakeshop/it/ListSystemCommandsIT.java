@@ -3,7 +3,6 @@ package uk.gov.justice.services.example.cakeshop.it;
 import static java.lang.Integer.parseInt;
 import static java.lang.System.getProperty;
 import static java.util.stream.Collectors.toMap;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -16,28 +15,17 @@ import static uk.gov.justice.services.eventstore.management.commands.RebuildComm
 import static uk.gov.justice.services.eventstore.management.commands.RemoveTriggerCommand.REMOVE_TRIGGER;
 import static uk.gov.justice.services.eventstore.management.commands.ValidatePublishedEventsCommand.VALIDATE_EVENTS;
 import static uk.gov.justice.services.eventstore.management.commands.VerifyCatchupCommand.VERIFY_CATCHUP;
+import static uk.gov.justice.services.eventstore.management.commands.VerifyRebuildCommand.VERIFY_REBUILD;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.management.ping.commands.PingCommand.PING;
-import static uk.gov.justice.services.management.shuttering.commands.ShutterCommand.SHUTTER;
-import static uk.gov.justice.services.management.shuttering.commands.UnshutterCommand.UNSHUTTER;
+import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
+import static uk.gov.justice.services.management.suspension.commands.UnsuspendCommand.UNSUSPEND;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
-import uk.gov.justice.services.eventstore.management.commands.AddTriggerCommand;
-import uk.gov.justice.services.eventstore.management.commands.DisablePublishingCommand;
-import uk.gov.justice.services.eventstore.management.commands.EnablePublishingCommand;
-import uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand;
-import uk.gov.justice.services.eventstore.management.commands.IndexerCatchupCommand;
-import uk.gov.justice.services.eventstore.management.commands.RebuildCommand;
-import uk.gov.justice.services.eventstore.management.commands.RemoveTriggerCommand;
-import uk.gov.justice.services.eventstore.management.commands.ValidatePublishedEventsCommand;
-import uk.gov.justice.services.eventstore.management.commands.VerifyCatchupCommand;
 import uk.gov.justice.services.jmx.api.command.SystemCommandDetails;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
-import uk.gov.justice.services.management.ping.commands.PingCommand;
-import uk.gov.justice.services.management.shuttering.commands.ShutterCommand;
-import uk.gov.justice.services.management.shuttering.commands.UnshutterCommand;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +54,7 @@ public class ListSystemCommandsIT {
                     .getRemote(CONTEXT_NAME)
                     .listCommands();
 
-            assertThat(systemCommandDetailsList.size(), is(12));
+            assertThat(systemCommandDetailsList.size(), is(13));
 
             final Map<String, SystemCommandDetails> systemCommandDetailsMap = systemCommandDetailsList
                     .stream()
@@ -80,9 +68,10 @@ public class ListSystemCommandsIT {
             assertThat(systemCommandDetailsMap.get(PING), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(REBUILD), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(REMOVE_TRIGGER), is(notNullValue()));
-            assertThat(systemCommandDetailsMap.get(SHUTTER), is(notNullValue()));
-            assertThat(systemCommandDetailsMap.get(UNSHUTTER), is(notNullValue()));
+            assertThat(systemCommandDetailsMap.get(SUSPEND), is(notNullValue()));
+            assertThat(systemCommandDetailsMap.get(UNSUSPEND), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(VALIDATE_EVENTS), is(notNullValue()));
+            assertThat(systemCommandDetailsMap.get(VERIFY_REBUILD), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(VERIFY_CATCHUP), is(notNullValue()));
         }
     }

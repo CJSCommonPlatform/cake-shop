@@ -5,6 +5,7 @@ import static com.jayway.jsonassert.JsonAssert.with;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.lang.System.getProperty;
+import static java.lang.Thread.sleep;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
@@ -16,8 +17,8 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
-import static uk.gov.justice.services.management.shuttering.commands.ShutterCommand.SHUTTER;
-import static uk.gov.justice.services.management.shuttering.commands.UnshutterCommand.UNSHUTTER;
+import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
+import static uk.gov.justice.services.management.suspension.commands.UnsuspendCommand.UNSUSPEND;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
@@ -80,7 +81,7 @@ public class ShutteringIT {
     public void cleanup() throws Exception {
         client.close();
 
-        //invoke unshuttering - Always ensure unshutter is invoked as we cannot guarantee order of execution for other Cakeshop ITs
+        //invoke unsuspending - Always ensure unsuspend is invoked as we cannot guarantee order of execution for other Cakeshop ITs
 
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
@@ -90,9 +91,9 @@ public class ShutteringIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
-            final UUID commandId = systemCommanderMBean.call(UNSHUTTER);
+            final UUID commandId = systemCommanderMBean.call(UNSUSPEND);
 
-            final Optional<SystemCommandStatus> unshutterStatus = poller.pollUntilFound(() -> {
+            final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
                 if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
                     return of(commandStatus);
@@ -101,25 +102,25 @@ public class ShutteringIT {
                 return empty();
             });
 
-            if (!unshutterStatus.isPresent()) {
+            if (!unsuspendStatus.isPresent()) {
                 fail();
             }
         }
     }
 
     @Test
-    public void shouldNotReturnRecipesAfterShuttering() throws Exception {
+    public void shouldNotReturnRecipesAfterSuspending() throws Exception {
 
-        //invoke shuttering
+        //invoke suspending
         final JmxParameters jmxParameters = jmxParameters()
                 .withHost(HOST)
                 .withPort(PORT)
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
-            final UUID commandId = systemCommanderMBean.call(SHUTTER);
+            final UUID commandId = systemCommanderMBean.call(SUSPEND);
 
-            final Optional<SystemCommandStatus> shutterStatus = poller.pollUntilFound(() -> {
+            final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
                 if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
                     return of(commandStatus);
@@ -129,7 +130,7 @@ public class ShutteringIT {
                 return empty();
             });
 
-            if (!shutterStatus.isPresent()) {
+            if (!suspendStatus.isPresent()) {
                 fail();
             }
         }
@@ -138,9 +139,9 @@ public class ShutteringIT {
         final String recipeId = addRecipe(MARBLE_CAKE);
         final String recipeId2 = addRecipe(CARROT_CAKE);
 
-        Thread.sleep(5000L);
+        sleep(5000L);
 
-        //check recipes have not been added due to shuttering
+        //check recipes have not been added due to suspending
         verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
     }
 
@@ -155,11 +156,11 @@ public class ShutteringIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
-            //invoke shuttering
-            final UUID shutterCommandId = systemCommanderMBean.call(SHUTTER);
+            //invoke suspending
+            final UUID suspendCommandId = systemCommanderMBean.call(SUSPEND);
 
-            final Optional<SystemCommandStatus> shutterStatus = poller.pollUntilFound(() -> {
-                final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(shutterCommandId);
+            final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
+                final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(suspendCommandId);
                 if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
                     return of(commandStatus);
                 }
@@ -168,7 +169,7 @@ public class ShutteringIT {
                 return empty();
             });
 
-            if (!shutterStatus.isPresent()) {
+            if (!suspendStatus.isPresent()) {
                 fail();
             }
 
@@ -176,16 +177,16 @@ public class ShutteringIT {
             final String recipeId = addRecipe(MARBLE_CAKE);
             final String recipeId2 = addRecipe(CARROT_CAKE);
 
-            Thread.sleep(5000L);
+            sleep(5000L);
 
-            //check recipes have not been added due to shuttering
+            //check recipes have not been added due to suspending
             verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
-            //invoke unshuttering
-            final UUID unshutterCommandId = systemCommanderMBean.call(UNSHUTTER);
+            //invoke unsuspending
+            final UUID unsuspendCommandId = systemCommanderMBean.call(UNSUSPEND);
 
-            final Optional<SystemCommandStatus> unshutterStatus = poller.pollUntilFound(() -> {
-                final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(unshutterCommandId);
+            final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
+                final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(unsuspendCommandId);
                 if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
                     return of(commandStatus);
                 }
@@ -194,11 +195,11 @@ public class ShutteringIT {
                 return empty();
             });
 
-            if (!unshutterStatus.isPresent()) {
+            if (!unsuspendStatus.isPresent()) {
                 fail();
             }
 
-            //check new recipes have been added successfully after unshuttering
+            //check new recipes have been added successfully after unsuspending
             verifyRecipeAdded(recipeId, recipeId2, MARBLE_CAKE, CARROT_CAKE, true, OK);
         }
     }
