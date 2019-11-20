@@ -46,11 +46,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-public class ShutteringIT {
+public class SuspendIT {
 
     private static final String CONTEXT_NAME = "example";
 
-    private static final Logger logger = getLogger(ShutteringIT.class);
+    private static final Logger logger = getLogger(SuspendIT.class);
     private static final String MARBLE_CAKE = "Marble cake";
     private static final String CARROT_CAKE = "Carrot cake";
 
