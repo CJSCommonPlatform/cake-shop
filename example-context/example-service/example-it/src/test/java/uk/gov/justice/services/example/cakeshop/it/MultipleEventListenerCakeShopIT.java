@@ -18,6 +18,7 @@ import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMat
 import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.EventSender;
 import uk.gov.justice.services.example.cakeshop.it.helpers.JmsBootstrapper;
 import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
@@ -26,10 +27,8 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import java.util.UUID;
 
 import javax.jms.MessageConsumer;
-import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.jms.Topic;
 import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 
@@ -44,6 +43,7 @@ public class MultipleEventListenerCakeShopIT {
 
     private final EventFactory eventFactory = new EventFactory();
     private final JmsBootstrapper jmsBootstrapper = new JmsBootstrapper();
+    private final EventSender eventSender = new EventSender();
 
     private Client client;
     private Querier querier;
@@ -69,12 +69,7 @@ public class MultipleEventListenerCakeShopIT {
 
         //adding 1 recipe as other event
         final UUID recipeId2 = randomUUID();
-
-        try (final Session jmsSession = jmsBootstrapper.jmsSession()) {
-            final Topic topic = jmsSession.createTopic("other.event");
-
-            try (final MessageProducer producer = jmsSession.createProducer(topic);) {
-
+            final String topicName = "other.event";
                 final JsonObject jsonObject = createObjectBuilder()
                         .add("recipeId", recipeId2.toString())
                         .add("name", "Chocolate muffin")
@@ -95,15 +90,7 @@ public class MultipleEventListenerCakeShopIT {
                                 .build(),
                         jsonObject);
 
-                @SuppressWarnings("deprecation") final String json = jsonEnvelope.toDebugStringPrettyPrint();
-                final TextMessage message = jmsSession.createTextMessage();
-
-                message.setText(json);
-                message.setStringProperty("CPPNAME", "other.recipe-added");
-
-                producer.send(message);
-            }
-        }
+        eventSender.sendToTopic(jsonEnvelope, topicName);
 
         await().until(() -> {
             final String responseBody = querier.recipesQueryResult(singletonList(new BasicNameValuePair("pagesize", "30"))).body();
