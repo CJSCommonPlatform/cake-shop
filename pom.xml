@@ -65,6 +65,11 @@
                         <argLine>${argLine} -Xmx64m</argLine>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>${plugins.maven.wildfly.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
