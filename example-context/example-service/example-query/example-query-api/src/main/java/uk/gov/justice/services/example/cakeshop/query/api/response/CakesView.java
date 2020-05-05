@@ -4,11 +4,15 @@ import uk.gov.justice.services.example.cakeshop.query.api.request.SearchCake;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CakesView {
 
     private final List<SearchCake> cakes;
 
-    public CakesView(final List<SearchCake> cakes) {
+    @JsonCreator
+    public CakesView(@JsonProperty final List<SearchCake> cakes) {
         this.cakes = cakes;
     }
 

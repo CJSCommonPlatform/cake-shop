@@ -6,8 +6,10 @@ public class SearchRecipes {
     private String name;
     private boolean glutenFree;
 
-    public SearchRecipes(final int pagesize) {
+    public SearchRecipes(final int pagesize, final String name, final boolean glutenFree) {
         this.pagesize = pagesize;
+        this.name = name;
+        this.glutenFree = glutenFree;
     }
 
     public int getPagesize() {

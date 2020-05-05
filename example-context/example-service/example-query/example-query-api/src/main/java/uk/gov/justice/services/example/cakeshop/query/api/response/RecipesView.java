@@ -5,6 +5,9 @@ import uk.gov.justice.services.example.cakeshop.persistence.entity.Recipe;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * View representation of a list of {@link  Recipe}'s.
  */
@@ -12,7 +15,8 @@ public class RecipesView {
 
     private final List<RecipeView> recipes;
 
-    public RecipesView(final List<RecipeView> recipes) {
+    @JsonCreator
+    public RecipesView(@JsonProperty final List<RecipeView> recipes) {
         this.recipes = recipes;
     }
 
