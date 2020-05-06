@@ -398,7 +398,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${jboss.home}/modules/system/layers/base/org
+                            <outputDirectory>${jboss.home}/modules/system/layers/base
                             </outputDirectory>
                             <resources>
                                 <resource>
