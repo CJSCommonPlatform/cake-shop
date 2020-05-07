@@ -9,7 +9,6 @@
     </parent>
     <artifactId>example-it</artifactId>
     <properties>
-        <wildfly.version>19.0.0.Final</wildfly.version>
         <jboss.home>${project.build.directory}/wildfly-${wildfly.version}</jboss.home>
 
         <!-- Single war is used by default, to run example-it with multiple wars set the system example.use-multiple-war property to true: -->

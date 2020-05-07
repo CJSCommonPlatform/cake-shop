@@ -7,7 +7,7 @@
     <parent>
         <groupId>uk.gov.justice</groupId>
         <artifactId>maven-framework-parent-pom</artifactId>
-        <version>8.0.0-SNAPSHOT</version>
+        <version>8.0.0-M2</version>
     </parent>
 
     <groupId>uk.gov.justice.example</groupId>
@@ -31,9 +31,16 @@
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
 
-        <framework-libraries.version>8.0.0-SNAPSHOT</framework-libraries.version>
-        <framework.version>8.0.0-SNAPSHOT</framework.version>
-        <event-store.version>8.0.0-SNAPSHOT</event-store.version>
+        <wildfly.version>19.1.0.Final</wildfly.version>
+        <wildfly.maven.plugin.version>2.0.2.Final</wildfly.maven.plugin.version>
+
+        <framework-libraries.version>8.0.0-M3</framework-libraries.version>
+        <framework.version>8.0.0-M3</framework.version>
+        <event-store.version>8.0.0-M1</event-store.version>
+
+
+        <!-- TODO - move dependency to common-bom -->
+        <deltaspike.version>1.9.1</deltaspike.version>
     </properties>
 
     <dependencyManagement>
@@ -68,7 +75,7 @@
                 <plugin>
                     <groupId>org.wildfly.plugins</groupId>
                     <artifactId>wildfly-maven-plugin</artifactId>
-                    <version>${plugins.maven.wildfly.version}</version>
+                    <version>${wildfly.maven.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

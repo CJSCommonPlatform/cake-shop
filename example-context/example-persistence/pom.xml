@@ -87,6 +87,29 @@
             <artifactId>openejb-server</artifactId>
             <scope>test</scope>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-test-control-module-api</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-test-control-module-impl</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.deltaspike.cdictrl</groupId>
+            <artifactId>deltaspike-cdictrl-openejb</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
     <build>
         <plugins>
