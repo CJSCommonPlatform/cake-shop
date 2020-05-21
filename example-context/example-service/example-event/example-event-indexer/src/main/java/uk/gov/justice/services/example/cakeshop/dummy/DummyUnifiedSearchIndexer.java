@@ -4,6 +4,7 @@ import static java.util.UUID.fromString;
 
 import uk.gov.justice.services.example.cakeshop.persistence.IndexRepository;
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Index;
+import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.unifiedsearch.UnifiedSearchIndexer;
 
 import java.time.ZonedDateTime;
@@ -20,9 +21,10 @@ public class DummyUnifiedSearchIndexer implements UnifiedSearchIndexer {
     private IndexRepository indexRepository;
 
     @Override
-    public void indexData(final JsonObject jsonObject) {
-        final UUID recipeId = fromString(jsonObject.getString("recipeId"));
-        final ZonedDateTime deliveryDate = ZonedDateTime.parse(jsonObject.getString("deliveryDate"));
+    public void indexData(final Envelope<JsonObject> eventWithJoltTransformedPayload) {
+        final JsonObject payload = eventWithJoltTransformedPayload.payload();
+        final UUID recipeId = fromString(payload.getString("recipeId"));
+        final ZonedDateTime deliveryDate = ZonedDateTime.parse(payload.getString("deliveryDate"));
         final Index index = new Index(recipeId, deliveryDate);
         indexRepository.save(index);
     }
