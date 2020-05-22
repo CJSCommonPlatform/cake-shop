@@ -13,8 +13,6 @@
     <packaging>pom</packaging>
 
     <properties>
-        <plugins.raml-maven.version>${raml-maven-plugin.version}</plugins.raml-maven.version>
-        <wiremock.service.version>1.1.0</wiremock.service.version>
         <cpp.service-component>UNKNOWN_SERVICE_COMPONENT</cpp.service-component>
         <skip.mockito.json.validation>true</skip.mockito.json.validation>
     </properties>
@@ -52,7 +50,7 @@
                 <plugin>
                     <groupId>uk.gov.justice.maven</groupId>
                     <artifactId>raml-maven-plugin</artifactId>
-                    <version>${plugins.raml-maven.version}</version>
+                    <version>${framework.version}</version>
                     <executions>
                         <execution>
                             <id>generate-rest-clients</id>
@@ -101,12 +99,12 @@
                         <dependency>
                             <groupId>uk.gov.justice.framework-generators</groupId>
                             <artifactId>rest-client-generator</artifactId>
-                            <version>${framework-generators.version}</version>
+                            <version>${framework.version}</version>
                         </dependency>
                         <dependency>
                             <groupId>uk.gov.justice.framework-generators</groupId>
                             <artifactId>messaging-client-generator</artifactId>
-                            <version>${framework-generators.version}</version>
+                            <version>${framework.version}</version>
                         </dependency>
                         <dependency>
                             <groupId>javax</groupId>
@@ -120,7 +118,7 @@
                 <plugin>
                     <groupId>uk.gov.justice.schema</groupId>
                     <artifactId>catalog-generation-plugin</artifactId>
-                    <version>${json-schema-catalog.version}</version>
+                    <version>${framework-libraries.version}</version>
                     <executions>
                         <execution>
                             <id>schema-catalog-generation</id>
@@ -169,12 +167,12 @@
                         <dependency>
                             <groupId>uk.gov.justice.schema</groupId>
                             <artifactId>catalog-generation</artifactId>
-                            <version>${json-schema-catalog.version}</version>
+                            <version>${framework-libraries.version}</version>
                         </dependency>
                         <dependency>
                             <groupId>uk.gov.justice.maven.generator</groupId>
                             <artifactId>parser-common</artifactId>
-                            <version>${generator-maven-plugin.version}</version>
+                            <version>${framework-libraries.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -205,7 +203,7 @@
                     <plugin>
                         <groupId>uk.gov.justice.maven</groupId>
                         <artifactId>raml-maven-plugin</artifactId>
-                        <version>${plugins.raml-maven.version}</version>
+                        <version>${framework.version}</version>
                         <executions>
                             <execution>
                                 <id>check-raml-syntax</id>
@@ -245,7 +243,7 @@
                             <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>
                                 <artifactId>lint-check-rules</artifactId>
-                                <version>${framework-generators.version}</version>
+                                <version>${framework.version}</version>
                             </dependency>
                             <dependency>
                                 <groupId>javax</groupId>
@@ -338,7 +336,7 @@
                     <plugin>
                         <groupId>uk.gov.justice.schema</groupId>
                         <artifactId>catalog-generation-plugin</artifactId>
-                        <version>${json-schema-catalog.version}</version>
+                        <version>${framework-libraries.version}</version>
                         <configuration>
                             <parserName>uk.gov.justice.maven.generator.io.files.parser.RamlFileParser
                             </parserName>
@@ -363,19 +361,19 @@
                             <dependency>
                                 <groupId>uk.gov.justice.schema</groupId>
                                 <artifactId>catalog-generation</artifactId>
-                                <version>${json-schema-catalog.version}</version>
+                                <version>${framework-libraries.version}</version>
                             </dependency>
                             <dependency>
                                 <groupId>uk.gov.justice.maven.generator</groupId>
-                                <artifactId>raml-parser</artifactId>
-                                <version>${generator-maven-plugin.version}</version>
+                                <artifactId>generator-raml-parser</artifactId>
+                                <version>${framework-libraries.version}</version>
                             </dependency>
                         </dependencies>
                     </plugin>
                     <plugin>
                         <groupId>uk.gov.justice.framework-generators</groupId>
                         <artifactId>rest-adapter-generator-plugin</artifactId>
-                        <version>${framework-generators.version}</version>
+                        <version>${framework.version}</version>
                         <executions>
                             <execution>
                                 <id>generate-rest-adapters</id>
@@ -407,14 +405,14 @@
                             <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>
                                 <artifactId>rest-adapter-generator</artifactId>
-                                <version>${framework-generators.version}</version>
+                                <version>${framework.version}</version>
                             </dependency>
                         </dependencies>
                     </plugin>
                     <plugin>
                         <groupId>uk.gov.justice.framework-generators</groupId>
                         <artifactId>messaging-adapter-generator-plugin</artifactId>
-                        <version>${framework-generators.version}</version>
+                        <version>${framework.version}</version>
                            <executions>
                             <execution>
                                 <id>generate-raml-messaging-adapters</id>
@@ -449,14 +447,14 @@
                             <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>
                                 <artifactId>messaging-adapter-generator</artifactId>
-                                <version>${framework-generators.version}</version>
+                                <version>${framework.version}</version>
                             </dependency>
                         </dependencies>
                     </plugin>
                     <plugin>
                         <groupId>uk.gov.justice.framework-generators</groupId>
                         <artifactId>messaging-client-generator-plugin</artifactId>
-                        <version>${framework-generators.version}</version>
+                        <version>${framework.version}</version>
                         <executions>
                             <execution>
                                 <id>generate-src-raml-message-clients</id>
@@ -489,7 +487,7 @@
                             <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>
                                 <artifactId>messaging-client-generator</artifactId>
-                                <version>${framework-generators.version}</version>
+                                <version>${framework.version}</version>
                             </dependency>
                         </dependencies>
                     </plugin>

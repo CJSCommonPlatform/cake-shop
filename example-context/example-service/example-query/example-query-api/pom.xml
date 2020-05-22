@@ -29,27 +29,22 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>common</artifactId>
-            <version>${framework.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>core</artifactId>
-            <version>${framework.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>rest-adapter-core</artifactId>
-            <version>${framework-generators.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>rest-client-core</artifactId>
-            <version>${framework-generators.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.utils</groupId>
             <artifactId>utilities-file</artifactId>
-            <version>${utilities.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
@@ -58,7 +53,6 @@
         <dependency>
             <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>rest-adapter-file-service</artifactId>
-            <version>${framework-generators.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -80,7 +74,6 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>test-utils-core</artifactId>
-            <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -102,7 +95,7 @@
             <plugin>
                 <groupId>uk.gov.justice.framework-generators</groupId>
                 <artifactId>rest-client-generator-plugin</artifactId>
-                <version>${framework-generators.version}</version>
+                <version>${framework.version}</version>
                 <executions>
                     <execution>
                         <id>external-ramls</id>
@@ -133,7 +126,7 @@
                     <dependency>
                         <groupId>uk.gov.justice.framework-generators</groupId>
                         <artifactId>rest-client-generator</artifactId>
-                        <version>${framework-generators.version}</version>
+                        <version>${framework.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
