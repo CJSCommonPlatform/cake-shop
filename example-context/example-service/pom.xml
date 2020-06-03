@@ -50,7 +50,7 @@
                 <plugin>
                     <groupId>uk.gov.justice.maven</groupId>
                     <artifactId>raml-maven-plugin</artifactId>
-                    <version>${framework.version}</version>
+                    <version>${framework-libraries.version}</version>
                     <executions>
                         <execution>
                             <id>generate-rest-clients</id>
@@ -203,7 +203,7 @@
                     <plugin>
                         <groupId>uk.gov.justice.maven</groupId>
                         <artifactId>raml-maven-plugin</artifactId>
-                        <version>${framework.version}</version>
+                        <version>${framework-libraries.version}</version>
                         <executions>
                             <execution>
                                 <id>check-raml-syntax</id>
