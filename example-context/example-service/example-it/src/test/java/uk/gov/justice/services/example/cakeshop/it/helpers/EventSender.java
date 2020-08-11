@@ -11,9 +11,27 @@ import javax.jms.Topic;
 public class EventSender {
 
     private final JmsBootstrapper jmsBootstrapper = new JmsBootstrapper();
+    private final AuditJmsBootstrapper auditJmsBootstrapper = new AuditJmsBootstrapper();
 
     public void sendToTopic(final JsonEnvelope jsonEnvelope, final String topicName) throws JMSException {
         try (final Session jmsSession = jmsBootstrapper.jmsSession()) {
+            final Topic topic = jmsSession.createTopic(topicName);
+
+            try (final MessageProducer producer = jmsSession.createProducer(topic);) {
+
+                @SuppressWarnings("deprecation") final String json = jsonEnvelope.toDebugStringPrettyPrint();
+                final TextMessage message = jmsSession.createTextMessage();
+
+                message.setText(json);
+                message.setStringProperty("CPPNAME", jsonEnvelope.metadata().name());
+
+                producer.send(message);
+            }
+        }
+    }
+
+    public void sendToAuditTopic(final JsonEnvelope jsonEnvelope, final String topicName) throws JMSException {
+        try (final Session jmsSession = auditJmsBootstrapper.jmsSession()) {
             final Topic topic = jmsSession.createTopic(topicName);
 
             try (final MessageProducer producer = jmsSession.createProducer(topic);) {

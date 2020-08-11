@@ -132,7 +132,7 @@
                 <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c{1}] %s%e%n"/>
             </formatter>
         </subsystem>
-        <subsystem xmlns="urn:jboss:domain:batch-jberet:1.0">
+        <subsystem xmlns="urn:jboss:domain:batch-jberet:2.0">
             <default-job-repository name="in-memory"/>
             <default-thread-pool name="batch"/>
             <job-repository name="in-memory">
@@ -144,7 +144,78 @@
             </thread-pool>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:bean-validation:1.0"/>
-
+        <subsystem xmlns="urn:jboss:domain:core-management:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:datasources:5.0">
+            <datasources>
+                <datasource jndi-name="java:/app/example-single/DS.eventstore" pool-name="DS.example.eventstore" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:postgresql://localhost:5432/frameworkeventstore</connection-url>
+                    <driver>postgres</driver>
+                    <pool>
+                        <min-pool-size>3</min-pool-size>
+                        <max-pool-size>3</max-pool-size>
+                        <prefill>true</prefill>
+                    </pool>
+                    <security>
+                        <user-name>framework</user-name>
+                        <password>framework</password>
+                    </security>
+                </datasource>
+                <datasource jndi-name="java:/DS.example" pool-name="DS.example" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:postgresql://localhost:5432/frameworkviewstore</connection-url>
+                    <driver>postgres</driver>
+                    <pool>
+                        <min-pool-size>3</min-pool-size>
+                        <max-pool-size>3</max-pool-size>
+                        <prefill>true</prefill>
+                    </pool>
+                    <security>
+                        <user-name>framework</user-name>
+                        <password>framework</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                    </validation>
+                </datasource>
+                <datasource jndi-name="java:/app/example/DS.system" pool-name="DS.example.system" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:postgresql://localhost:5432/frameworksystem</connection-url>
+                    <driver>postgres</driver>
+                    <pool>
+                        <min-pool-size>3</min-pool-size>
+                        <max-pool-size>3</max-pool-size>
+                        <prefill>true</prefill>
+                    </pool>
+                    <security>
+                        <user-name>framework</user-name>
+                        <password>framework</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                    </validation>
+                </datasource>
+                <datasource jndi-name="java:/DS.fileservice" pool-name="DS.fileservice" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:postgresql://localhost:5432/frameworkfilestore</connection-url>
+                    <driver>postgres</driver>
+                    <pool>
+                        <min-pool-size>3</min-pool-size>
+                        <max-pool-size>3</max-pool-size>
+                        <prefill>true</prefill>
+                    </pool>
+                    <security>
+                        <user-name>framework</user-name>
+                        <password>framework</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                    </validation>
+                </datasource>
+                <drivers>
+                    <driver name="postgres" module="org.postgresql">
+                        <driver-class>org.postgresql.Driver</driver-class>
+                        <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+                    </driver>
+                </drivers>
+            </datasources>
+        </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir"
                                 scan-interval="5000"
@@ -353,6 +424,8 @@
                     <param name="batch-delay" value="50"/>
                 </http-connector>
                 <in-vm-connector name="in-vm" server-id="0"/>
+                <remote-connector name="remote-audit-artemis" socket-binding="remote-audit-artemis"/>
+
                 <http-acceptor name="http-acceptor" http-listener="default"/>
                 <http-acceptor name="http-acceptor-throughput" http-listener="default">
                     <param name="batch-delay" value="50"/>
@@ -376,6 +449,14 @@
                 <pooled-connection-factory name="activemq-ra" transaction="xa"
                                            entries="java:/JmsXA java:jboss/DefaultJMSConnectionFactory"
                                            connectors="in-vm"/>
+                <pooled-connection-factory name="audit-activemq-ra" transaction="xa"
+                                           failover-on-initial-connection="true"
+                                           reconnect-attempts="-1"
+                                           retry-interval-multiplier="1.0"
+                                           block-on-acknowledge="true"
+                                           client-failure-check-period="2000"
+                                           entries="java:/JmsXAudit java:jboss/AuditJMSConnectionFactory"
+                                           connectors="remote-audit-artemis"/>
                 <remote-acceptor name="activemq-5x-acceptor" socket-binding="activemq-5x"/>
             </server>
         </subsystem>
@@ -601,6 +682,9 @@
         <socket-binding name="activemq-5x" port="${random-jms-port}"/>
         <outbound-socket-binding name="mail-smtp">
             <remote-destination host="localhost" port="25"/>
+        </outbound-socket-binding>
+        <outbound-socket-binding name="remote-audit-artemis">
+            <remote-destination host="localhost" port="61646"/>
         </outbound-socket-binding>
     </socket-binding-group>
 </server>
