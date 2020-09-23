@@ -7,9 +7,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ### Changed
 - Reduced the maximum runtime for each iteration of the publishing beans in the IT tests to 450 milliseconds
-- Update to framework 6.0.14
-- Update to event-store 2.0.15
-- Update to framework-generators 2.0.10
+- Update to maven-framework-parent-pom 2.0.0
+- Update to framework 7.1.0
+- Update to event-store 7.1.0
+- Handled the move to the new Cloudsmith.io maven repository
 
 ## [2.0.0] - 2019-08-19
 ### Added
