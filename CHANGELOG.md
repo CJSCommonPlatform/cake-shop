@@ -11,6 +11,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Update to framework 7.1.0
 - Update to event-store 7.1.0
 - Handled the move to the new Cloudsmith.io maven repository
+- Added support for feature toggling with an integration test showing it working
 
 ## [2.0.0] - 2019-08-19
 ### Added

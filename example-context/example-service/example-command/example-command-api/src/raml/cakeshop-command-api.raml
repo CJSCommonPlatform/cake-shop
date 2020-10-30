@@ -15,12 +15,19 @@ protocols: [ HTTP, HTTPS ]
             requestType: application/vnd.example.add-recipe+json
             name: example.add-recipe
         (mapping):
+            requestType: application/vnd.example.add-recipe-v2+json
+            name: example.add-recipe-v2
+        (mapping):
             requestType: application/vnd.example.remove-recipe+json
             name: example.remove-recipe
         ...
 
     body:
         application/vnd.example.add-recipe+json:
+            schema: !include json/schema/example.add-recipe.json
+            example: !include json/add-recipe.json
+
+        application/vnd.example.add-recipe-v2+json:
             schema: !include json/schema/example.add-recipe.json
             example: !include json/add-recipe.json
 
