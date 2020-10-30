@@ -1,0 +1,21 @@
+{
+  "name": "Eton Mess",
+  "glutenFree": false,
+  "ingredients": [
+    {
+      "name": "custard",
+      "quantity": 2,
+      "allergen": true
+    },
+    {
+      "name": "egg",
+      "quantity": 6,
+      "allergen": true
+    },
+    {
+      "name": "sugar",
+      "quantity": 500,
+      "allergen": false
+    }
+  ]
+}

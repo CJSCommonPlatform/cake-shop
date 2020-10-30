@@ -3,6 +3,7 @@ package uk.gov.justice.services.example.provider;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 
 import uk.gov.justice.services.adapter.rest.interceptor.InputStreamFileInterceptor;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlInterceptor;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntry;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntryProvider;
 
@@ -15,6 +16,7 @@ public class ExampleCommandApiInterceptorChainProvider implements InterceptorCha
 
     public ExampleCommandApiInterceptorChainProvider() {
         interceptorChainEntries.add(new InterceptorChainEntry(7000, InputStreamFileInterceptor.class));
+        interceptorChainEntries.add(new InterceptorChainEntry(8000, FeatureControlInterceptor.class));
     }
 
     @Override
