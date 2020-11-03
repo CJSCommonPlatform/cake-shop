@@ -9,6 +9,7 @@ public class CakeShopMediaTypes {
     private static final String PREFIX = format("application/vnd.%s.", CONTEXT_NAME);
 
     public static final String ADD_RECIPE_MEDIA_TYPE = PREFIX + "add-recipe+json";
+    public static final String ADD_RECIPE_VERSION_2_MEDIA_TYPE = PREFIX + "add-recipe-v2+json";
     public static final String RENAME_RECIPE_MEDIA_TYPE = PREFIX + "rename-recipe+json";
     public static final String REMOVE_RECIPE_MEDIA_TYPE = PREFIX + "remove-recipe+json";
     public static final String MAKE_CAKE_MEDIA_TYPE = PREFIX + "make-cake+json";
