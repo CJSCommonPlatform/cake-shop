@@ -1,6 +1,5 @@
 package uk.gov.justice.services.example.cakeshop.it.helpers;
 
-import static java.lang.String.format;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.apache.commons.io.FileUtils.deleteQuietly;
