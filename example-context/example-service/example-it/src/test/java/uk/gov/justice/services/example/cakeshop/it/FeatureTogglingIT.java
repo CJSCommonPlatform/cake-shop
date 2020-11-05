@@ -5,27 +5,18 @@ import static java.util.UUID.randomUUID;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_VERSION_2_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 import uk.gov.justice.services.core.featurecontrol.domain.FeatureControl;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
-import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.WildflyFeatureUpdater;
-import static org.hamcrest.CoreMatchers.is;
 
-import java.util.Collections;
-import java.util.Optional;
-
-import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
