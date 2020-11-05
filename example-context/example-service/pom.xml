@@ -26,6 +26,7 @@
         <module>example-liquibase</module>
         <module>example-single</module>
         <module>example-event-source</module>
+        <module>example-feature-control</module>
     </modules>
 
     <build>
