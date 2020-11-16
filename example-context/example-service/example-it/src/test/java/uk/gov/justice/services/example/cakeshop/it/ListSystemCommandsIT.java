@@ -18,6 +18,7 @@ import static uk.gov.justice.services.eventstore.management.commands.VerifyCatch
 import static uk.gov.justice.services.eventstore.management.commands.VerifyRebuildCommand.VERIFY_REBUILD;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.management.ping.commands.PingCommand.PING;
+import static uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand.REFRESH_FEATURE_CACHE;
 import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
 import static uk.gov.justice.services.management.suspension.commands.UnsuspendCommand.UNSUSPEND;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
@@ -26,6 +27,7 @@ import uk.gov.justice.services.jmx.api.command.SystemCommandDetails;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
+import uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand;
 
 import java.util.List;
 import java.util.Map;
@@ -54,7 +56,7 @@ public class ListSystemCommandsIT {
                     .getRemote(CONTEXT_NAME)
                     .listCommands();
 
-            assertThat(systemCommandDetailsList.size(), is(13));
+            assertThat(systemCommandDetailsList.size(), is(14));
 
             final Map<String, SystemCommandDetails> systemCommandDetailsMap = systemCommandDetailsList
                     .stream()
@@ -67,6 +69,7 @@ public class ListSystemCommandsIT {
             assertThat(systemCommandDetailsMap.get(INDEXER_CATCHUP), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(PING), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(REBUILD), is(notNullValue()));
+            assertThat(systemCommandDetailsMap.get(REFRESH_FEATURE_CACHE), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(REMOVE_TRIGGER), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(SUSPEND), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(UNSUSPEND), is(notNullValue()));

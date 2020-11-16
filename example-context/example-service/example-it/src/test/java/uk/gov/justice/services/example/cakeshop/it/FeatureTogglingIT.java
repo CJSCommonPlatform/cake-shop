@@ -64,7 +64,6 @@ public class FeatureTogglingIT {
         final boolean enabled = true;
         final Feature feature = new Feature(
                 "recipes-have-allergens-specified",
-                "Version 2 of add recipe handler for testing feature toggling",
                 enabled
         );
 
@@ -88,7 +87,6 @@ public class FeatureTogglingIT {
         final boolean enabled = false;
         final Feature feature = new Feature(
                 "recipes-have-allergens-specified",
-                "Version 2 of add recipe handler for testing feature toggling",
                 enabled
         );
 

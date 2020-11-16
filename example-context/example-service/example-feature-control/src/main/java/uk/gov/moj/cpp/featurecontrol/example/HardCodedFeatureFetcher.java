@@ -7,7 +7,6 @@ import uk.gov.justice.services.core.featurecontrol.FeatureFetcher;
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
@@ -21,7 +20,6 @@ public class HardCodedFeatureFetcher implements FeatureFetcher {
 
     private static final Feature HARD_CODED_DISABLED_FEATURE = new Feature(
             "recipes-have-allergens-specified",
-            "Version 2 of add recipe handler for testing feature toggling",
             false
     );
 
