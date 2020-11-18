@@ -8,14 +8,14 @@ import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
+import javax.annotation.Priority;
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-@Default
-@ApplicationScoped
+@Alternative
+@Priority(1)
 public class HardCodedFeatureFetcher implements FeatureFetcher {
 
     private static final Feature HARD_CODED_DISABLED_FEATURE = new Feature(
