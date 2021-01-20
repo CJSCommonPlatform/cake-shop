@@ -89,6 +89,7 @@
         <dependency>
             <groupId>uk.gov.justice.event-store</groupId>
             <artifactId>event-store-management-command-handler-extension</artifactId>
+            <version>${event-store.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->

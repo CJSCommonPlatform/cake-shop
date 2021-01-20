@@ -203,9 +203,7 @@ public class RecipesQueryViewTest {
         when(service.getRecipes(pagesize, Optional.of(recipeName), Optional.of(false)))
                 .thenReturn(new RecipesView(asList(new RecipeView(recipeId, recipeName, false), new RecipeView(recipeId2, recipeName2, false))));
 
-        final SearchRecipes searchRecipes = new SearchRecipes(pagesize);
-        searchRecipes.setName(recipeName);
-        searchRecipes.setGlutenFree(false);
+        final SearchRecipes searchRecipes = new SearchRecipes(pagesize, recipeName, false);
 
         final Envelope<SearchRecipes> envelope = envelopeFrom(metadataWithDefaults(), searchRecipes);
 
