@@ -6,10 +6,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 
 ### Changed
+- Updated to java 11 and OpenJdk
+- Updated wildfly to 20.0.1-Final  
 - Reduced the maximum runtime for each iteration of the publishing beans in the IT tests to 450 milliseconds
-- Update to maven-framework-parent-pom 2.0.0
-- Update to framework 7.1.0
-- Update to event-store 7.1.0
+- Update to maven-framework-parent-pom 8.0.0-M2
+- Update to framework-libraries 8.0.0-M3
+- Update to framework 8.0.0-M3
+- Update to event-store 8.0.0-M1
+- Bumped the base version of the project to 8.0.0 to match the framework libraries and show java 11 change  
 - Handled the move to the new Cloudsmith.io maven repository
 - Added support for feature toggling with an integration test showing it working
 
