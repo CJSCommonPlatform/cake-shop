@@ -178,11 +178,6 @@
         <dependency>
             <groupId>uk.gov.justice.event-store</groupId>
             <artifactId>event-store-management-command-handler-extension</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>uk.gov.justice.event-store</groupId>
-            <artifactId>event-store-management-command-handler-extension</artifactId>
             <version>${event-store.version}</version>
             <scope>test</scope>
         </dependency>
