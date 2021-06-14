@@ -223,6 +223,11 @@
                         </executions>
                         <dependencies>
                             <dependency>
+                                <groupId>javax</groupId>
+                                <artifactId>javaee-api</artifactId>
+                                <version>${jee.api.version}</version>
+                            </dependency>
+                            <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>
                                 <artifactId>messaging-adapter-generator</artifactId>
                                 <version>${framework.version}</version>
