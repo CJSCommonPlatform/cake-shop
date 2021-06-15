@@ -1,6 +1,6 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static com.jayway.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
@@ -219,6 +219,8 @@ public class SuspendIT {
             } else {
                 verifyResponse(recId, status);
             }
+
+            return true;
         });
     }
 

@@ -14,6 +14,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,10 +45,11 @@ public class EventFactoryTest {
 
     }
 
+    @SuppressWarnings("deprecation")
     @Test(expected = IllegalStateException.class)
     public void shouldThrowIllegalStateExceptionOnMapperIOException() throws IOException {
         final ObjectMapper mockedMapper = Mockito.mock(ObjectMapper.class);
-        when(mockedMapper.readValue(Mockito.anyString(), Mockito.eq(CakeOrdered.class))).thenThrow(new IOException("Error"));
+        when(mockedMapper.readValue(Mockito.anyString(), Mockito.eq(CakeOrdered.class))).thenThrow(new JsonMappingException("Error"));
         eventFactory.objectMapper = mockedMapper;
 
         eventFactory.cakeOrderedEventFrom(envelope().with(metadataWithDefaults()).build());

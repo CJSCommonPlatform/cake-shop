@@ -7,7 +7,7 @@
     <parent>
         <groupId>uk.gov.justice</groupId>
         <artifactId>maven-framework-parent-pom</artifactId>
-        <version>11.0.0-M1</version>
+        <version>11.0.0-M3</version>
     </parent>
 
     <groupId>uk.gov.justice.example</groupId>
@@ -34,10 +34,11 @@
         <wildfly.version>20.0.1.Final</wildfly.version>
         <wildfly.maven.plugin.version>2.0.2.Final</wildfly.maven.plugin.version>
 
-        <framework-libraries.version>11.0.0-M1</framework-libraries.version>
-        <framework.version>11.0.0-M1</framework.version>
-        <event-store.version>11.0.0-M1</event-store.version>
+        <framework-libraries.version>11.0.0-M7</framework-libraries.version>
+        <framework.version>11.0.0-M6</framework.version>
+        <event-store.version>11.0.0-M6</event-store.version>
 
+        <jee.api.version>8.0</jee.api.version>
     </properties>
 
     <dependencyManagement>
