@@ -36,7 +36,7 @@
 
         <framework-libraries.version>11.0.0-M7</framework-libraries.version>
         <framework.version>11.0.0-M6</framework.version>
-        <event-store.version>11.0.0-M6</event-store.version>
+        <event-store.version>11.0.0-M7</event-store.version>
 
         <jee.api.version>8.0</jee.api.version>
     </properties>
