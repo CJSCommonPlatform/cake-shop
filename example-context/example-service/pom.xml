@@ -406,7 +406,7 @@
                             <dependency>
                                 <groupId>javax</groupId>
                                 <artifactId>javaee-api</artifactId>
-                                <version>${jee.api.version}</version>
+                                <version>${javaee-api.version}</version>
                             </dependency>
                             <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>
@@ -453,7 +453,7 @@
                             <dependency>
                                 <groupId>javax</groupId>
                                 <artifactId>javaee-api</artifactId>
-                                <version>${jee.api.version}</version>
+                                <version>${javaee-api.version}</version>
                             </dependency>
                             <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>
@@ -498,7 +498,7 @@
                             <dependency>
                                 <groupId>javax</groupId>
                                 <artifactId>javaee-api</artifactId>
-                                <version>${jee.api.version}</version>
+                                <version>${javaee-api.version}</version>
                             </dependency>
                             <dependency>
                                 <groupId>uk.gov.justice.framework-generators</groupId>

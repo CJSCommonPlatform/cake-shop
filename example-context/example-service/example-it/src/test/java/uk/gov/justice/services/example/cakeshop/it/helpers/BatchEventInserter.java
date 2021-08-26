@@ -23,6 +23,9 @@ public class BatchEventInserter {
     private static final String SQL_INSERT_STREAM = "INSERT INTO event_stream " +
             "(stream_id, date_created, active) values (?, ?, ?)";
 
+    private static final String SQL_INSERT_EVENT_INTO_PUBLISH_QUEUE = "INSERT INTO pre_publish_queue " +
+            "(event_log_id, date_queued) values (?, ?)";
+
     private final DataSource eventStoreDataSource;
     private final int batchSize;
 
@@ -69,6 +72,26 @@ public class BatchEventInserter {
                 preparedStatement.setObject(1, streamId);
                 preparedStatement.setTimestamp(2, toSqlTimestamp(clock.now()));
                 preparedStatement.setBoolean(3, true);
+
+                preparedStatement.addBatch();
+
+                if (i % batchSize == 0) {
+                    preparedStatement.executeBatch();
+                }
+            }
+
+            preparedStatement.executeBatch();
+        }
+    }
+
+    public void updatePublishQueueTableWithEvents(final List<Event> events) throws Exception {
+
+        try (final Connection connection = eventStoreDataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_EVENT_INTO_PUBLISH_QUEUE)) {
+            for (int i = 0; i < events.size(); i++) {
+                final UUID eventId = events.get(i).getId();
+                preparedStatement.setObject(1, eventId);
+                preparedStatement.setTimestamp(2, toSqlTimestamp(clock.now()));
 
                 preparedStatement.addBatch();
 
