@@ -186,6 +186,7 @@ public class EventValidationIT {
 
         batchEventInserter.updateEventStreamTable(streamIds);
         batchEventInserter.updateEventLogTable(events);
+        batchEventInserter.updatePublishQueueTableWithEvents(events);
     }
 
     private void setPayloadsOfEventsInvalid() throws Exception {

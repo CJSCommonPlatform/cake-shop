@@ -1,5 +1,6 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.Integer.valueOf;
 import static java.lang.String.format;
 import static java.lang.System.getProperty;
@@ -49,7 +50,7 @@ public class CatchupPerformanceIT {
     private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
 
     private static final String HOST = getHost();
-    private static final int PORT = valueOf(getProperty("random.management.port"));
+    private static final int PORT = parseInt(getProperty("random.management.port"));
 
     private final TestSystemCommanderClientFactory systemCommanderClientFactory = new TestSystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
@@ -157,6 +158,7 @@ public class CatchupPerformanceIT {
 
         batchEventInserter.updateEventStreamTable(streamIds);
         batchEventInserter.updateEventLogTable(events);
+        batchEventInserter.updatePublishQueueTableWithEvents(events);
 
     }
 

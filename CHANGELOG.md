@@ -7,6 +7,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ### Changed
 - Updated to java 11 and OpenJdk
+- Removed trigger from the event publishing process
 - Updated wildfly to 20.0.1-Final  
 - Reduced the maximum runtime for each iteration of the publishing beans in the IT tests to 450 milliseconds
 - Update to maven-framework-parent-pom 11.0.0-M1
