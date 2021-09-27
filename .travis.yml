@@ -18,17 +18,13 @@ before_script:
 - psql -c "CREATE USER framework WITH PASSWORD 'framework';" -U postgres
 addons:
   postgresql: '9.5'
-  sonarcloud:
-    organization: cjscommonplatform
-    token:
-      secure: MPrE0HzubH6Of0OeMlYuB5vEZNVfJE8wZG/iWdVmNHBVWWodEP4sO8s1GggKQk5rrHiSlVXs+G7OIM4X6Kg2HnjUj05G28IpirtkDnCLvIcSqAZxecO21tIBYwHn/mCdihHQOPjA8RFjc8+TSsRDNipeR3QvOzf6g5XZtOV/Ew+p5VoirIbI9jOO/qdOzHuQjZhARmI7HXqEmpkXJiObfyT5uJvO047lSbKA48VLWSfv2zFl5+8uymT+0g8fHPm9JWTNn7VLyKQQ4en7Cr9NC03Ahk8rXybB0qOrHj3fewtUGBp3pCa8bU6XaMFzSNHixueUG2mxxxI9ROB7nz+19CSOGafXZsygjDqPeT8D1wHHGGBmc90WQE3JhU9YFMXKnx5/a8OJyIAGRUE81wt3FsJUu+OvIHdQEOlM7geWYv6P52VbgmJSSvMgRnzNE3seq0LSsFxQXAQmAmDLWwWz0t2wbzO8dUmmU4jn5xoqSe2RBENaD1vDG37rvi8aGrr+Xg2005/8yIvlr+7ZZbeiHdYXqzbiDdYQyGjr8FaJLI3WPBtCRhsvJBgdQhuMFI/V44ntwAP6CzOty9Gfldlp+ybaY9UcFSKbGxBcrHPJfsS2ajgPUjW1K8KBFc7IKfy/XWhBsWOEHgVb2n4AZSV/nFTpK4HwpvHid0bEHcyTpk8=
 before_install:
 - git clone https://github.com/CJSCommonPlatform/travis-settings.git target/travis-settings
 - ln -sfT ${PWD}/target/travis-settings/settings.xml ${HOME}/.m2/settings.xml
 - ln -sfT ${PWD}/target/travis-settings/mvnw mvnw
 - ln -sft ${PWD} ${PWD}/target/travis-settings/.mvn
 install: "${PWD}/target/travis-settings/java/install.sh -e -q -DexcludeGroupIds=uk.gov.justice.service,uk.gov.justice.services"
-script: "${PWD}/target/travis-settings/java/script-install.sh coveralls:report sonar:sonar"
+script: "${PWD}/target/travis-settings/java/script-install.sh coveralls:report"
 after_success: "${PWD}/target/travis-settings/java/after_success.sh"
 notifications:
   slack:

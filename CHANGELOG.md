@@ -7,11 +7,13 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [7.0.0] - 2021-09-27
 - Release of the Java 8 version of the framework
-- Handled the move to the new Cloudsmith.io maven repository
-- Update to maven-framework-parent-pom 2.0.0
-- Update to framework-libraries 7.2.2
-- Update to framework 7.2.23
-- Update to event-store 7.2.3
+- Updated the version to 7.x.x to match the version of the framework  
+- Moved to the new Cloudsmith.io maven repository
+- Updated to maven-framework-parent-pom 2.0.0
+- Updated to framework-libraries 7.2.2
+- Updated to framework 7.2.23
+- Updated to event-store 7.2.3
+- Removed sonar from the release process as it's no longer compatible with java 8
 - Added support for feature toggling with an integration test showing it working
 - Reduced the maximum runtime for each iteration of the publishing beans in the IT tests to 450 milliseconds
 
