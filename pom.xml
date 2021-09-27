@@ -31,9 +31,9 @@
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
 
-        <framework-libraries.version>7.2.0</framework-libraries.version>
-        <framework.version>7.2.0</framework.version>
-        <event-store.version>7.2.0</event-store.version>
+        <framework-libraries.version>7.2.2</framework-libraries.version>
+        <framework.version>7.2.23</framework.version>
+        <event-store.version>7.2.3</event-store.version>
     </properties>
 
     <dependencyManagement>

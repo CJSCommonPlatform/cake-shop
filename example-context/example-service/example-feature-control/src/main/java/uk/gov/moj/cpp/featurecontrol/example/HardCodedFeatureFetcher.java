@@ -3,6 +3,7 @@ package uk.gov.moj.cpp.featurecontrol.example;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
+import uk.gov.justice.services.core.featurecontrol.EmptyFeatureFetcher;
 import uk.gov.justice.services.core.featurecontrol.FeatureFetcher;
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 
@@ -10,13 +11,14 @@ import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-@Default
+@Specializes
 @ApplicationScoped
-public class HardCodedFeatureFetcher implements FeatureFetcher {
+public class HardCodedFeatureFetcher extends EmptyFeatureFetcher {
 
     private static final Feature HARD_CODED_DISABLED_FEATURE = new Feature(
             "recipes-have-allergens-specified",
