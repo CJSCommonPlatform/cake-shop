@@ -5,13 +5,15 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
-### Changed
-- Reduced the maximum runtime for each iteration of the publishing beans in the IT tests to 450 milliseconds
-- Update to maven-framework-parent-pom 2.0.0
-- Update to framework 7.1.0
-- Update to event-store 7.1.0
+## [7.0.0] - 2021-09-27
+- Release of the Java 8 version of the framework
 - Handled the move to the new Cloudsmith.io maven repository
+- Update to maven-framework-parent-pom 2.0.0
+- Update to framework-libraries 7.2.2
+- Update to framework 7.2.23
+- Update to event-store 7.2.3
 - Added support for feature toggling with an integration test showing it working
+- Reduced the maximum runtime for each iteration of the publishing beans in the IT tests to 450 milliseconds
 
 ## [2.0.0] - 2019-08-19
 ### Added
