@@ -4,8 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Created branch for version 8.x.x of the framework
 
 ## [7.0.0] - 2021-09-27
+### Changed
 - Release of the Java 8 version of the framework
 - Updated the version to 7.x.x to match the version of the framework  
 - Moved to the new Cloudsmith.io maven repository
