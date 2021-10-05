@@ -6,6 +6,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 ### Changed
 - Created branch for version 8.x.x of the framework
+- Updated to maven-framework-parent-pom 2.0.1
+- Updated to framework-libraries 8.0.1
+- Updated to framework 8.0.1
+- Updated to event-store 8.0.1
 
 ## [7.0.0] - 2021-09-27
 ### Changed
