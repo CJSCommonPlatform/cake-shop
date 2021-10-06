@@ -6,6 +6,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 ### Changed
 - Created branch for version 8.x.x of the framework
+- Included fix for out of memory error in catchup for large datasets
+- Publishing of events no longer use a trigger on the event_log table
 
 ## [7.0.0] - 2021-09-27
 ### Changed

@@ -5,14 +5,12 @@ import static java.lang.System.getProperty;
 import static java.util.stream.Collectors.toMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static uk.gov.justice.services.eventstore.management.commands.AddTriggerCommand.ADD_TRIGGER;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.eventstore.management.commands.DisablePublishingCommand.DISABLE_PUBLISHING;
 import static uk.gov.justice.services.eventstore.management.commands.EnablePublishingCommand.ENABLE_PUBLISHING;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.eventstore.management.commands.IndexerCatchupCommand.INDEXER_CATCHUP;
 import static uk.gov.justice.services.eventstore.management.commands.RebuildCommand.REBUILD;
-import static uk.gov.justice.services.eventstore.management.commands.RemoveTriggerCommand.REMOVE_TRIGGER;
 import static uk.gov.justice.services.eventstore.management.commands.ValidatePublishedEventsCommand.VALIDATE_EVENTS;
 import static uk.gov.justice.services.eventstore.management.commands.VerifyCatchupCommand.VERIFY_CATCHUP;
 import static uk.gov.justice.services.eventstore.management.commands.VerifyRebuildCommand.VERIFY_REBUILD;
@@ -27,7 +25,6 @@ import uk.gov.justice.services.jmx.api.command.SystemCommandDetails;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
-import uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand;
 
 import java.util.List;
 import java.util.Map;
@@ -56,13 +53,12 @@ public class ListSystemCommandsIT {
                     .getRemote(CONTEXT_NAME)
                     .listCommands();
 
-            assertThat(systemCommandDetailsList.size(), is(14));
+            assertThat(systemCommandDetailsList.size(), is(12));
 
             final Map<String, SystemCommandDetails> systemCommandDetailsMap = systemCommandDetailsList
                     .stream()
                     .collect(toMap(SystemCommandDetails::getName, systemCommandDetails -> systemCommandDetails));
 
-            assertThat(systemCommandDetailsMap.get(ADD_TRIGGER), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(DISABLE_PUBLISHING), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(ENABLE_PUBLISHING), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(CATCHUP), is(notNullValue()));
@@ -70,7 +66,6 @@ public class ListSystemCommandsIT {
             assertThat(systemCommandDetailsMap.get(PING), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(REBUILD), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(REFRESH_FEATURE_CACHE), is(notNullValue()));
-            assertThat(systemCommandDetailsMap.get(REMOVE_TRIGGER), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(SUSPEND), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(UNSUSPEND), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(VALIDATE_EVENTS), is(notNullValue()));
