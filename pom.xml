@@ -7,12 +7,12 @@
     <parent>
         <groupId>uk.gov.justice</groupId>
         <artifactId>maven-framework-parent-pom</artifactId>
-        <version>2.0.0</version>
+        <version>2.0.1</version>
     </parent>
 
     <groupId>uk.gov.justice.example</groupId>
     <artifactId>cake-shop</artifactId>
-    <version>7.0.0</version>
+    <version>8.0.0</version>
     <packaging>pom</packaging>
 
     <name>Cakeshop Application</name>
@@ -31,9 +31,9 @@
     <properties>
         <cpp.repo.name>cake-shop</cpp.repo.name>
 
-        <framework-libraries.version>8.0.0</framework-libraries.version>
-        <framework.version>8.0.0</framework.version>
-        <event-store.version>8.0.0</event-store.version>
+        <framework-libraries.version>8.0.1</framework-libraries.version>
+        <framework.version>8.0.1</framework.version>
+        <event-store.version>8.0.1</event-store.version>
     </properties>
 
     <dependencyManagement>
