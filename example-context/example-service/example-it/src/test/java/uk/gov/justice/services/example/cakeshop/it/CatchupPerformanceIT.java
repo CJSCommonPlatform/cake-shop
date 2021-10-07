@@ -6,7 +6,7 @@ import static java.lang.System.getProperty;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
@@ -157,6 +157,7 @@ public class CatchupPerformanceIT {
 
         batchEventInserter.updateEventStreamTable(streamIds);
         batchEventInserter.updateEventLogTable(events);
+        batchEventInserter.updatePublishQueueTableWithEvents(events);
 
     }
 
