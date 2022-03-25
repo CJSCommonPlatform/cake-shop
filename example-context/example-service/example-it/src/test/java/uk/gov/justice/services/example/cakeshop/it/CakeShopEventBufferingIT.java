@@ -1,11 +1,11 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static org.awaitility.Awaitility.await;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
 import static javax.ws.rs.client.Entity.entity;
-import static org.hamcrest.core.Is.is;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.CONTEXT_NAME;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;

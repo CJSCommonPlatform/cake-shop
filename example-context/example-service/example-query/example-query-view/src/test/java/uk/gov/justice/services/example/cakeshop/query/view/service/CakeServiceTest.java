@@ -2,8 +2,8 @@ package uk.gov.justice.services.example.cakeshop.query.view.service;
 
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.services.example.cakeshop.persistence.CakeRepository;

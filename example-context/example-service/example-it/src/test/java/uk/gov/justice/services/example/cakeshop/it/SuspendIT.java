@@ -1,6 +1,5 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
@@ -12,6 +11,7 @@ import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
 import static junit.framework.TestCase.fail;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.slf4j.LoggerFactory.getLogger;

@@ -1,8 +1,8 @@
 package uk.gov.justice.services.example.cakeshop.query.view;
 
 import static java.util.UUID.randomUUID;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_VIEW;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;

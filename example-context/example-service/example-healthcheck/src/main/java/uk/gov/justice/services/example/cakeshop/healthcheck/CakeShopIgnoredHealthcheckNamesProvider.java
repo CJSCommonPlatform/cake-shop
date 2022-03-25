@@ -4,7 +4,6 @@ import static java.util.Collections.singletonList;
 import static uk.gov.justice.services.healthcheck.healthchecks.JobStoreHealthcheck.JOB_STORE_HEALTHCHECK_NAME;
 
 import uk.gov.justice.services.healthcheck.api.DefaultIgnoredHealthcheckNamesProvider;
-import uk.gov.justice.services.healthcheck.healthchecks.JobStoreHealthcheck;
 
 import java.util.List;
 
