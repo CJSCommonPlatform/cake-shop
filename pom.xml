@@ -34,9 +34,9 @@
         <wildfly.version>20.0.1.Final</wildfly.version>
         <wildfly.maven.plugin.version>2.0.2.Final</wildfly.maven.plugin.version>
 
-        <framework-libraries.version>11.0.0-M16</framework-libraries.version>
-        <framework.version>11.0.0-M14</framework.version>
-        <event-store.version>11.0.0-M16</event-store.version>
+        <framework-libraries.version>11.0.0-M18</framework-libraries.version>
+        <framework.version>11.0.0-M16</framework.version>
+        <event-store.version>11.0.0-M18</event-store.version>
     </properties>
 
     <dependencyManagement>
