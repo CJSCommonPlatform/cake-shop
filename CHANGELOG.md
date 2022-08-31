@@ -6,6 +6,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 
 ### Changed
+- Update framework-libraries to 11.0.0-M20 for:
+    - A default name of `jms.queue.DLQ` rather than the original name of `DLQ`
+    - A new constructor to pass the name in if you don't want the default name
+    - New builder `MessageConsumerClientBuilder` that allows ActiveMQ connection parameters to be specified
 - Updated to java 11 and OpenJdk
 - Removed trigger from the event publishing process
 - Updated wildfly to 20.0.1-Final  
