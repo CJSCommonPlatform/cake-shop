@@ -20,6 +20,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Update to event-store 11.0.0-M1
 - Bumped the base version of the project to 11.0.0 to match the framework libraries and show java 11 change  
 - Handled the move to the new Cloudsmith.io maven repository
+- Updated slf4j/log4j bridge jar from slf4j-log4j12 to slf4j-reload4j
+
 ### Added
 - Added support for feature toggling with an integration test showing it working
 - Added healthcheck integration test
