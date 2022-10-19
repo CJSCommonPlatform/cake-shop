@@ -26,6 +26,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Added support for feature toggling with an integration test showing it working
 - Added healthcheck integration test
 
+### Security
+- Updates to various libraries to address security alerts:
+  - wildfly to version 26.1.2.Final
+  - artemis to version 2.20.0
+  - resteasy-client to version 4.7.7.Final
+
 ## [2.0.0] - 2019-08-19
 ### Added
 - Update to framework 6.0.6
