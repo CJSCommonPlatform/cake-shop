@@ -466,7 +466,7 @@
                 </property>
             </activation>
             <properties>
-                <server.config>standalone-single.xml</server.config>
+                <server.config>standalone.xml</server.config>
             </properties>
             <dependencies>
                 <dependency>

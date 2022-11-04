@@ -34,19 +34,23 @@ public class Querier {
     }
 
     public ApiResponse queryForRecipe(final String recipeId) {
-        final Response jaxrsResponse = client.target(RECIPES_RESOURCE_QUERY_URI + recipeId).request().accept(QUERY_RECIPE_MEDIA_TYPE).get();
-        return ApiResponse.from(jaxrsResponse);
+        try(final Response jaxrsResponse = client.target(RECIPES_RESOURCE_QUERY_URI + recipeId).request().accept(QUERY_RECIPE_MEDIA_TYPE).get()) {
+            return ApiResponse.from(jaxrsResponse);
+        }
     }
 
     public ApiResponse queryForOrder(final String orderId) {
-        final Response jaxrsResponse = client.target(ORDERS_RESOURCE_QUERY_URI + orderId).request().accept(QUERY_ORDER_MEDIA_TYPE).get();
-        return ApiResponse.from(jaxrsResponse);
+        try(final Response jaxrsResponse = client.target(ORDERS_RESOURCE_QUERY_URI + orderId).request().accept(QUERY_ORDER_MEDIA_TYPE).get()) {
+            return ApiResponse.from(jaxrsResponse);
+        }
     }
 
     public ApiResponse queryForIndex(final String recipeId) {
-        final Response jaxrsResponse = client.target(INDEXES_RESOURCE_QUERY_URI + recipeId).request().accept(QUERY_INDEX_MEDIA_TYPE).get();
-        return ApiResponse.from(jaxrsResponse);
+        try (final Response jaxrsResponse = client.target(INDEXES_RESOURCE_QUERY_URI + recipeId).request().accept(QUERY_INDEX_MEDIA_TYPE).get()) {
+            return ApiResponse.from(jaxrsResponse);
+        }
     }
+
     public ApiResponse recipesQueryResult() {
         return recipesQueryResult(singletonList(new BasicNameValuePair("pagesize", "50")));
     }
