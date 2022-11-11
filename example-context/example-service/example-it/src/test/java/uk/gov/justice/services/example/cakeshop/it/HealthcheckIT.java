@@ -2,6 +2,7 @@ package uk.gov.justice.services.example.cakeshop.it;
 
 import static com.jayway.jsonassert.JsonAssert.with;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.HEALTHCHECK_URI;
 
@@ -31,9 +32,11 @@ public class HealthcheckIT {
                 .get();
 
         final String healthcheckJson = response.readEntity(String.class);
-        LOGGER.info(healthcheckJson);
 
         assertThat(response.getStatus(), is(200));
-        with(healthcheckJson).assertThat("$.allHealthchecksPassed", is(true));
+        with(healthcheckJson)
+                .assertThat("$.allHealthchecksPassed", is(true))
+                .assertThat("$.healthcheckRunDetails[*].healthcheckName", hasItems("system-database-healthcheck",
+                        "artemis-healthcheck", "event-store-healthcheck", "view-store-healthcheck", "file-store-healthcheck"));
     }
 }
