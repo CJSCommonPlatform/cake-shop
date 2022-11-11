@@ -32,6 +32,7 @@ public class HealthcheckIT {
                 .get();
 
         final String healthcheckJson = response.readEntity(String.class);
+        LOGGER.info("HealthcheckJSON: " + healthcheckJson);
 
         assertThat(response.getStatus(), is(200));
         with(healthcheckJson)
