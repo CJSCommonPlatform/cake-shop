@@ -26,7 +26,6 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
   - Update jboss-logging version to 3.5.0.Final
   - Update jackson libraries to 2.12.7
 
-
 ### Added
 - Added support for feature toggling with an integration test showing it working
 - Added healthcheck integration test
@@ -36,6 +35,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
   - wildfly to version 26.1.2.Final
   - artemis to version 2.20.0
   - resteasy-client to version 4.7.7.Final
+  - Update hibernate version to 5.4.24.Final
+  - Update jackson.databind version to 2.12.7.1
 
 ## [2.0.0] - 2019-08-19
 ### Added
