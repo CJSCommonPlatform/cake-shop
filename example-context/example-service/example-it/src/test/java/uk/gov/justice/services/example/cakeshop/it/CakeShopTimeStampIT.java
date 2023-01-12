@@ -1,14 +1,12 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
-import static java.time.temporal.ChronoUnit.SECONDS;
 import static java.util.UUID.randomUUID;
 import static javax.json.Json.createObjectBuilder;
 import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.exparity.hamcrest.date.ZonedDateTimeMatchers.within;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -101,6 +99,6 @@ public class CakeShopTimeStampIT {
         final Event event = events.findFirst().get();
 
         assertThat(event.getCreatedAt(), is(notNullValue()));
-        assertThat(event.getCreatedAt(), is(within(10L, SECONDS, new UtcClock().now())));
+        assertThat(event.getCreatedAt().isAfter(new UtcClock().now().minusSeconds(10)), is(true));
     }
 }

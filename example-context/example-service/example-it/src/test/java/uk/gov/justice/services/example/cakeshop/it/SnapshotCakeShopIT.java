@@ -1,8 +1,8 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.UUID.randomUUID;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 

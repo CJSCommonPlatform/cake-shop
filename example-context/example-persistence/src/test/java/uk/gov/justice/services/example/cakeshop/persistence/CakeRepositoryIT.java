@@ -1,9 +1,9 @@
 package uk.gov.justice.services.example.cakeshop.persistence;
 
 import static java.util.UUID.randomUUID;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Cake;
 import uk.gov.justice.services.test.utils.persistence.BaseTransactionalTest;

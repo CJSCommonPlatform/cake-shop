@@ -1,7 +1,6 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
 import static com.google.common.io.Resources.getResource;
-import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.lang.String.format;
 import static java.util.UUID.randomUUID;
@@ -12,6 +11,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 import static org.apache.commons.io.IOUtils.contentEquals;
 import static org.apache.http.entity.ContentType.APPLICATION_OCTET_STREAM;
 import static org.apache.http.entity.mime.HttpMultipartMode.BROWSER_COMPATIBLE;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;

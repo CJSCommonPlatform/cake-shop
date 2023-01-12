@@ -1,8 +1,8 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
 import static com.jayway.jsonassert.JsonAssert.with;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.HEALTHCHECK_URI;
 

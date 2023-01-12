@@ -1,6 +1,5 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -11,6 +10,7 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
