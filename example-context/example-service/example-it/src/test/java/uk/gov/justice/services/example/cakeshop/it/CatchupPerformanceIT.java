@@ -1,7 +1,6 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
 import static java.lang.Integer.parseInt;
-import static java.lang.Integer.valueOf;
 import static java.lang.String.format;
 import static java.lang.System.getProperty;
 import static java.util.Optional.empty;

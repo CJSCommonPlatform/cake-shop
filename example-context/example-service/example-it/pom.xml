@@ -88,11 +88,11 @@
             <artifactId>event-buffer-core</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.exparity</groupId>
-            <artifactId>hamcrest-date</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.exparity</groupId>-->
+<!--            <artifactId>hamcrest-date</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>file-service-api</artifactId>

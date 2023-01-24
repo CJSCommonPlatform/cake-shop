@@ -22,9 +22,13 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Handled the move to the new Cloudsmith.io maven repository
 - Updated slf4j/log4j bridge jar from slf4j-log4j12 to slf4j-reload4j
 - Added Artemis healthcheck
-- Update common bom to 11.0.0-M19 in order to:
+- Update common bom in order to:
   - Update jboss-logging version to 3.5.0.Final
   - Update jackson libraries to 2.12.7
+  - Update mockito version to 4.11.0
+  - Update slf4j version to 2.0.6
+  - Update hamcrest version to 2.2
+   -Update slf4j version to 2.0.6
 
 ### Added
 - Added support for feature toggling with an integration test showing it working

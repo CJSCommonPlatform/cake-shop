@@ -1,11 +1,11 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.UUID.randomUUID;
 import static javax.json.Json.createArrayBuilder;
 import static javax.json.Json.createObjectBuilder;
 import static javax.ws.rs.client.Entity.entity;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
