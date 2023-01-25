@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [17.0.0] - 2023-02-07
+### Changed
+- Updated to Java 17
+
 ### Changed
 - Update framework-libraries to 11.0.0 for:
     - A default name of `jms.queue.DLQ` rather than the original name of `DLQ`
