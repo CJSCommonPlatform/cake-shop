@@ -7,12 +7,12 @@
     <parent>
         <groupId>uk.gov.justice</groupId>
         <artifactId>maven-framework-parent-pom</artifactId>
-        <version>11.0.0-M6</version>
+        <version>11.0.0</version>
     </parent>
 
     <groupId>uk.gov.justice.example</groupId>
     <artifactId>cake-shop</artifactId>
-    <version>11.0.0-M1-SNAPSHOT</version>
+    <version>11.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Cakeshop Application</name>
@@ -34,9 +34,9 @@
         <wildfly.version>26.1.2.Final</wildfly.version>
         <wildfly.maven.plugin.version>3.2.0.Final</wildfly.maven.plugin.version>
 
-        <framework-libraries.version>11.0.0-M29</framework-libraries.version>
-        <framework.version>11.0.0-M31</framework.version>
-        <event-store.version>11.0.0-M32</event-store.version>
+        <framework-libraries.version>11.0.0</framework-libraries.version>
+        <framework.version>11.0.0</framework.version>
+        <event-store.version>11.0.0</event-store.version>
     </properties>
 
     <dependencyManagement>

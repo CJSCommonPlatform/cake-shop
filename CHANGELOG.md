@@ -6,7 +6,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 
 ### Changed
-- Update framework-libraries to 11.0.0-M20 for:
+- Update framework-libraries to 11.0.0 for:
     - A default name of `jms.queue.DLQ` rather than the original name of `DLQ`
     - A new constructor to pass the name in if you don't want the default name
     - New builder `MessageConsumerClientBuilder` that allows ActiveMQ connection parameters to be specified
@@ -14,10 +14,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Removed trigger from the event publishing process
 - Updated wildfly to 20.0.1-Final  
 - Reduced the maximum runtime for each iteration of the publishing beans in the IT tests to 450 milliseconds
-- Update to maven-framework-parent-pom 11.0.0-M1
-- Update to framework-libraries 11.0.0-M1
-- Update to framework 11.0.0-M1
-- Update to event-store 11.0.0-M1
+- Update to maven-framework-parent-pom 11.0.0
+- Update to framework 11.0.0
+- Update to event-store 11.0.0
 - Bumped the base version of the project to 11.0.0 to match the framework libraries and show java 11 change  
 - Handled the move to the new Cloudsmith.io maven repository
 - Updated slf4j/log4j bridge jar from slf4j-log4j12 to slf4j-reload4j
