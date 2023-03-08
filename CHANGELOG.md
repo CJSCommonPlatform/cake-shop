@@ -8,6 +8,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [17.0.0] - 2023-02-07
 ### Changed
 - Updated to Java 17
+- Update common-bom to 17.0.0-M3 in order to:
+  - Add byte-buddy 1.12.22 as a replacement for cglib
+  - Downgrade h2 to 1.4.196 as 2.x.x is too strict for our tests
+- Update framework-libraries to 17.0.0-M4 in order to:
+  - Change 'additionalProperties' Map in generated pojos to HashMap to allow serialization
+
 
 ### Changed
 - Update framework-libraries to 11.0.0 for:
