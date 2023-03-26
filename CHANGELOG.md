@@ -13,7 +13,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
   - Downgrade h2 to 1.4.196 as 2.x.x is too strict for our tests
 - Update framework-libraries to 17.0.0-M4 in order to:
   - Change 'additionalProperties' Map in generated pojos to HashMap to allow serialization
-
+- Update framework-libraries to 17.0.0-M6 in order to:
+  - Remove illegal-access argument from surefire plugin
+  - Make pojo generator to perform null safe assignment of additionalProperties inside constructor
 
 ### Changed
 - Update framework-libraries to 11.0.0 for:
