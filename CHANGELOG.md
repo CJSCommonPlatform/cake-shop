@@ -4,6 +4,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fix Logging of missing event ranges to only log on debug
+- Limit logging of MissingEventRanges logged to sensible maximum number.
+### Added
+- New JNDI value `catchup.max.number.of.missing.event.ranges.to.log`
+### Security
+- Update org.json to version 20230227 to fix **security vulnerability CVE-2022-45688**
+  Detail: https://nvd.nist.gov/vuln/detail/CVE-2022-45688
 
 ## [17.0.0] - 2023-02-07
 ### Changed
