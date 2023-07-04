@@ -9,7 +9,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Recipe;
-import uk.gov.justice.services.test.utils.persistence.BaseTransactionalTest;
+import uk.gov.justice.services.test.utils.persistence.BaseTransactionalJunit4Test;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(CdiTestRunner.class)
-public class RecipeRepositoryIT extends BaseTransactionalTest {
+public class RecipeRepositoryIT extends BaseTransactionalJunit4Test {
 
     private static final UUID RECIPE_ID_A = UUID.randomUUID();
     private static final String RECIPE_NAME_A = "Chocolate Cake";

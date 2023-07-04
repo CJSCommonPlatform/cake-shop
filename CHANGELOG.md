@@ -4,9 +4,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Updated to Junit 5
 ### Fixed
 - Fix Logging of missing event ranges to only log on debug
 - Limit logging of MissingEventRanges logged to sensible maximum number.
+- Update to Junit5 and surefire, failsafe plugin versions
 ### Added
 - New JNDI value `catchup.max.number.of.missing.event.ranges.to.log`
 ### Security

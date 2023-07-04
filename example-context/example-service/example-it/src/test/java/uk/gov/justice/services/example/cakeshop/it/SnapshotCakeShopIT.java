@@ -24,9 +24,9 @@ import java.util.UUID;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SnapshotCakeShopIT {
 
@@ -38,14 +38,14 @@ public class SnapshotCakeShopIT {
     private Querier querier;
     private CommandSender commandSender;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         client = new RestEasyClientFactory().createResteasyClient();
         querier = new Querier(client);
         commandSender = new CommandSender(client, eventFactory);
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws Exception {
         client.close();
     }

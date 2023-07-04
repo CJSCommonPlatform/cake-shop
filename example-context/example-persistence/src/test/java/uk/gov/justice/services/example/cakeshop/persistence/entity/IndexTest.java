@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import com.google.common.testing.EqualsTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class IndexTest {
 

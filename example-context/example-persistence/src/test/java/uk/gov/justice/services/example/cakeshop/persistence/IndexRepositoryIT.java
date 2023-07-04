@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Index;
-import uk.gov.justice.services.test.utils.persistence.BaseTransactionalTest;
+import uk.gov.justice.services.test.utils.persistence.BaseTransactionalJunit4Test;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(CdiTestRunner.class)
-public class IndexRepositoryIT extends BaseTransactionalTest {
+public class IndexRepositoryIT extends BaseTransactionalJunit4Test {
 
     @Inject
     private IndexRepository indexRepository;

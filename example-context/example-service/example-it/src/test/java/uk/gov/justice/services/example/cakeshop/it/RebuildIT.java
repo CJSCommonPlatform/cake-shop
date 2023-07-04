@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.eventstore.management.commands.RebuildCommand.REBUILD;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
@@ -36,8 +36,8 @@ import java.util.UUID;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RebuildIT {
 
@@ -57,7 +57,7 @@ public class RebuildIT {
 
     private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         final Client client = new RestEasyClientFactory().createResteasyClient();
         commandSender = new CommandSender(client, eventFactory);

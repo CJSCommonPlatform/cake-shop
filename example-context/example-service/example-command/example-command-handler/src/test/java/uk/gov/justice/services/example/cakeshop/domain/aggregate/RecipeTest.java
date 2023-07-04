@@ -7,7 +7,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 import uk.gov.justice.services.example.cakeshop.domain.Ingredient;
@@ -20,8 +21,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit test for the {@link Recipe} aggregate class.
@@ -35,7 +36,7 @@ public class RecipeTest {
 
     private Recipe recipe;
 
-    @Before
+    @BeforeEach
     public void setup() {
         recipe = new Recipe();
     }
@@ -46,9 +47,10 @@ public class RecipeTest {
         assertThat(recipe.apply(event), equalTo(event));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldThrowExceptionForUnrecognisedEvent() {
-        recipe.apply(new Object());
+
+        assertThrows(RuntimeException.class, () -> recipe.apply(new Object()));
     }
 
     @Test
@@ -69,7 +71,7 @@ public class RecipeTest {
         assertThat(recipeAdded.isGlutenFree(), is(true));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldNotAddRecipeIfAlreadyAdded() {
         try {
             recipe.addRecipe(RECIPE_ID, NAME, false, INGREDIENTS);
@@ -77,7 +79,8 @@ public class RecipeTest {
             // Make sure we don't throw an exception the first time.
             fail();
         }
-        recipe.addRecipe(RECIPE_ID, NAME, false, INGREDIENTS);
+
+        assertThrows(RuntimeException.class, () -> recipe.addRecipe(RECIPE_ID, NAME, false, INGREDIENTS));
     }
 
     @Test

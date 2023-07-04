@@ -1,17 +1,19 @@
 package uk.gov.justice.services.example.cakeshop.event.listener.interceptor;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.core.interceptor.InterceptorContext.interceptorContextWithInput;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
 
 import uk.gov.justice.services.core.interceptor.InterceptorChain;
+import uk.gov.justice.services.messaging.JsonEnvelope;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ExceptionThrowingInterceptorTest {
 
     private ExceptionThrowingInterceptor interceptor = new ExceptionThrowingInterceptor();
@@ -20,11 +22,15 @@ public class ExceptionThrowingInterceptorTest {
     private InterceptorChain interceptorChain;
 
 
-    @Test(expected = TestInterceptorException.class)
+    @Test
     public void shouldThrowExceptionWhenNameContainsExceptionalCake() throws Exception {
 
-        interceptor.process(interceptorContextWithInput(
-                envelope().with(metadataWithDefaults()).withPayloadOf("Exceptional cake", "name").build()), interceptorChain);
+        final JsonEnvelope jsonEnvelope = envelope()
+                .with(metadataWithDefaults())
+                .withPayloadOf("Exceptional cake", "name")
+                .build();
+
+        assertThrows(TestInterceptorException.class, () -> interceptor.process(interceptorContextWithInput(jsonEnvelope), interceptorChain));
 
     }
 

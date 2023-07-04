@@ -4,7 +4,7 @@ import static java.util.Collections.singletonList;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_CAKES_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_INDEX_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_ORDER_MEDIA_TYPE;

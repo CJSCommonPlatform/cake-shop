@@ -31,9 +31,9 @@ import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CakeShopTimeStampIT {
 
@@ -43,13 +43,13 @@ public class CakeShopTimeStampIT {
     private Client client;
     private Querier querier;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         client = new RestEasyClientFactory().createResteasyClient();
         querier = new Querier(client);
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws Exception {
         client.close();
     }

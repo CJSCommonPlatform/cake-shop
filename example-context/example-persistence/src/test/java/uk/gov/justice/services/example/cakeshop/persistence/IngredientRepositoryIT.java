@@ -9,7 +9,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Ingredient;
-import uk.gov.justice.services.test.utils.persistence.BaseTransactionalTest;
+import uk.gov.justice.services.test.utils.persistence.BaseTransactionalJunit4Test;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(CdiTestRunner.class)
-public class IngredientRepositoryIT extends BaseTransactionalTest {
+public class IngredientRepositoryIT extends BaseTransactionalJunit4Test {
 
     private static final UUID INGREDIENT = UUID.randomUUID();
     private static final String INGREDIENT_NAME_A = "Flour";
