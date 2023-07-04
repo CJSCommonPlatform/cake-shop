@@ -22,9 +22,9 @@ import java.util.Optional;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CakeShopEventBufferingIT {
 
@@ -36,12 +36,12 @@ public class CakeShopEventBufferingIT {
 
     private Client client;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         client = new RestEasyClientFactory().createResteasyClient();
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws Exception {
         client.close();
     }

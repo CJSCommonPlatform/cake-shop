@@ -20,12 +20,12 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.WildflyFeatureUpdater
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-@Ignore("Fix and re-enable when the java 11 move has calmed down")
+@Disabled("Fix and re-enable when the java 11 move has calmed down")
 public class FeatureTogglingIT {
 
     private final CommandFactory commandFactory = new CommandFactory();
@@ -33,13 +33,13 @@ public class FeatureTogglingIT {
 
     private Client client;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         client = new RestEasyClientFactory().createResteasyClient();
         wildflyFeatureUpdater.deleteFeatureFile();
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws Exception {
         client.close();
         wildflyFeatureUpdater.deleteFeatureFile();

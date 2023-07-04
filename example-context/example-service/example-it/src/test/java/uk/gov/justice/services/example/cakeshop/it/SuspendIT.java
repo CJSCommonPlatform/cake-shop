@@ -10,10 +10,10 @@ import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
-import static junit.framework.TestCase.fail;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
@@ -41,9 +41,9 @@ import java.util.UUID;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
 public class SuspendIT {
@@ -67,7 +67,7 @@ public class SuspendIT {
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
     private final Poller poller = new Poller();
 
-    @Before
+    @BeforeEach
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
         querier = new Querier(client);
@@ -77,7 +77,7 @@ public class SuspendIT {
         databaseCleaner.cleanEventStoreTables("framework");
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws Exception {
         client.close();
 

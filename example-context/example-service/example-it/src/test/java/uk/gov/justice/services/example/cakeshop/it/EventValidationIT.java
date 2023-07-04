@@ -7,7 +7,7 @@ import static java.util.Optional.of;
 import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
@@ -40,8 +40,8 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class EventValidationIT {
 
@@ -70,7 +70,7 @@ public class EventValidationIT {
             .withPort(PORT)
             .build();
 
-    @Before
+    @BeforeEach
     public void cleanTables() {
 
         final String databaseContextName = "framework";

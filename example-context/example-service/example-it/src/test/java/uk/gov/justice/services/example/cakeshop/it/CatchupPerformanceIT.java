@@ -7,7 +7,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
@@ -33,9 +33,9 @@ import java.util.UUID;
 import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CatchupPerformanceIT {
 
@@ -59,7 +59,7 @@ public class CatchupPerformanceIT {
 
     private Client client;
 
-    @Before
+    @BeforeEach
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
 
@@ -70,7 +70,7 @@ public class CatchupPerformanceIT {
         databaseCleaner.cleanSystemTables(contextName);
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         client.close();
     }

@@ -23,9 +23,9 @@ import java.util.UUID;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class UnifiedSearchIndexerIT {
 
@@ -34,7 +34,7 @@ public class UnifiedSearchIndexerIT {
 
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
 
         final String contextName = "framework";
@@ -43,7 +43,7 @@ public class UnifiedSearchIndexerIT {
         cleanViewstoreTables();
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws Exception {
         client.close();
     }

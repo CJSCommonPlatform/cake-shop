@@ -4,7 +4,7 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
@@ -20,9 +20,9 @@ import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.ws.rs.client.Client;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CakeShopManyUpdatesIT {
 
@@ -35,13 +35,13 @@ public class CakeShopManyUpdatesIT {
 
     private Client client;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         client = new RestEasyClientFactory().createResteasyClient();
         querier = new Querier(client);
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws Exception {
         client.close();
     }
@@ -94,7 +94,7 @@ public class CakeShopManyUpdatesIT {
             final MessageConsumer dlqConsumer = jmsBootstrapper.queueConsumerOf(DEAD_LETTER_QUEUE, jmsSession);
             final Message message = dlqConsumer.receiveNoWait();
 
-            assertNull("Dead letter queue is not empty, found message: ", message);
+            assertNull(message, "Dead letter queue is not empty, found message: ");
         }
 
         client.target(RECIPES_RESOURCE_URI + recipeId).request()

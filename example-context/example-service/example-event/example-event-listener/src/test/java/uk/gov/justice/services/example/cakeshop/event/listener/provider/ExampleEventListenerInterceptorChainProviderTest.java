@@ -7,7 +7,7 @@ import uk.gov.justice.services.core.interceptor.InterceptorChainEntry;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ExampleEventListenerInterceptorChainProviderTest {
 

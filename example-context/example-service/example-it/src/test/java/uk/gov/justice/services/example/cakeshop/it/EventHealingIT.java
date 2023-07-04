@@ -9,7 +9,7 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
@@ -45,9 +45,9 @@ import javax.sql.DataSource;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class EventHealingIT {
 
@@ -75,7 +75,7 @@ public class EventHealingIT {
 
     private Client client;
 
-    @Before
+    @BeforeEach
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
 
@@ -88,7 +88,7 @@ public class EventHealingIT {
         sequenceSetter.setSequenceTo(1L, "event_sequence_seq", eventStoreDataSource);
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         client.close();
     }

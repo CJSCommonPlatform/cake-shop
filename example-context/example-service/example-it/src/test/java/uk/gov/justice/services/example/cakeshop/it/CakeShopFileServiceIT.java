@@ -44,9 +44,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class CakeShopFileServiceIT {
 
@@ -59,7 +59,7 @@ public class CakeShopFileServiceIT {
     private Querier querier;
     private CommandSender commandSender;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         new DatabaseCleaner().cleanViewStoreTables("framework", "cake", "cake_order", "recipe", "ingredient", "processed_event");
         client = new RestEasyClientFactory().createResteasyClient();
@@ -67,7 +67,7 @@ public class CakeShopFileServiceIT {
         commandSender = new CommandSender(client, new EventFactory());
     }
 
-    @After
+    @AfterEach
     public void cleanup() throws Exception {
         client.close();
     }

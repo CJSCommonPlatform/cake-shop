@@ -29,7 +29,7 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ListSystemCommandsIT {
 

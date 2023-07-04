@@ -11,7 +11,7 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -10,13 +10,13 @@ import uk.gov.justice.services.example.cakeshop.persistence.entity.Ingredient;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RecipeAddedToIngredientsConverterTest {
 
     private static final String NAME = "ingredientName";
@@ -26,7 +26,7 @@ public class RecipeAddedToIngredientsConverterTest {
 
     private RecipeAddedToIngredientsConverter converter;
 
-    @Before
+    @BeforeEach
     public void setup() {
         when(recipeAdded.getIngredients()).thenReturn(Collections.singletonList(new uk.gov.justice.services.example.cakeshop.domain.Ingredient(NAME, 2)));
         converter = new RecipeAddedToIngredientsConverter();

@@ -2,6 +2,7 @@ package uk.gov.justice.services.example.cakeshop.command.handler;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
@@ -16,15 +17,15 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class EventFactoryTest {
 
     private EventFactory eventFactory;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         eventFactory = new EventFactory();
         eventFactory.objectMapper = new ObjectMapperProducer().objectMapper();
@@ -46,12 +47,12 @@ public class EventFactoryTest {
     }
 
     @SuppressWarnings("deprecation")
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowIllegalStateExceptionOnMapperIOException() throws IOException {
         final ObjectMapper mockedMapper = Mockito.mock(ObjectMapper.class);
         when(mockedMapper.readValue(Mockito.anyString(), Mockito.eq(CakeOrdered.class))).thenThrow(new JsonMappingException("Error"));
         eventFactory.objectMapper = mockedMapper;
 
-        eventFactory.cakeOrderedEventFrom(envelope().with(metadataWithDefaults()).build());
+        assertThrows(IllegalStateException.class, () -> eventFactory.cakeOrderedEventFrom(envelope().with(metadataWithDefaults()).build()));
     }
 }
