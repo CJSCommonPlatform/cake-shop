@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Index;
-import uk.gov.justice.services.test.utils.persistence.BaseTransactionalTest;
+import uk.gov.justice.services.test.utils.persistence.BaseTransactionalJunit4Test;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -15,14 +15,11 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
-//@RunWith(CdiTestRunner.class)
-@Disabled
-public class IndexRepositoryIT extends BaseTransactionalTest {
+@RunWith(CdiTestRunner.class)
+public class IndexRepositoryIT extends BaseTransactionalJunit4Test {
 
     @Inject
     private IndexRepository indexRepository;

@@ -36,7 +36,7 @@
 
         <framework-libraries.version>17.1.1</framework-libraries.version>
         <framework.version>17.1.0</framework.version>
-        <event-store.version>17.1.0</event-store.version>
+        <event-store.version>17.1.1</event-store.version>
 
         <!-- TODO - move to common bom -->
         <weld-junit5.version>1.2.2.Final</weld-junit5.version>

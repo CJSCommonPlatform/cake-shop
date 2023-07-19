@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 import uk.gov.justice.services.example.cakeshop.persistence.entity.Cake;
-import uk.gov.justice.services.test.utils.persistence.BaseTransactionalTest;
+import uk.gov.justice.services.test.utils.persistence.BaseTransactionalJunit4Test;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,14 +14,11 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
-//@RunWith(CdiTestRunner.class)
-@Disabled
-public class CakeRepositoryIT extends BaseTransactionalTest {
+@RunWith(CdiTestRunner.class)
+public class CakeRepositoryIT extends BaseTransactionalJunit4Test {
 
     @Inject
     private CakeRepository cakeRepository;
