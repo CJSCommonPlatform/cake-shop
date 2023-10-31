@@ -12,6 +12,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Update to Junit5 and surefire, failsafe plugin versions
 ### Added
 - New JNDI value `catchup.max.number.of.missing.event.ranges.to.log`
+### Removed
+- Removed dependency on apache-drools as it's not used by any of the framework code
 ### Security
 - Update org.json to version 20230227 to fix **security vulnerability CVE-2022-45688**
   Detail: https://nvd.nist.gov/vuln/detail/CVE-2022-45688
