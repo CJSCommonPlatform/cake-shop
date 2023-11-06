@@ -6,17 +6,18 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 ### Changed
 - Updated to Junit 5
+- Centralise all generic library dependencies and versions into maven-common-bom
+- Update to Junit5 and surefire, failsafe plugin versions
 ### Fixed
 - Fix Logging of missing event ranges to only log on debug
 - Limit logging of MissingEventRanges logged to sensible maximum number.
-- Update to Junit5 and surefire, failsafe plugin versions
 ### Added
 - New JNDI value `catchup.max.number.of.missing.event.ranges.to.log`
 ### Removed
 - Removed dependency on apache-drools as it's not used by any of the framework code
 ### Security
-- Update org.json to version 20230227 to fix **security vulnerability CVE-2022-45688**
-  Detail: https://nvd.nist.gov/vuln/detail/CVE-2022-45688
+- Update common-bom to fix various security vulnerabilities in org.json, plexus-codehaus, apache-tika and google-guava
+
 
 ## [17.0.0] - 2023-02-07
 ### Changed
