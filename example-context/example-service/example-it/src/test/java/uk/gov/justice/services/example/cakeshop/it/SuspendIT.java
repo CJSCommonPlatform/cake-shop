@@ -16,6 +16,8 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
 import static uk.gov.justice.services.management.suspension.commands.UnsuspendCommand.UNSUSPEND;
@@ -91,7 +93,7 @@ public class SuspendIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
-            final UUID commandId = systemCommanderMBean.call(UNSUSPEND);
+            final UUID commandId = systemCommanderMBean.call(UNSUSPEND, GUARDED);
 
             final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
@@ -118,7 +120,7 @@ public class SuspendIT {
                 .build();
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
-            final UUID commandId = systemCommanderMBean.call(SUSPEND);
+            final UUID commandId = systemCommanderMBean.call(SUSPEND, FORCED);
 
             final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
@@ -157,7 +159,7 @@ public class SuspendIT {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
             //invoke suspending
-            final UUID suspendCommandId = systemCommanderMBean.call(SUSPEND);
+            final UUID suspendCommandId = systemCommanderMBean.call(SUSPEND, FORCED);
 
             final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(suspendCommandId);
@@ -183,7 +185,7 @@ public class SuspendIT {
             verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
             //invoke unsuspending
-            final UUID unsuspendCommandId = systemCommanderMBean.call(UNSUSPEND);
+            final UUID unsuspendCommandId = systemCommanderMBean.call(UNSUSPEND, FORCED);
 
             final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(unsuspendCommandId);
