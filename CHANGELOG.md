@@ -13,6 +13,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Limit logging of MissingEventRanges logged to sensible maximum number.
 ### Added
 - New JNDI value `catchup.max.number.of.missing.event.ranges.to.log`
+- Add '-f' '--force' switch to the JmxCommandClient to bypass COMMAND_IN_PROGRESS check
 ### Removed
 - Removed dependency on apache-drools as it's not used by any of the framework code
 ### Security
