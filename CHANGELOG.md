@@ -4,10 +4,13 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [17.0.1] - 2023-12-13
 ### Changed
 - Updated to Junit 5
 - Centralise all generic library dependencies and versions into maven-common-bom
 - Update to Junit5 and surefire, failsafe plugin versions
+- Add retry mechanism to jobstore via framework-libraries
 ### Fixed
 - Fix Logging of missing event ranges to only log on debug
 - Limit logging of MissingEventRanges logged to sensible maximum number.
