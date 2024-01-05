@@ -2,8 +2,7 @@ package uk.gov.justice.services.example.cakeshop.it.params;
 
 public class CakeShopUris {
 
-    private static final String RANDOM_HTTP_PORT = System.getProperty("random.http.port");
-    private static final String HOST = "http://localhost:" + RANDOM_HTTP_PORT ;
+    private static final String HOST = "http://localhost:8080";
 
 
     public static final String RECIPES_RESOURCE_URI = HOST + "/example-command-api/command/api/rest/cakeshop/recipes/";
