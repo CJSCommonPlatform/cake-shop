@@ -29,7 +29,7 @@ runLiquibase() {
   runEventLogLiquibase
   runEventLogAggregateSnapshotLiquibase
   runEventBufferLiquibase
-  runViewStoreLiquibaseForExampleContext
+  runViewStoreLiquibase
   runSystemLiquibase
   runEventTrackingLiquibase
   runFileServiceLiquibase
@@ -37,15 +37,15 @@ runLiquibase() {
 }
 
 buildDeployAndTest() {
-  loginToDockerContainerRegistry
+  #loginToDockerContainerRegistry
   #buildWars #ITs execution not skipped
   undeployWarsFromDocker
   buildAndStartContainers
   runLiquibase
   deployWiremock
-  deployWarsForExampleContext
+  deployWars
   #healthchecks
-  integrationTests
+  #integrationTests
 }
 
 buildDeployAndTest

@@ -1,0 +1,58 @@
+---
+resource_descriptor:
+  spec_version: '1.0.0'
+  version: '${project.version}'
+
+  resources:
+    - name: java:/app/example-service/DS.eventstore
+      type: xa-datasource
+      setup:
+        - type: liquibase
+          maven:
+            groupId: uk.gov.justice.services
+            artifactId: event-repository-liquibase
+            type: jar
+            version: '${cpp.framework.version}'
+        - type: liquibase
+          maven:
+            groupId: uk.gov.justice.services
+            artifactId: aggregate-snapshot-repository-liquibase
+            type: jar
+            version: '${project.version}'
+
+    - name: java:/DS.example
+      type: xa-datasource
+      setup:
+        - type: liquibase
+          maven:
+            groupId: uk.gov.justice.services
+            artifactId: event-buffer-liquibase
+            type: jar
+            version: '${cpp.framework.version}'
+        - type: liquibase
+          maven:
+            groupId: uk.gov.justice.services.example
+            artifactId: example-viewstore-liquibase
+            type: jar
+            version: '${project.version}'
+
+    - name: example.handler.command
+      type: queue
+    - name: example.event
+      type: topic
+    - name: public.event
+      type: topic
+
+  services:
+    # People provides these service mappings
+    - name: 'example-service'
+      id: 'example_service'
+      target: '/example-service'
+      map:
+        - '/example-command-api'
+        - '/example-command-handler'
+        - '/example-event-listener'
+        - '/example-event-processor'
+        - '/example-query-api'
+        - '/example-custom-api'
+      matcher: '/example-[^/]+'

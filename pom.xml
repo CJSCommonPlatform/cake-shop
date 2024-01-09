@@ -146,6 +146,7 @@
                             <systemPropertyVariables>
                                 <random.jms.port>${random-jms-port}</random.jms.port>
                                 <random.http.port>${random-http-port}</random.http.port>
+                                <!-- TO DO SAN -->
                                 <random.management.port>${random-management-port}
                                 </random.management.port>
                             </systemPropertyVariables>
