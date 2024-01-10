@@ -474,7 +474,7 @@
             <dependencies>
                 <dependency>
                     <groupId>uk.gov.justice.services.example</groupId>
-                    <artifactId>example-single</artifactId>
+                    <artifactId>example-service</artifactId>
                     <version>${project.version}</version>
                     <type>war</type>
                 </dependency>
@@ -491,10 +491,10 @@
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>uk.gov.justice.services.example</groupId>
-                                            <artifactId>example-single</artifactId>
+                                            <artifactId>example-service</artifactId>
                                             <version>${project.version}</version>
                                             <type>war</type>
-                                            <destFileName>example-single.war</destFileName>
+                                            <destFileName>example-service.war</destFileName>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>

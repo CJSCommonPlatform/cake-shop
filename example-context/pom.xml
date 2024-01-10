@@ -21,7 +21,6 @@
         <module>example-viewstore</module>
         <module>example-integration-test</module>
         <module>example-service</module>
-        <module>example-single</module>
         <module>example-event-source</module>
         <module>example-custom</module>
         <module>example-feature-control</module>
