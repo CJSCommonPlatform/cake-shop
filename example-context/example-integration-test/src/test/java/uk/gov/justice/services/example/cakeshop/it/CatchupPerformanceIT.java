@@ -1,19 +1,14 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static java.lang.Integer.parseInt;
-import static java.lang.String.format;
-import static java.lang.System.getProperty;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
-import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
-import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
-import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.sql.DataSource;
+import javax.ws.rs.client.Client;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.example.cakeshop.it.helpers.BatchEventInserter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
@@ -23,35 +18,29 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.sql.DataSource;
-import javax.ws.rs.client.Client;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static java.lang.String.format;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.DB_CONTEXT_NAME;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 
 public class CatchupPerformanceIT {
 
     private static final int BATCH_INSERT_SIZE = 10_000;
 
-    private static final String CONTEXT_NAME = "example";
-
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
 
     private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
-
-    private static final String HOST = getHost();
-    private static final int PORT = findWildflyManagementPort();
 
     private final TestSystemCommanderClientFactory systemCommanderClientFactory = new TestSystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
@@ -64,12 +53,9 @@ public class CatchupPerformanceIT {
     @BeforeEach
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
-
-        final String contextName = "framework";
-
-        databaseCleaner.cleanEventStoreTables(contextName);
+        databaseCleaner.cleanEventStoreTables(DB_CONTEXT_NAME);
         cleanViewstoreTables();
-        databaseCleaner.cleanSystemTables(contextName);
+        databaseCleaner.cleanSystemTables(DB_CONTEXT_NAME);
     }
 
     @AfterEach
@@ -165,30 +151,21 @@ public class CatchupPerformanceIT {
 
     private void runCatchup() throws Exception {
 
-        final JmxParameters jmxParameters = jmxParameters()
-                .withHost(HOST)
-                .withPort(PORT)
-                .build();
-
-        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
+        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(buildJmxParameters())) {
 
             systemCommanderClient.getRemote(CONTEXT_NAME).call(CATCHUP, GUARDED);
         }
     }
 
     private void cleanViewstoreTables() {
-
-        final String contextName = "framework";
-
-        databaseCleaner.cleanViewStoreTables(contextName,
+        databaseCleaner.cleanViewStoreTables(DB_CONTEXT_NAME,
                 "ingredient",
                 "recipe",
                 "cake",
                 "cake_order",
                 "processed_event"
         );
-
-        databaseCleaner.cleanStreamBufferTable(contextName);
-        databaseCleaner.cleanStreamStatusTable(contextName);
+        databaseCleaner.cleanStreamBufferTable(DB_CONTEXT_NAME);
+        databaseCleaner.cleanStreamStatusTable(DB_CONTEXT_NAME);
     }
 }

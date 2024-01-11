@@ -1,24 +1,19 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static java.lang.Integer.valueOf;
-import static java.lang.System.getProperty;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.UUID.randomUUID;
-import static javax.ws.rs.client.Entity.entity;
-import static javax.ws.rs.core.Response.Status.ACCEPTED;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
-import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
-import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
-import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
-import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
-import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
-import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.sql.DataSource;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.core.Response;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJdbsRepositoryFactory;
@@ -29,43 +24,32 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 import uk.gov.justice.services.test.utils.persistence.SequenceSetter;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.sql.DataSource;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.UUID.randomUUID;
+import static javax.ws.rs.client.Entity.entity;
+import static javax.ws.rs.core.Response.Status.ACCEPTED;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.DB_CONTEXT_NAME;
+import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
+import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
+import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 public class EventHealingIT {
 
-    private static final String CONTEXT_NAME = "example";
-
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
-    private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
-
-    private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
-    private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
-
     private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
-
-    private static final String HOST = getHost();
-    private static final int PORT = findWildflyManagementPort();
 
     private final CommandFactory commandFactory = new CommandFactory();
 
@@ -81,11 +65,9 @@ public class EventHealingIT {
     public void before() {
         client = new RestEasyClientFactory().createResteasyClient();
 
-        final String contextName = "framework";
-
-        databaseCleaner.cleanEventStoreTables(contextName);
+        databaseCleaner.cleanEventStoreTables(DB_CONTEXT_NAME);
         cleanViewstoreTables();
-        databaseCleaner.cleanSystemTables(contextName);
+        databaseCleaner.cleanSystemTables(DB_CONTEXT_NAME);
 
         sequenceSetter.setSequenceTo(1L, "event_sequence_seq", eventStoreDataSource);
     }
@@ -170,32 +152,22 @@ public class EventHealingIT {
     }
 
     private void runCatchup() throws Exception {
-
-        final JmxParameters jmxParameters = jmxParameters()
-                .withHost(HOST)
-                .withPort(PORT)
-                .build();
-
-        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
+        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(buildJmxParameters())) {
 
             systemCommanderClient.getRemote(CONTEXT_NAME).call(CATCHUP, GUARDED);
         }
     }
 
     private void cleanViewstoreTables() {
-
-        final String contextName = "framework";
-
-        databaseCleaner.cleanViewStoreTables(contextName,
+        databaseCleaner.cleanViewStoreTables(DB_CONTEXT_NAME,
                 "ingredient",
                 "recipe",
                 "cake",
                 "cake_order",
                 "processed_event"
         );
-
-        databaseCleaner.cleanStreamBufferTable(contextName);
-        databaseCleaner.cleanStreamStatusTable(contextName);
+        databaseCleaner.cleanStreamBufferTable(DB_CONTEXT_NAME);
+        databaseCleaner.cleanStreamStatusTable(DB_CONTEXT_NAME);
     }
 
     private UUID findRecipeIdForEventNumber(final int eventNumber) throws Exception {

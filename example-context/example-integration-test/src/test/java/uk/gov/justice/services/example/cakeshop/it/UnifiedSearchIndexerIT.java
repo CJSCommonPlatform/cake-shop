@@ -1,5 +1,16 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
+import java.util.UUID;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.core.Response;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
+import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
+import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
+
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.UUID.randomUUID;
 import static javax.json.Json.createObjectBuilder;
@@ -9,23 +20,10 @@ import static javax.ws.rs.core.Response.Status.OK;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.DB_CONTEXT_NAME;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ORDER_CAKE_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.ORDERS_RESOURCE_URI;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
-
-import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
-import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
-import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
-
-import java.util.UUID;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class UnifiedSearchIndexerIT {
 
@@ -36,10 +34,7 @@ public class UnifiedSearchIndexerIT {
 
     @BeforeEach
     public void before() throws Exception {
-
-        final String contextName = "framework";
-
-        databaseCleaner.cleanEventStoreTables(contextName);
+        databaseCleaner.cleanEventStoreTables(DB_CONTEXT_NAME);
         cleanViewstoreTables();
     }
 
@@ -74,18 +69,14 @@ public class UnifiedSearchIndexerIT {
     }
 
     private void cleanViewstoreTables() {
-
-        final String contextName = "framework";
-
-        databaseCleaner.cleanViewStoreTables(contextName,
+        databaseCleaner.cleanViewStoreTables(DB_CONTEXT_NAME,
                 "ingredient",
                 "recipe",
                 "cake",
                 "cake_order",
                 "processed_event"
         );
-
-        databaseCleaner.cleanStreamBufferTable(contextName);
-        databaseCleaner.cleanStreamStatusTable(contextName);
+        databaseCleaner.cleanStreamBufferTable(DB_CONTEXT_NAME);
+        databaseCleaner.cleanStreamStatusTable(DB_CONTEXT_NAME);
     }
 }

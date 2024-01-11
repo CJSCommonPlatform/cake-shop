@@ -36,6 +36,10 @@ public class SystemPropertyFinder {
         return findValue("jms.user.password", STANDALONE_ARTEMIS_USER_PASSWORD);
     }
 
+    public static boolean hasRandomJmsPortConfigured() {
+        return !isEmpty(System.getProperty("random.http.port"));
+    }
+
     private static String findValue(final String propertyName, final String defaultValue) {
         String value = System.getProperty(propertyName);
         return isEmpty(value) ? defaultValue : value;

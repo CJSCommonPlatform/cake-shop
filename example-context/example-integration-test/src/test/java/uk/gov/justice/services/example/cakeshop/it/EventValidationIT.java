@@ -8,7 +8,10 @@ import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
 import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.DB_CONTEXT_NAME;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
@@ -49,16 +52,11 @@ public class EventValidationIT {
 
     private static final int BATCH_INSERT_SIZE = 10_000;
 
-    private static final String CONTEXT_NAME = "example";
-
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
 
     @SuppressWarnings("unused")
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
-
-    private static final String HOST = getHost();
-    private static final int PORT = findWildflyManagementPort();
 
     private final TestSystemCommanderClientFactory systemCommanderClientFactory = new TestSystemCommanderClientFactory();
 
@@ -67,24 +65,16 @@ public class EventValidationIT {
 
     private PublishedEventCounter publishedEventCounter = new PublishedEventCounter(eventStoreDataSource);
 
-    private final JmxParameters jmxParameters = jmxParameters()
-            .withHost(HOST)
-            .withPort(PORT)
-            .build();
+    private final JmxParameters jmxParameters = buildJmxParameters();
 
     @BeforeEach
     public void cleanTables() {
-
-        final String databaseContextName = "framework";
-
-        databaseCleaner.cleanEventStoreTables(databaseContextName);
-
-        databaseCleaner.cleanProcessedEventTable(databaseContextName);
-        databaseCleaner.cleanStreamStatusTable(databaseContextName);
-        databaseCleaner.cleanStreamBufferTable(databaseContextName);
-        databaseCleaner.cleanViewStoreTables(databaseContextName, "recipe");
-
-        databaseCleaner.cleanSystemTables(databaseContextName);
+        databaseCleaner.cleanEventStoreTables(DB_CONTEXT_NAME);
+        databaseCleaner.cleanProcessedEventTable(DB_CONTEXT_NAME);
+        databaseCleaner.cleanStreamStatusTable(DB_CONTEXT_NAME);
+        databaseCleaner.cleanStreamBufferTable(DB_CONTEXT_NAME);
+        databaseCleaner.cleanViewStoreTables(DB_CONTEXT_NAME, "recipe");
+        databaseCleaner.cleanSystemTables(DB_CONTEXT_NAME);
     }
 
     @Test

@@ -1,9 +1,27 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
+import java.util.Optional;
+import java.util.UUID;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.core.Response.Status;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
+import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
+import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
+import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
+import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
+import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
+import uk.gov.justice.services.test.utils.core.messaging.Poller;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
+
 import static com.jayway.jsonassert.JsonAssert.with;
-import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
-import static java.lang.System.getProperty;
 import static java.lang.Thread.sleep;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -15,43 +33,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.slf4j.LoggerFactory.getLogger;
-import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
-import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
 import static uk.gov.justice.services.management.suspension.commands.UnsuspendCommand.UNSUSPEND;
-import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
-import uk.gov.justice.services.example.cakeshop.it.helpers.ApiResponse;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
-import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.Querier;
-import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
-import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
-import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
-import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
-import uk.gov.justice.services.test.utils.core.messaging.Poller;
-import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response.Status;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-
 public class SuspendIT {
-
-    private static final String CONTEXT_NAME = "example";
 
     private static final Logger logger = getLogger(SuspendIT.class);
     private static final String MARBLE_CAKE = "Marble cake";
@@ -62,9 +53,6 @@ public class SuspendIT {
     private Client client;
     private Querier querier;
     private CommandSender commandSender;
-
-    private static final String HOST = getHost();
-    private static final int PORT = findWildflyManagementPort();
 
     private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
@@ -85,12 +73,7 @@ public class SuspendIT {
         client.close();
 
         //invoke unsuspending - Always ensure unsuspend is invoked as we cannot guarantee order of execution for other Cakeshop ITs
-
-        final JmxParameters jmxParameters = jmxParameters()
-                .withHost(HOST)
-                .withPort(PORT)
-                .build();
-        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
+        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(buildJmxParameters())) {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
@@ -115,11 +98,7 @@ public class SuspendIT {
     public void shouldNotReturnRecipesAfterSuspending() throws Exception {
 
         //invoke suspending
-        final JmxParameters jmxParameters = jmxParameters()
-                .withHost(HOST)
-                .withPort(PORT)
-                .build();
-        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
+        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(buildJmxParameters())) {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
             final UUID commandId = systemCommanderMBean.call(SUSPEND, FORCED);
 
@@ -150,12 +129,7 @@ public class SuspendIT {
 
     @Test
     public void shouldQueryForRecipesAfterUnShuttering() throws Exception {
-
-        final JmxParameters jmxParameters = jmxParameters()
-                .withHost(HOST)
-                .withPort(PORT)
-                .build();
-        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
+        try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(buildJmxParameters())) {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 

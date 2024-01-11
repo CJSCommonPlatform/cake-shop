@@ -1,7 +1,26 @@
 package uk.gov.justice.services.example.cakeshop.it;
 
-import static java.lang.Integer.valueOf;
-import static java.lang.System.getProperty;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.sql.DataSource;
+import javax.ws.rs.client.Client;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
+import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
+import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
+import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
+import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
+import uk.gov.justice.services.test.utils.core.messaging.Poller;
+import uk.gov.justice.services.test.utils.events.EventStoreDataAccess;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
+import uk.gov.justice.services.test.utils.persistence.SequenceSetter;
+
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
@@ -11,39 +30,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.eventstore.management.commands.RebuildCommand.REBUILD;
-import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
-import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
-import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
-
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
-import uk.gov.justice.services.example.cakeshop.it.helpers.CommandSender;
-import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
-import uk.gov.justice.services.example.cakeshop.it.helpers.EventFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
-import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
-import uk.gov.justice.services.test.utils.core.messaging.Poller;
-import uk.gov.justice.services.test.utils.events.EventStoreDataAccess;
-import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
-import uk.gov.justice.services.test.utils.persistence.SequenceSetter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.sql.DataSource;
-import javax.ws.rs.client.Client;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 public class RebuildIT {
-
-    private static final String CONTEXT_NAME = "example";
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final EventFactory eventFactory = new EventFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
@@ -53,9 +44,6 @@ public class RebuildIT {
     private final SequenceSetter sequenceSetter = new SequenceSetter();
 
     private final Poller poller = new Poller();
-
-    private static final String HOST = getHost();
-    private static final int PORT = findWildflyManagementPort();
 
     private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
 
@@ -110,12 +98,7 @@ public class RebuildIT {
 
     private void invokeRebuild() throws Exception {
 
-        final JmxParameters jmxParameters = jmxParameters()
-                .withHost(HOST)
-                .withPort(PORT)
-                .build();
-
-        try(final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
+        try(final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(buildJmxParameters())) {
             systemCommanderClient.getRemote(CONTEXT_NAME).call(REBUILD, GUARDED);
         }
     }

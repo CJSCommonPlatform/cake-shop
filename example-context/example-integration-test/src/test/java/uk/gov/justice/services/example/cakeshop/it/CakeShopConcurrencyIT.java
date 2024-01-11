@@ -10,6 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.DB_CONTEXT_NAME;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.QUERY_RECIPE_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.REMOVE_RECIPE_MEDIA_TYPE;
@@ -22,6 +23,7 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventReposito
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants;
 import uk.gov.justice.services.test.utils.core.http.HttpResponsePoller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
@@ -50,10 +52,7 @@ public class CakeShopConcurrencyIT {
     @BeforeEach
     public void before() throws Exception {
         client = new RestEasyClientFactory().createResteasyClient();
-
-        final String contextName = "framework";
-
-        databaseCleaner.cleanEventStoreTables(contextName);
+        databaseCleaner.cleanEventStoreTables(DB_CONTEXT_NAME);
         cleanViewstoreTables();
     }
 
@@ -124,18 +123,14 @@ public class CakeShopConcurrencyIT {
     }
 
     private void cleanViewstoreTables() {
-
-        final String contextName = "framework";
-
-        databaseCleaner.cleanViewStoreTables(contextName,
+        databaseCleaner.cleanViewStoreTables(DB_CONTEXT_NAME,
                 "ingredient",
                 "recipe",
                 "cake",
                 "cake_order",
                 "processed_event"
         );
-
-        databaseCleaner.cleanStreamBufferTable(contextName);
-        databaseCleaner.cleanStreamStatusTable(contextName);
+        databaseCleaner.cleanStreamBufferTable(DB_CONTEXT_NAME);
+        databaseCleaner.cleanStreamStatusTable(DB_CONTEXT_NAME);
     }
 }

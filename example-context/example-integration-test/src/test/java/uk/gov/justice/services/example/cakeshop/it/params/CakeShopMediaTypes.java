@@ -1,11 +1,9 @@
 package uk.gov.justice.services.example.cakeshop.it.params;
 
 import static java.lang.String.format;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
 
 public class CakeShopMediaTypes {
-
-    public static final String CONTEXT_NAME = "example";
-
     private static final String PREFIX = format("application/vnd.%s.", CONTEXT_NAME);
 
     public static final String ADD_RECIPE_MEDIA_TYPE = PREFIX + "add-recipe+json";
