@@ -116,7 +116,7 @@
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services.example</groupId>
-            <artifactId>example-persistence</artifactId>
+            <artifactId>example-viewstore-persistence</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
@@ -301,7 +301,7 @@
                     </dependency>
                     <dependency>
                         <groupId>uk.gov.justice.services.example</groupId>
-                        <artifactId>example-liquibase</artifactId>
+                        <artifactId>example-viewstore-liquibase</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                     <dependency>
@@ -329,6 +329,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <dependencies>
+                       <dependency>
+                           <groupId>uk.gov.justice.services.example</groupId>
+                           <artifactId>example-service</artifactId>
+                           <version>${project.version}</version>
+                           <type>war</type>
+                       </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>unpack-wildfly</id>
@@ -421,7 +429,7 @@
                 <version>4.0.0.Final</version>
                 <configuration>
                     <jbossHome>${jboss.home}</jbossHome>
-                    <serverConfig>${server.config}</serverConfig>
+                    <serverConfig>standalone.xml</serverConfig>
                     <timeout>120</timeout>
                     <java-opts>
                         <javaOpt>-DDEFAULT_PORT=${random-http-port}</javaOpt>

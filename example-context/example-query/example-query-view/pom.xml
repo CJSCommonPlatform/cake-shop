@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services.example</groupId>
-            <artifactId>example-persistence</artifactId>
+            <artifactId>example-viewstore-persistence</artifactId>
             <version>${project.version}</version>
         </dependency>
 
