@@ -3,18 +3,17 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>example-context</artifactId>
         <groupId>uk.gov.justice.services.example</groupId>
+        <artifactId>cake-shop</artifactId>
         <version>17.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>example-query</artifactId>
+    <artifactId>example-command</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>example-query-api</module>
-        <module>example-query-view</module>
+        <module>example-command-api</module>
+        <module>example-command-handler</module>
     </modules>
-
 </project>

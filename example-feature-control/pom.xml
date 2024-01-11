@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>example-context</artifactId>
+        <artifactId>cake-shop</artifactId>
         <groupId>uk.gov.justice.services.example</groupId>
         <version>17.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>example-healthcheck</artifactId>
+    <artifactId>example-feature-control</artifactId>
 
     <dependencies>
         <dependency>
@@ -18,14 +18,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.services</groupId>
-            <artifactId>framework-healthcheck</artifactId>
-            <version>${framework.version}</version>
+            <groupId>uk.gov.justice.utils</groupId>
+            <artifactId>utilities-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.event-store</groupId>
-            <artifactId>healthchecks</artifactId>
-            <version>${event-store.version}</version>
+            <groupId>uk.gov.justice.framework-api</groupId>
+            <artifactId>framework-api-core</artifactId>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -37,11 +35,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
