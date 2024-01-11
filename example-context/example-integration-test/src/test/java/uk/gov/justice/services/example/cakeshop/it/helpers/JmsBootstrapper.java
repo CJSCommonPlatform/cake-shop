@@ -15,9 +15,9 @@ import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 public class JmsBootstrapper {
 
     //TODO SAN
-    private static final String JMS_USERNAME = "jmsuser";
+    private static final String JMS_USERNAME = System.getProperty("jms.user.name");
 
-    private static final String JMS_PASSWORD = "jms@user123";
+    private static final String JMS_PASSWORD = System.getProperty("jms.user.password");
     private static final String RANDOM_JMS_PORT = System.getProperty("random.jms.port");
     private static final String JMS_BROKER_URL = "tcp://localhost:" + RANDOM_JMS_PORT;
 

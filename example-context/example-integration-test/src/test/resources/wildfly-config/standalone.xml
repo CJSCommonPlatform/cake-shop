@@ -583,6 +583,7 @@
                 <https-listener name="https" socket-binding="https" ssl-context="applicationSSC" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
+                    <!-- In actual contexts this redirection is managed by haproxy configuration in development setup -->
                     <filter-ref name="example-service" predicate="path-prefix('/example-command-api/') or path-prefix('/example-command-controller/') or path-prefix('/example-command-handler/') or path-prefix('/example-event-api/') or path-prefix('/example-event-listener/') or path-prefix('/example-event-indexer/') or path-prefix('/example-event-processor/') or path-prefix('/example-query-api/') or path-prefix('/example-query-controller/') or path-prefix('/example-query-view/') or path-prefix('/example-custom-api/')"/>
                     <http-invoker http-authentication-factory="application-http-authentication"/>
                 </host>
