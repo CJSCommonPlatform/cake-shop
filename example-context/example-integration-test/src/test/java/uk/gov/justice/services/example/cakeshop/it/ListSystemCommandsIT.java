@@ -14,6 +14,7 @@ import static uk.gov.justice.services.eventstore.management.commands.RebuildComm
 import static uk.gov.justice.services.eventstore.management.commands.ValidatePublishedEventsCommand.VALIDATE_EVENTS;
 import static uk.gov.justice.services.eventstore.management.commands.VerifyCatchupCommand.VERIFY_CATCHUP;
 import static uk.gov.justice.services.eventstore.management.commands.VerifyRebuildCommand.VERIFY_REBUILD;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.management.ping.commands.PingCommand.PING;
 import static uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand.REFRESH_FEATURE_CACHE;
@@ -34,7 +35,7 @@ import org.junit.jupiter.api.Test;
 public class ListSystemCommandsIT {
 
     private static final String HOST = getHost();
-    private static final int PORT = parseInt(getProperty("random.management.port"));
+    private static final int PORT = findWildflyManagementPort();
     private static final String CONTEXT_NAME = "example";
 
     private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();

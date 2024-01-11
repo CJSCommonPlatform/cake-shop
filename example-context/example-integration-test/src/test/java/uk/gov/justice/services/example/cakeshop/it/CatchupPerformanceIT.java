@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
@@ -50,7 +51,7 @@ public class CatchupPerformanceIT {
     private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
 
     private static final String HOST = getHost();
-    private static final int PORT = parseInt(getProperty("random.management.port"));
+    private static final int PORT = findWildflyManagementPort();
 
     private final TestSystemCommanderClientFactory systemCommanderClientFactory = new TestSystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();

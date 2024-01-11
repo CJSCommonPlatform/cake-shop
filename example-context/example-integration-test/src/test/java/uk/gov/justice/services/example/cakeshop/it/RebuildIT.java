@@ -11,6 +11,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.eventstore.management.commands.RebuildCommand.REBUILD;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
@@ -54,7 +55,7 @@ public class RebuildIT {
     private final Poller poller = new Poller();
 
     private static final String HOST = getHost();
-    private static final int PORT = valueOf(getProperty("random.management.port"));
+    private static final int PORT = findWildflyManagementPort();
 
     private final TestSystemCommanderClientFactory testSystemCommanderClientFactory = new TestSystemCommanderClientFactory();
 

@@ -1,6 +1,9 @@
 package uk.gov.justice.services.example.cakeshop.it.helpers;
 
 import static javax.jms.Session.AUTO_ACKNOWLEDGE;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findJmsPort;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findJmsUserName;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findJmsUserPassword;
 
 import javax.jms.Connection;
 import javax.jms.JMSException;
@@ -14,12 +17,10 @@ import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
 public class JmsBootstrapper {
 
-    //TODO SAN
-    private static final String JMS_USERNAME = System.getProperty("jms.user.name");
-
-    private static final String JMS_PASSWORD = System.getProperty("jms.user.password");
-    private static final String RANDOM_JMS_PORT = System.getProperty("random.jms.port");
-    private static final String JMS_BROKER_URL = "tcp://localhost:" + RANDOM_JMS_PORT;
+    private static final String JMS_USERNAME = findJmsUserName();
+    private static final String JMS_PASSWORD = findJmsUserPassword();
+    private static final String JMS_PORT = findJmsPort();
+    private static final String JMS_BROKER_URL = "tcp://localhost:" + JMS_PORT;
 
     private final ActiveMQConnectionFactory jmsConnectionFactory = new ActiveMQConnectionFactory(JMS_BROKER_URL);
 

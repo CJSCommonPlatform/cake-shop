@@ -8,6 +8,7 @@ import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
@@ -57,7 +58,7 @@ public class EventValidationIT {
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
     private static final String HOST = getHost();
-    private static final int PORT = parseInt(getProperty("random.management.port"));
+    private static final int PORT = findWildflyManagementPort();
 
     private final TestSystemCommanderClientFactory systemCommanderClientFactory = new TestSystemCommanderClientFactory();
 

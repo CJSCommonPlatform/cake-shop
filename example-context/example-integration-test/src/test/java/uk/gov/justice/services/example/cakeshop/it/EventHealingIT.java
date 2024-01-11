@@ -11,6 +11,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
+import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
@@ -64,7 +65,7 @@ public class EventHealingIT {
     private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
 
     private static final String HOST = getHost();
-    private static final int PORT = valueOf(getProperty("random.management.port"));
+    private static final int PORT = findWildflyManagementPort();
 
     private final CommandFactory commandFactory = new CommandFactory();
 
