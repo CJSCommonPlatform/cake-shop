@@ -25,11 +25,11 @@ protocols: [ HTTP, HTTPS ]
     body:
         application/vnd.cakeshop.add-recipe+json:
             schema: !include json/schema/cakeshop.add-recipe.json
-            cakeshop: !include json/add-recipe.json
+            example: !include json/add-recipe.json
 
         application/vnd.cakeshop.add-recipe-v2+json:
             schema: !include json/schema/cakeshop.add-recipe.json
-            cakeshop: !include json/add-recipe.json
+            example: !include json/add-recipe.json
 
         application/vnd.cakeshop.remove-recipe+json: !!null
 
@@ -44,7 +44,7 @@ protocols: [ HTTP, HTTPS ]
     body:
         application/vnd.cakeshop.rename-recipe+json:
             schema: !include json/schema/cakeshop.rename-recipe.json
-            cakeshop: !include json/rename-recipe.json
+            example: !include json/rename-recipe.json
 
 
 /recipes/{recipeId}/cakes/{cakeId}:
@@ -60,13 +60,13 @@ protocols: [ HTTP, HTTPS ]
     body:
         application/vnd.cakeshop.make-cake+json:
             schema: !include json/schema/cakeshop.make-cake.json
-            cakeshop: !include json/make-cake.json
+            example: !include json/make-cake.json
     responses:
       202:
         body:
           application/vnd.cakeshop.make-cake-status+json:
             schema: !include json/schema/cakeshop.make-cake-status.json
-            cakeshop: !include json/make-cake-status.json
+            example: !include json/make-cake-status.json
 
 /orders/{orderId}:
   description: |
@@ -81,7 +81,7 @@ protocols: [ HTTP, HTTPS ]
     body:
         application/vnd.cakeshop.order-cake+json:
             schema: !include json/schema/cakeshop.order-cake.json
-            cakeshop: !include json/order-cake.json
+            example: !include json/order-cake.json
 
 /recipes/{recipeId}/photograph:
   post:

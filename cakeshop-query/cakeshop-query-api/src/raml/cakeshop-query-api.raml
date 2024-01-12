@@ -22,7 +22,7 @@ protocols: [ HTTP, HTTPS ]
             displayName: Name
             type: string
             description: A recipe name
-            cakeshop: Mess
+            example: Mess
             required: false
         glutenFree:
             type: boolean
@@ -32,7 +32,7 @@ protocols: [ HTTP, HTTPS ]
         body:
           application/vnd.cakeshop.recipes+json:
             schema: !include json/schema/cakeshop.search-recipes.json
-            cakeshop: !include json/recipes.json
+            example: !include json/recipes.json
   post:
     description: |
         ...
@@ -43,13 +43,13 @@ protocols: [ HTTP, HTTPS ]
     body:
         application/vnd.cakeshop.query-recipes+json:
             schema: !include json/schema/cakeshop.query-recipes.json
-            cakeshop: !include json/query-recipes.json
+            example: !include json/query-recipes.json
     responses:
        200:
          body:
            application/vnd.cakeshop.recipes+json:
              schema: !include json/schema/cakeshop.search-recipes.json
-             cakeshop: !include json/recipes.json
+             example: !include json/recipes.json
 
 /recipes/{recipeId}:
   description: return a recipe
@@ -65,7 +65,7 @@ protocols: [ HTTP, HTTPS ]
         body:
           application/vnd.cakeshop.recipe+json:
             schema: !include json/schema/cakeshop.get-recipe.json
-            cakeshop: !include json/recipe.json
+            example: !include json/recipe.json
 
 /orders/{orderId}:
   description: return an order
@@ -81,7 +81,7 @@ protocols: [ HTTP, HTTPS ]
         body:
           application/vnd.cakeshop.order+json:
             schema: !include json/schema/cakeshop.get-order.json
-            cakeshop: !include json/order.json
+            example: !include json/order.json
 /cakes:
   description: return cakes
   get:
@@ -96,7 +96,7 @@ protocols: [ HTTP, HTTPS ]
         body:
           application/vnd.cakeshop.cakes+json:
             schema: !include json/schema/cakeshop.search-cakes.json
-            cakeshop: !include json/cakes.json
+            example: !include json/cakes.json
 
 /recipes/{recipeId}/photograph:
   description: return recipe photograph data
@@ -126,4 +126,4 @@ protocols: [ HTTP, HTTPS ]
         body:
           application/vnd.cakeshop.index+json:
             schema: !include json/schema/cakeshop.search-index.json
-            cakeshop: !include json/index.json
+            example: !include json/index.json
