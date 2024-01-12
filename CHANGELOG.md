@@ -4,6 +4,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Provide capability to deploy in local dev environment
+- Reorganise modules and move them to root level
 
 ## [17.0.1] - 2023-12-13
 ### Changed
