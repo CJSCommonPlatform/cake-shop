@@ -17,7 +17,7 @@ public class IndexQueryApi {
     @Inject
     private Requester requester;
 
-    @Handles("example.get-index")
+    @Handles("cakeshop.get-index")
     public Envelope<IndexView> getIndex(final Envelope<SearchIndex> query) {
         return requester.request(query, IndexView.class);
     }

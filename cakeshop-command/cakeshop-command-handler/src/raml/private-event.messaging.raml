@@ -2,27 +2,27 @@
 title: API Using media type in the URL
 baseUri: message://command/handler/message/cakeshop
 version: v1
-/example.event:
+/cakeshop.event:
   post:
     body:
-        application/vnd.example.events.recipe-added+json:
-            schema: !include json/schema/example.events.recipe-added.json
-            example: !include json/command.add-recipe.json
+        application/vnd.cakeshop.events.recipe-added+json:
+            schema: !include json/schema/cakeshop.events.recipe-added.json
+            cakeshop: !include json/command.add-recipe.json
 
-        application/vnd.example.events.recipe-removed+json:
-            schema: !include json/schema/example.events.recipe-removed.json
-            example: !include json/recipe-removed.json
+        application/vnd.cakeshop.events.recipe-removed+json:
+            schema: !include json/schema/cakeshop.events.recipe-removed.json
+            cakeshop: !include json/recipe-removed.json
 
-        application/vnd.example.events.cake-made+json:
-            schema: !include json/schema/example.events.cake-made.json
-            example: !include json/command.make-cake.json
+        application/vnd.cakeshop.events.cake-made+json:
+            schema: !include json/schema/cakeshop.events.cake-made.json
+            cakeshop: !include json/command.make-cake.json
 
-        application/vnd.example.events.cake-ordered+json:
+        application/vnd.cakeshop.events.cake-ordered+json:
 
-        application/vnd.example.events.recipe-renamed+json:
-            schema: !include json/schema/example.events.recipe-renamed.json
-            example: !include json/recipe-renamed.json
+        application/vnd.cakeshop.events.recipe-renamed+json:
+            schema: !include json/schema/cakeshop.events.recipe-renamed.json
+            cakeshop: !include json/recipe-renamed.json
 
-        application/vnd.example.events.recipe-photograph-added+json:
-            schema: !include json/schema/example.events.recipe-photograph-added.json
-            example: !include json/recipe-photograph-added.json
+        application/vnd.cakeshop.events.recipe-photograph-added+json:
+            schema: !include json/schema/cakeshop.events.recipe-photograph-added.json
+            cakeshop: !include json/recipe-photograph-added.json

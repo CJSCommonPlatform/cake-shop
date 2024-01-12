@@ -19,10 +19,10 @@ public class CakesQueryView {
     @Inject
     CakeService service;
 
-    @Handles("example.search-cakes")
+    @Handles("cakeshop.search-cakes")
     public Envelope<CakesView> cakes(final JsonEnvelope query) {
         return envelop(service.cakes())
-                .withName("example.search-cakes")
+                .withName("cakeshop.search-cakes")
                 .withMetadataFrom(query);
     }
 }

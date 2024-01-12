@@ -18,7 +18,7 @@ public class CakeOrdersQueryApi {
     @Inject
     Requester requester;
 
-    @Handles("example.get-order")
+    @Handles("cakeshop.get-order")
     public Envelope<CakeOrderView> getOrder(final Envelope<SearchCakeOrder> query) {
         return requester.request(query, CakeOrderView.class);
     }

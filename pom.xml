@@ -10,13 +10,13 @@
         <version>17.1.0</version>
     </parent>
 
-    <groupId>uk.gov.justice.services.example</groupId>
+    <groupId>uk.gov.justice.services.cakeshop</groupId>
     <artifactId>cake-shop-parent</artifactId>
     <version>17.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Cakeshop Application</name>
-    <description>Example application for Microservice Framework</description>
+    <description>Cakeshop application for Microservice Framework</description>
 
     <scm>
         <connection>${cpp.scm.connection}</connection>
@@ -264,7 +264,7 @@
                                 <annotation>uk.gov.justice.domain.annotation.Event</annotation>
                             </annotations>
                             <validatorProperties>
-                                <serviceName>example</serviceName>
+                                <serviceName>cakeshop</serviceName>
                             </validatorProperties>
                         </configuration>
                     </execution>

@@ -13,7 +13,7 @@ This licence does not affect your freedom under fair dealing or fair use or any 
 You are free to:
 copy, publish, distribute and transmit the Information;
 adapt the Information;
-exploit the Information commercially and non-commercially for example, by combining it with other Information, or by including it in your own product or application.
+exploit the Information commercially and non-commercially for cakeshop, by combining it with other Information, or by including it in your own product or application.
 
 
 You must (where you do any of the above):
@@ -56,7 +56,7 @@ Definitions
 
 In this licence, the terms below have the following meanings:
 
-'Information' means information protected by copyright or by database right (for example, literary and artistic works, content, data and source code) offered for use under the terms of this licence. 
+'Information' means information protected by copyright or by database right (for cakeshop, literary and artistic works, content, data and source code) offered for use under the terms of this licence. 
 
 'Information Provider' means the person or organisation providing the Information under this licence.
 

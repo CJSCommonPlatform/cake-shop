@@ -123,7 +123,7 @@ public class CakeShopIT {
         await().until(() -> eventFinder.eventsWithPayloadContaining(recipeId).size() == 1);
 
         final Event event = eventFinder.eventsWithPayloadContaining(recipeId).get(0);
-        assertThat(event.getName(), is("example.events.recipe-added"));
+        assertThat(event.getName(), is("cakeshop.events.recipe-added"));
         with(event.getMetadata())
                 .assertEquals("stream.id", recipeId)
                 .assertEquals("stream.version", 1);
@@ -248,7 +248,7 @@ public class CakeShopIT {
 
     @Test
     public void shouldQueryForOvenStatus() throws Exception {
-        final Response response = client.target(OVEN_RESOURCE_CUSTOM_URI).request().accept("application/vnd.example.status+json").get();
+        final Response response = client.target(OVEN_RESOURCE_CUSTOM_URI).request().accept("application/vnd.cakeshop.status+json").get();
         assertThat(response.getStatus(), isStatus(OK));
 
         final String entity = response.readEntity(String.class);

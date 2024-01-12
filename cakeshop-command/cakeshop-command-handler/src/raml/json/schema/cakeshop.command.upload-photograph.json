@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://justice.gov.uk/example/command/handler/example.upload-photograph.json",
+  "id": "http://justice.gov.uk/cakeshop/command/handler/cakeshop.upload-photograph.json",
   "type": "object",
   "properties": {
     "recipeId": {

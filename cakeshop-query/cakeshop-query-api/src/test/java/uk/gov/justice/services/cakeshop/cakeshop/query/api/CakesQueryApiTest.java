@@ -13,7 +13,7 @@ public class CakesQueryApiTest {
     public void shouldBeQueryApiThatHasRequesterPassThroughMethod() throws Exception {
         assertThat(CakesQueryApi.class, isHandlerClass(QUERY_API)
                 .with(method("cakes")
-                        .thatHandles("example.search-cakes")
+                        .thatHandles("cakeshop.search-cakes")
                         .withRequesterPassThrough()
                 ));
     }

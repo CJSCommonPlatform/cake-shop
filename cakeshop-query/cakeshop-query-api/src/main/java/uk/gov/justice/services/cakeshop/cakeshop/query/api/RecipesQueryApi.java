@@ -18,22 +18,22 @@ public class RecipesQueryApi {
     @Inject
     Requester requester;
 
-    @Handles("example.search-recipes")
+    @Handles("cakeshop.search-recipes")
     public JsonEnvelope searchRecipes(final JsonEnvelope query) {
         return requester.request(query);
     }
 
-    @Handles("example.get-recipe")
+    @Handles("cakeshop.get-recipe")
     public JsonEnvelope getRecipe(final JsonEnvelope query) {
         return requester.request(query);
     }
 
-    @Handles("example.query-recipes")
+    @Handles("cakeshop.query-recipes")
     public Envelope<RecipesView> queryRecipes(final Envelope<SearchRecipes> query) {
         return requester.request(query, RecipesView.class);
     }
 
-    @Handles("example.get-recipe-photograph")
+    @Handles("cakeshop.get-recipe-photograph")
     public JsonEnvelope getRecipePhotograph(final JsonEnvelope query) {
         return requester.request(query);
     }

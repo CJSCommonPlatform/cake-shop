@@ -16,11 +16,11 @@ public class OrderCakeCommandApi {
     @Inject
     Sender sender;
 
-    @Handles("example.order-cake")
+    @Handles("cakeshop.order-cake")
     public void orderCake(final JsonEnvelope envelope) {
         sender.send(
                 envelop(envelope.payloadAsJsonObject())
-                        .withName("example.command.order-cake")
+                        .withName("cakeshop.command.order-cake")
                         .withMetadataFrom(envelope));
     }
 }

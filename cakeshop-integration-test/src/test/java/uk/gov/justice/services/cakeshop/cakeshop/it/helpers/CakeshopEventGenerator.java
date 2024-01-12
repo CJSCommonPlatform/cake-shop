@@ -21,7 +21,7 @@ public class CakeshopEventGenerator {
 
     private final Clock clock = new UtcClock();
 
-    private static final String EVENT_SOURCE = "example";
+    private static final String EVENT_SOURCE = "cakeshop";
 
     public Event createRecipeAddedEvent(final long seed, final PositionInStreamIterator positionInStreamIterator) {
 
@@ -34,7 +34,7 @@ public class CakeshopEventGenerator {
         final Metadata metadata = metadataBuilder()
                 .createdAt(now)
                 .withId(randomUUID())
-                .withName("example.events.recipe-added")
+                .withName("cakeshop.events.recipe-added")
                 .withCausation(randomUUID(), randomUUID())
                 .withStreamId(recipeId)
                 .withPosition(position)
@@ -61,7 +61,7 @@ public class CakeshopEventGenerator {
                 randomUUID(),
                 recipeId,
                 position,
-                "example.events.recipe-added",
+                "cakeshop.events.recipe-added",
                 metadata.asJsonObject().toString(),
                 recipe,
                 now);
@@ -75,7 +75,7 @@ public class CakeshopEventGenerator {
         final Metadata metadata = metadataBuilder()
                 .createdAt(now)
                 .withId(randomUUID())
-                .withName("example.events.recipe-renamed")
+                .withName("cakeshop.events.recipe-renamed")
                 .withCausation(randomUUID(), randomUUID())
                 .withStreamId(recipeId)
                 .withPosition(position)
@@ -92,7 +92,7 @@ public class CakeshopEventGenerator {
                 randomUUID(),
                 recipeId,
                 position,
-                "example.events.recipe-renamed",
+                "cakeshop.events.recipe-renamed",
                 metadata.asJsonObject().toString(),
                 recipeRename,
                 now);
@@ -110,7 +110,7 @@ public class CakeshopEventGenerator {
         final Metadata metadata = metadataBuilder()
                 .createdAt(now)
                 .withId(randomUUID())
-                .withName("example.events.cake-ordered")
+                .withName("cakeshop.events.cake-ordered")
                 .withCausation(randomUUID(), randomUUID())
                 .withStreamId(orderId)
                 .withPosition(position)
@@ -130,7 +130,7 @@ public class CakeshopEventGenerator {
                 randomUUID(),
                 recipeId,
                 position,
-                "example.events.cake-ordered",
+                "cakeshop.events.cake-ordered",
                 metadata.asJsonObject().toString(),
                 cakeOrdered,
                 now);

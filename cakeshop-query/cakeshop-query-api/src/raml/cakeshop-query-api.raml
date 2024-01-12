@@ -11,8 +11,8 @@ protocols: [ HTTP, HTTPS ]
     description: |
         ...
         (mapping):
-            responseType: application/vnd.example.recipes+json
-            name: example.search-recipes
+            responseType: application/vnd.cakeshop.recipes+json
+            name: cakeshop.search-recipes
         ...
     queryParameters:
         pagesize:
@@ -22,7 +22,7 @@ protocols: [ HTTP, HTTPS ]
             displayName: Name
             type: string
             description: A recipe name
-            example: Mess
+            cakeshop: Mess
             required: false
         glutenFree:
             type: boolean
@@ -30,26 +30,26 @@ protocols: [ HTTP, HTTPS ]
     responses:
       200:
         body:
-          application/vnd.example.recipes+json:
-            schema: !include json/schema/example.search-recipes.json
-            example: !include json/recipes.json
+          application/vnd.cakeshop.recipes+json:
+            schema: !include json/schema/cakeshop.search-recipes.json
+            cakeshop: !include json/recipes.json
   post:
     description: |
         ...
         (mapping):
-            requestType: application/vnd.example.query-recipes+json
-            name: example.query-recipes
+            requestType: application/vnd.cakeshop.query-recipes+json
+            name: cakeshop.query-recipes
         ...
     body:
-        application/vnd.example.query-recipes+json:
-            schema: !include json/schema/example.query-recipes.json
-            example: !include json/query-recipes.json
+        application/vnd.cakeshop.query-recipes+json:
+            schema: !include json/schema/cakeshop.query-recipes.json
+            cakeshop: !include json/query-recipes.json
     responses:
        200:
          body:
-           application/vnd.example.recipes+json:
-             schema: !include json/schema/example.search-recipes.json
-             example: !include json/recipes.json
+           application/vnd.cakeshop.recipes+json:
+             schema: !include json/schema/cakeshop.search-recipes.json
+             cakeshop: !include json/recipes.json
 
 /recipes/{recipeId}:
   description: return a recipe
@@ -57,15 +57,15 @@ protocols: [ HTTP, HTTPS ]
     description: |
         ...
         (mapping):
-            responseType: application/vnd.example.recipe+json
-            name: example.get-recipe
+            responseType: application/vnd.cakeshop.recipe+json
+            name: cakeshop.get-recipe
         ...
     responses:
       200:
         body:
-          application/vnd.example.recipe+json:
-            schema: !include json/schema/example.get-recipe.json
-            example: !include json/recipe.json
+          application/vnd.cakeshop.recipe+json:
+            schema: !include json/schema/cakeshop.get-recipe.json
+            cakeshop: !include json/recipe.json
 
 /orders/{orderId}:
   description: return an order
@@ -73,30 +73,30 @@ protocols: [ HTTP, HTTPS ]
     description: |
         ...
         (mapping):
-            responseType: application/vnd.example.order+json
-            name: example.get-order
+            responseType: application/vnd.cakeshop.order+json
+            name: cakeshop.get-order
         ...
     responses:
       200:
         body:
-          application/vnd.example.order+json:
-            schema: !include json/schema/example.get-order.json
-            example: !include json/order.json
+          application/vnd.cakeshop.order+json:
+            schema: !include json/schema/cakeshop.get-order.json
+            cakeshop: !include json/order.json
 /cakes:
   description: return cakes
   get:
     description: |
         ...
         (mapping):
-            responseType: application/vnd.example.cakes+json
-            name: example.search-cakes
+            responseType: application/vnd.cakeshop.cakes+json
+            name: cakeshop.search-cakes
         ...
     responses:
       200:
         body:
-          application/vnd.example.cakes+json:
-            schema: !include json/schema/example.search-cakes.json
-            example: !include json/cakes.json
+          application/vnd.cakeshop.cakes+json:
+            schema: !include json/schema/cakeshop.search-cakes.json
+            cakeshop: !include json/cakes.json
 
 /recipes/{recipeId}/photograph:
   description: return recipe photograph data
@@ -105,7 +105,7 @@ protocols: [ HTTP, HTTPS ]
         ...
         (mapping):
             responseType: application/octet-stream
-            name: example.get-recipe-photograph
+            name: cakeshop.get-recipe-photograph
         ...
     responses:
       200:
@@ -118,12 +118,12 @@ protocols: [ HTTP, HTTPS ]
     description: |
         ...
         (mapping):
-            responseType: application/vnd.example.index+json
-            name: example.get-index
+            responseType: application/vnd.cakeshop.index+json
+            name: cakeshop.get-index
         ...
     responses:
       200:
         body:
-          application/vnd.example.index+json:
-            schema: !include json/schema/example.search-index.json
-            example: !include json/index.json
+          application/vnd.cakeshop.index+json:
+            schema: !include json/schema/cakeshop.search-index.json
+            cakeshop: !include json/index.json

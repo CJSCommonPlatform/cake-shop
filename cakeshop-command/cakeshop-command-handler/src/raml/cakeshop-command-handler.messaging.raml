@@ -2,29 +2,29 @@
 title: API Using media type in the URL
 baseUri: message://command/handler/message/cakeshop
 version: v1
-/example.handler.command:
+/cakeshop.handler.command:
   post:
     body:
-        application/vnd.example.command.add-recipe+json:
-            schema: !include json/schema/example.command.add-recipe.json
-            example: !include json/command.add-recipe.json
+        application/vnd.cakeshop.command.add-recipe+json:
+            schema: !include json/schema/cakeshop.command.add-recipe.json
+            cakeshop: !include json/command.add-recipe.json
 
-        application/vnd.example.command.remove-recipe+json:
-            schema: !include json/schema/example.command.remove-recipe.json
-            example: !include json/command.remove-recipe.json
+        application/vnd.cakeshop.command.remove-recipe+json:
+            schema: !include json/schema/cakeshop.command.remove-recipe.json
+            cakeshop: !include json/command.remove-recipe.json
 
-        application/vnd.example.command.make-cake+json:
-            schema: !include json/schema/example.command.make-cake.json
-            example: !include json/command.make-cake.json
+        application/vnd.cakeshop.command.make-cake+json:
+            schema: !include json/schema/cakeshop.command.make-cake.json
+            cakeshop: !include json/command.make-cake.json
 
-        application/vnd.example.command.order-cake+json:
-            schema: !include json/schema/example.command.order-cake.json
-            example: !include json/command.order-cake.json
+        application/vnd.cakeshop.command.order-cake+json:
+            schema: !include json/schema/cakeshop.command.order-cake.json
+            cakeshop: !include json/command.order-cake.json
 
-        application/vnd.example.command.rename-recipe+json:
-            schema: !include json/schema/example.command.rename-recipe.json
-            example: !include json/command.rename-recipe.json
+        application/vnd.cakeshop.command.rename-recipe+json:
+            schema: !include json/schema/cakeshop.command.rename-recipe.json
+            cakeshop: !include json/command.rename-recipe.json
 
-        application/vnd.example.command.upload-photograph+json:
-            schema: !include json/schema/example.command.upload-photograph.json
-            example: !include json/command.upload-photograph.json
+        application/vnd.cakeshop.command.upload-photograph+json:
+            schema: !include json/schema/cakeshop.command.upload-photograph.json
+            cakeshop: !include json/command.upload-photograph.json

@@ -37,7 +37,7 @@ public class CakeShopCrossOriginResourceSharingIT {
         final Response corsResponse =
                 client.target(ORDERS_RESOURCE_URI + "123")
                         .request()
-                        .header("Origin", "http://foo.example")
+                        .header("Origin", "http://foo.cakeshop")
                         .header("Access-Control-Request-Headers", "CPPCLIENTCORRELATIONID")
                         .options();
 

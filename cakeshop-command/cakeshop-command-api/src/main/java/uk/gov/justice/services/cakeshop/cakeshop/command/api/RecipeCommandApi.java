@@ -22,41 +22,41 @@ public class RecipeCommandApi {
     @Inject
     Logger logger;
 
-    @Handles("example.add-recipe")
+    @Handles("cakeshop.add-recipe")
     public void addRecipe(final JsonEnvelope envelope) {
         sender.send(
                 envelop(envelope.payloadAsJsonObject())
-                        .withName("example.command.add-recipe")
+                        .withName("cakeshop.command.add-recipe")
                         .withMetadataFrom(envelope));
     }
 
-    @Handles("example.add-recipe-v2")
+    @Handles("cakeshop.add-recipe-v2")
     @FeatureControl("recipes-have-allergens-specified")
     public void addRecipeWithAllergenSupport(final JsonEnvelope envelope) {
         logger.warn("Call to in progress method. Feature 'recipes-have-allergens-specified' is enabled");
     }
 
-    @Handles("example.rename-recipe")
+    @Handles("cakeshop.rename-recipe")
     public void renameRecipe(final JsonEnvelope envelope) {
         sender.send(
                 envelop(envelope.payloadAsJsonObject())
-                        .withName("example.command.rename-recipe")
+                        .withName("cakeshop.command.rename-recipe")
                         .withMetadataFrom(envelope));
     }
 
-    @Handles("example.remove-recipe")
+    @Handles("cakeshop.remove-recipe")
     public void removeRecipe(final JsonEnvelope envelope) {
         sender.send(
                 envelop(envelope.payloadAsJsonObject())
-                        .withName("example.command.remove-recipe")
+                        .withName("cakeshop.command.remove-recipe")
                         .withMetadataFrom(envelope));
     }
 
-    @Handles("example.upload-photograph")
+    @Handles("cakeshop.upload-photograph")
     public void uploadPhotograph(final JsonEnvelope envelope) {
         sender.send(
                 envelop(envelope.payloadAsJsonObject())
-                        .withName("example.command.upload-photograph")
+                        .withName("cakeshop.command.upload-photograph")
                         .withMetadataFrom(envelope));
     }
 }

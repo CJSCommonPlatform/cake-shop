@@ -12,39 +12,39 @@ protocols: [ HTTP, HTTPS ]
     description: |
         ...
         (mapping):
-            requestType: application/vnd.example.add-recipe+json
-            name: example.add-recipe
+            requestType: application/vnd.cakeshop.add-recipe+json
+            name: cakeshop.add-recipe
         (mapping):
-            requestType: application/vnd.example.add-recipe-v2+json
-            name: example.add-recipe-v2
+            requestType: application/vnd.cakeshop.add-recipe-v2+json
+            name: cakeshop.add-recipe-v2
         (mapping):
-            requestType: application/vnd.example.remove-recipe+json
-            name: example.remove-recipe
+            requestType: application/vnd.cakeshop.remove-recipe+json
+            name: cakeshop.remove-recipe
         ...
 
     body:
-        application/vnd.example.add-recipe+json:
-            schema: !include json/schema/example.add-recipe.json
-            example: !include json/add-recipe.json
+        application/vnd.cakeshop.add-recipe+json:
+            schema: !include json/schema/cakeshop.add-recipe.json
+            cakeshop: !include json/add-recipe.json
 
-        application/vnd.example.add-recipe-v2+json:
-            schema: !include json/schema/example.add-recipe.json
-            example: !include json/add-recipe.json
+        application/vnd.cakeshop.add-recipe-v2+json:
+            schema: !include json/schema/cakeshop.add-recipe.json
+            cakeshop: !include json/add-recipe.json
 
-        application/vnd.example.remove-recipe+json: !!null
+        application/vnd.cakeshop.remove-recipe+json: !!null
 
   put:
     description: |
         ...
         (mapping):
-            requestType: application/vnd.example.rename-recipe+json
-            name: example.rename-recipe
+            requestType: application/vnd.cakeshop.rename-recipe+json
+            name: cakeshop.rename-recipe
         ...
 
     body:
-        application/vnd.example.rename-recipe+json:
-            schema: !include json/schema/example.rename-recipe.json
-            example: !include json/rename-recipe.json
+        application/vnd.cakeshop.rename-recipe+json:
+            schema: !include json/schema/cakeshop.rename-recipe.json
+            cakeshop: !include json/rename-recipe.json
 
 
 /recipes/{recipeId}/cakes/{cakeId}:
@@ -54,19 +54,19 @@ protocols: [ HTTP, HTTPS ]
     description: |
         ...
         (mapping):
-            requestType: application/vnd.example.make-cake+json
-            name: example.make-cake
+            requestType: application/vnd.cakeshop.make-cake+json
+            name: cakeshop.make-cake
         ...
     body:
-        application/vnd.example.make-cake+json:
-            schema: !include json/schema/example.make-cake.json
-            example: !include json/make-cake.json
+        application/vnd.cakeshop.make-cake+json:
+            schema: !include json/schema/cakeshop.make-cake.json
+            cakeshop: !include json/make-cake.json
     responses:
       202:
         body:
-          application/vnd.example.make-cake-status+json:
-            schema: !include json/schema/example.make-cake-status.json
-            example: !include json/make-cake-status.json
+          application/vnd.cakeshop.make-cake-status+json:
+            schema: !include json/schema/cakeshop.make-cake-status.json
+            cakeshop: !include json/make-cake-status.json
 
 /orders/{orderId}:
   description: |
@@ -75,13 +75,13 @@ protocols: [ HTTP, HTTPS ]
     description: |
         ...
         (mapping):
-            requestType: application/vnd.example.order-cake+json
-            name: example.order-cake
+            requestType: application/vnd.cakeshop.order-cake+json
+            name: cakeshop.order-cake
         ...
     body:
-        application/vnd.example.order-cake+json:
-            schema: !include json/schema/example.order-cake.json
-            example: !include json/order-cake.json
+        application/vnd.cakeshop.order-cake+json:
+            schema: !include json/schema/cakeshop.order-cake.json
+            cakeshop: !include json/order-cake.json
 
 /recipes/{recipeId}/photograph:
   post:
@@ -90,7 +90,7 @@ protocols: [ HTTP, HTTPS ]
       ...
       (mapping):
           requestType: multipart/form-data
-          name: example.upload-photograph
+          name: cakeshop.upload-photograph
       ...
     body:
      multipart/form-data:

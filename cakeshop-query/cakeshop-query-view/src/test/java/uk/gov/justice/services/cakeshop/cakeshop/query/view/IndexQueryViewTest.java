@@ -36,7 +36,7 @@ public class IndexQueryViewTest {
     @Test
     public void shouldHaveCorrectHandlerMethod() throws Exception {
         assertThat(indexQueryView, isHandler(QUERY_VIEW)
-                .with(method("findIndex").thatHandles("example.get-index")));
+                .with(method("findIndex").thatHandles("cakeshop.get-index")));
     }
 
     @Test

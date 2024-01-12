@@ -43,7 +43,7 @@ public class RecipeEventListener {
     @Inject
     IngredientRepository ingredientRepository;
 
-    @Handles("example.events.recipe-added")
+    @Handles("cakeshop.events.recipe-added")
     public void recipeAdded(final JsonEnvelope event) {
 
         final String recipeId = event.payloadAsJsonObject().getString(FIELD_RECIPE_ID);
@@ -66,7 +66,7 @@ public class RecipeEventListener {
         }
     }
 
-    @Handles("example.events.recipe-renamed")
+    @Handles("cakeshop.events.recipe-renamed")
     public void recipeRenamed(final JsonEnvelope event) {
 
         final String recipeId = event.payloadAsJsonObject().getString(FIELD_RECIPE_ID);
@@ -78,7 +78,7 @@ public class RecipeEventListener {
         recipeRepository.save(recipe);
     }
 
-    @Handles("example.events.recipe-removed")
+    @Handles("cakeshop.events.recipe-removed")
     public void recipeRemoved(final JsonEnvelope event) {
         final String recipeId = event.payloadAsJsonObject().getString(FIELD_RECIPE_ID);
         LOGGER.trace("=============> Inside remove-recipe Event Listener about to find recipeId: " + recipeId);
@@ -87,7 +87,7 @@ public class RecipeEventListener {
         recipeRepository.remove(recipeFound);
     }
 
-    @Handles("example.events.recipe-photograph-added")
+    @Handles("cakeshop.events.recipe-photograph-added")
     public void recipePhotographAdded(final JsonEnvelope event) {
 
         final String recipeId = event.payloadAsJsonObject().getString(FIELD_RECIPE_ID);

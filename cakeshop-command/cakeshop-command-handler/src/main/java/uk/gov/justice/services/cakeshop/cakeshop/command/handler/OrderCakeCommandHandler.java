@@ -26,7 +26,7 @@ public class OrderCakeCommandHandler {
     @Inject
     EventFactory eventFactory;
 
-    @Handles("example.command.order-cake")
+    @Handles("cakeshop.command.order-cake")
     public void handle(final JsonEnvelope command) throws EventStreamException {
 
         final UUID streamId = UUID.fromString(command.payloadAsJsonObject().getString(FIELD_STREAM_ID));

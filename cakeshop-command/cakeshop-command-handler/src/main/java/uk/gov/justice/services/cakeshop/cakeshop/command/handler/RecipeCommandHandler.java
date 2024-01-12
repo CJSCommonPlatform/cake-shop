@@ -43,7 +43,7 @@ public class RecipeCommandHandler {
     @Inject
     AggregateService aggregateService;
 
-    @Handles("example.command.add-recipe")
+    @Handles("cakeshop.command.add-recipe")
     public void addRecipe(final JsonEnvelope command) throws EventStreamException {
         LOGGER.trace("=============> Inside add-recipe Command Handler. RecipeId: " + command.payloadAsJsonObject().getString(FIELD_RECIPE_ID));
 
@@ -60,7 +60,7 @@ public class RecipeCommandHandler {
                         .map(toEnvelopeWithMetadataFrom(command)));
     }
 
-    @Handles("example.command.rename-recipe")
+    @Handles("cakeshop.command.rename-recipe")
     public void renameRecipe(final Envelope<RenameRecipe> command) throws EventStreamException {
         LOGGER.trace("=============> Inside rename-recipe Command Handler");
 
@@ -78,7 +78,7 @@ public class RecipeCommandHandler {
 
     }
 
-    @Handles("example.command.remove-recipe")
+    @Handles("cakeshop.command.remove-recipe")
     public void removeRecipe(final JsonEnvelope command) throws EventStreamException {
         LOGGER.trace("=============> Inside remove-recipe Command Handler. RecipeId: " + command.payloadAsJsonObject().getString(FIELD_RECIPE_ID));
 
@@ -92,7 +92,7 @@ public class RecipeCommandHandler {
                         .map(toEnvelopeWithMetadataFrom(command)));
     }
 
-    @Handles("example.command.upload-photograph")
+    @Handles("cakeshop.command.upload-photograph")
     public void uploadPhotograph(final JsonEnvelope command) throws EventStreamException {
         LOGGER.trace("=============> Inside upload-photograph Command Handler. RecipeId: " + command.payloadAsJsonObject().getString(FIELD_RECIPE_ID));
 

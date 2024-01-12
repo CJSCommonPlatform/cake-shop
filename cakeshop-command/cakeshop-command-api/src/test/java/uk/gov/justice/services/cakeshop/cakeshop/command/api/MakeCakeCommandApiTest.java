@@ -42,7 +42,7 @@ public class MakeCakeCommandApiTest {
     public void shouldHandleMakeCakeCommand() throws Exception {
         assertThat(MakeCakeCommandApi.class, isHandlerClass(COMMAND_API)
                 .with(method("handle")
-                        .thatHandles("example.make-cake")));
+                        .thatHandles("cakeshop.make-cake")));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class MakeCakeCommandApiTest {
         commandApi.sender = sender;
 
         final JsonEnvelope envelope = envelope()
-                .with(metadataWithDefaults().withName("example.make-cake"))
+                .with(metadataWithDefaults().withName("cakeshop.make-cake"))
                 .withPayloadOf("Field", "Value").build();
 
         final Envelope<JsonObject> jsonObjectEnvelope = commandApi.handle(envelope);
@@ -59,6 +59,6 @@ public class MakeCakeCommandApiTest {
         assertThat(jsonObjectEnvelope.payload().getString("status"), equalTo("Making Cake"));
 
         verify(sender).send(envelopeCaptor.capture());
-        assertThat(envelopeCaptor.getValue().metadata().name(), is("example.command.make-cake"));
+        assertThat(envelopeCaptor.getValue().metadata().name(), is("cakeshop.command.make-cake"));
     }
 }

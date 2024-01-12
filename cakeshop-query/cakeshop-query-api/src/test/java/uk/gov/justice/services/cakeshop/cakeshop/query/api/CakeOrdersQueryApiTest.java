@@ -14,7 +14,7 @@ public class CakeOrdersQueryApiTest {
     public void shouldHandleCakeOrderQuery() throws Exception {
         assertThat(CakeOrdersQueryApi.class, isHandlerClass(QUERY_API)
                 .with(method("getOrder")
-                        .thatHandles("example.get-order")
+                        .thatHandles("cakeshop.get-order")
                         .withRequesterPassThrough()));
     }
 }

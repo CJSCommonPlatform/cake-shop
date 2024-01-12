@@ -15,7 +15,7 @@ public class CakeMadeEventProcessor {
     @Inject
     Sender sender;
 
-    @Handles("example.events.cake-made")
+    @Handles("cakeshop.events.cake-made")
     public void handle(final JsonEnvelope event) {
         sender.send(event);
     }

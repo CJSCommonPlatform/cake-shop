@@ -36,7 +36,7 @@ public class CakeOrdersQueryViewTest {
     @Test
     public void shouldHaveCorrectHandlerMethod() throws Exception {
         assertThat(queryView, isHandler(QUERY_VIEW)
-                .with(method("findOrder").thatHandles("example.get-order")));
+                .with(method("findOrder").thatHandles("cakeshop.get-order")));
     }
 
     @Test
