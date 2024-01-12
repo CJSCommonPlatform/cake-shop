@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>uk.gov.justice.services.example</groupId>
-    <artifactId>cake-shop</artifactId>
+    <artifactId>cake-shop-parent</artifactId>
     <version>17.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -25,17 +25,17 @@
     </scm>
 
     <modules>
-        <module>example-domain</module>
-        <module>example-command</module>
-        <module>example-event</module>
-        <module>example-query</module>
-        <module>example-viewstore</module>
-        <module>example-integration-test</module>
-        <module>example-service</module>
-        <module>example-event-source</module>
-        <module>example-custom</module>
-        <module>example-feature-control</module>
-        <module>example-healthcheck</module>
+        <module>cakeshop-domain</module>
+        <module>cakeshop-command</module>
+        <module>cakeshop-event</module>
+        <module>cakeshop-query</module>
+        <module>cakeshop-viewstore</module>
+        <module>cakeshop-integration-test</module>
+        <module>cakeshop-service</module>
+        <module>cakeshop-event-source</module>
+        <module>cakeshop-custom</module>
+        <module>cakeshop-feature-control</module>
+        <module>cakeshop-healthcheck</module>
     </modules>
 
     <properties>

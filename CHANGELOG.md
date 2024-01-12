@@ -92,7 +92,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Update json-schema-catalog to 1.7.4
 
 ### Changed
-- Use a single event-source.yaml in example-event-source module
+- Use a single event-source.yaml in cakeshop-event-source module
 
 ## [2.0.0-M3] - 2019-05-09
 
