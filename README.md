@@ -2,3 +2,6 @@
 
 
 # cake-shop
+
+#How to deployment?
+
