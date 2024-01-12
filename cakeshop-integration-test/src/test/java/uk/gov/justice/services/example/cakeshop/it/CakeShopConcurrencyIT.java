@@ -23,7 +23,6 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventReposito
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.EventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants;
 import uk.gov.justice.services.test.utils.core.http.HttpResponsePoller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 

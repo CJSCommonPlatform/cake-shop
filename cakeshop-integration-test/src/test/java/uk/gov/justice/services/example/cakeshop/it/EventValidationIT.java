@@ -9,14 +9,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.example.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
-import static uk.gov.justice.services.example.cakeshop.it.helpers.SystemPropertyFinder.findWildflyManagementPort;
 import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
 import static uk.gov.justice.services.example.cakeshop.it.helpers.TestConstants.DB_CONTEXT_NAME;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
-import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
-import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
 import uk.gov.justice.services.eventstore.management.commands.ValidatePublishedEventsCommand;
