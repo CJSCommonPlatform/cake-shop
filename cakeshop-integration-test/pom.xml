@@ -366,7 +366,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>uk.gov.justice.services.example</groupId>
+                                    <groupId>uk.gov.justice.services.cakeshop</groupId>
                                     <artifactId>cakeshop-service</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
