@@ -8,7 +8,7 @@ import uk.gov.justice.services.core.interceptor.InterceptorChainEntryProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExampleQueryApiInterceptorChainProvider implements InterceptorChainEntryProvider {
+public class CakshopQueryApiInterceptorChainProvider implements InterceptorChainEntryProvider {
 
     private final List<InterceptorChainEntry> interceptorChainEntries = new ArrayList<>();
 

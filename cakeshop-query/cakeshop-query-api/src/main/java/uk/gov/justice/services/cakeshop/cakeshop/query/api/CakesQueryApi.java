@@ -17,7 +17,7 @@ public class CakesQueryApi {
     @Inject
     Requester requester;
 
-    @Handles("example.search-cakes")
+    @Handles("cakeshop.search-cakes")
     public Envelope<CakesView> cakes(final Envelope<SearchCake> query) {
         return requester.request(query, CakesView.class);
     }

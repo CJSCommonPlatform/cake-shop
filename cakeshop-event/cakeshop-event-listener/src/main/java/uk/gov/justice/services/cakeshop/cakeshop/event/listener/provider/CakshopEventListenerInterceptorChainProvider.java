@@ -7,11 +7,11 @@ import uk.gov.justice.services.event.source.subscriptions.interceptors.Subscript
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExampleEventListenerInterceptorChainProvider implements InterceptorChainEntryProvider {
+public class CakshopEventListenerInterceptorChainProvider implements InterceptorChainEntryProvider {
 
     private final List<InterceptorChainEntry> interceptorChainEntries = new ArrayList<InterceptorChainEntry>();
 
-    public ExampleEventListenerInterceptorChainProvider() {
+    public CakshopEventListenerInterceptorChainProvider() {
         interceptorChainEntries.add(new InterceptorChainEntry(1000, SubscriptionEventInterceptor.class));
     }
 

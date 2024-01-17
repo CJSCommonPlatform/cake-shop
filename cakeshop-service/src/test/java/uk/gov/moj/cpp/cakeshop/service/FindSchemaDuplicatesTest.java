@@ -1,4 +1,4 @@
-package uk.gov.moj.cpp.example.service;
+package uk.gov.moj.cpp.cakeshop.service;
 
 import uk.gov.justice.services.test.utils.core.schema.SchemaDuplicateTestHelper;
 

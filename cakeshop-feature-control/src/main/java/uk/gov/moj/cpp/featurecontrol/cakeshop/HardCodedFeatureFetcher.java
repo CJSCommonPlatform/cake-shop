@@ -1,4 +1,4 @@
-package uk.gov.moj.cpp.featurecontrol.example;
+package uk.gov.moj.cpp.featurecontrol.cakeshop;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;

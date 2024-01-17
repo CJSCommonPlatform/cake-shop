@@ -9,12 +9,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class ExampleEventListenerInterceptorChainProviderTest {
+public class CakshopEventListenerInterceptorChainProviderTest {
 
     @Test
     public void shouldCreateInterceptorChainEntriesWithSubscriptionEventInterceptor() {
 
-        final List<InterceptorChainEntry> interceptorChainEntries = new ExampleEventListenerInterceptorChainProvider().interceptorChainTypes();
+        final List<InterceptorChainEntry> interceptorChainEntries = new CakshopEventListenerInterceptorChainProvider().interceptorChainTypes();
 
         assertThat(interceptorChainEntries.size(), is(1));
 
@@ -25,6 +25,6 @@ public class ExampleEventListenerInterceptorChainProviderTest {
 
     @Test
     public void shouldReturnComponentName() {
-        assertThat(new ExampleEventListenerInterceptorChainProvider().component(), is("EVENT_LISTENER"));
+        assertThat(new CakshopEventListenerInterceptorChainProvider().component(), is("EVENT_LISTENER"));
     }
 }

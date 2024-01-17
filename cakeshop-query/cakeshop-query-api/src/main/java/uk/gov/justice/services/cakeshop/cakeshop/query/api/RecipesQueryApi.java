@@ -18,7 +18,7 @@ public class RecipesQueryApi {
     @Inject
     Requester requester;
 
-    @Handles("example.search-recipes")
+    @Handles("cakeshop.search-recipes")
     public JsonEnvelope searchRecipes(final JsonEnvelope query) {
         return requester.request(query);
     }

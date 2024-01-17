@@ -10,11 +10,11 @@ import uk.gov.justice.services.core.interceptor.InterceptorChainEntryProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExampleCommandHandlerInterceptorChainProvider implements InterceptorChainEntryProvider {
+public class CakshopCommandHandlerInterceptorChainProvider implements InterceptorChainEntryProvider {
 
     private final List<InterceptorChainEntry> interceptorChainEntries = new ArrayList<>();
 
-    public ExampleCommandHandlerInterceptorChainProvider() {
+    public CakshopCommandHandlerInterceptorChainProvider() {
         interceptorChainEntries.add(new InterceptorChainEntry(MAX_VALUE, RetryInterceptor.class));
     }
 

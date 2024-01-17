@@ -10,11 +10,11 @@ import uk.gov.justice.services.core.interceptor.InterceptorChainEntryProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExampleCommandApiInterceptorChainProvider implements InterceptorChainEntryProvider {
+public class CakshopCommandApiInterceptorChainProvider implements InterceptorChainEntryProvider {
 
     final List<InterceptorChainEntry> interceptorChainEntries = new ArrayList<>();
 
-    public ExampleCommandApiInterceptorChainProvider() {
+    public CakshopCommandApiInterceptorChainProvider() {
         interceptorChainEntries.add(new InterceptorChainEntry(7000, InputStreamFileInterceptor.class));
         interceptorChainEntries.add(new InterceptorChainEntry(8000, FeatureControlInterceptor.class));
     }
