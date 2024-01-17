@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <name>Cakeshop Application</name>
-    <description>Example application for Microservice Framework</description>
+    <description>cakeshop application for Microservice Framework</description>
 
     <scm>
         <connection>${cpp.scm.connection}</connection>
@@ -25,17 +25,17 @@
     </scm>
 
     <modules>
-        <module>example-domain</module>
-        <module>example-command</module>
-        <module>example-event</module>
-        <module>example-query</module>
-        <module>example-viewstore</module>
-        <module>example-integration-test</module>
-        <module>example-service</module>
-        <module>example-event-source</module>
-        <module>example-custom</module>
-        <module>example-feature-control</module>
-        <module>example-healthcheck</module>
+        <module>cakeshop-domain</module>
+        <module>cakeshop-command</module>
+        <module>cakeshop-event</module>
+        <module>cakeshop-query</module>
+        <module>cakeshop-viewstore</module>
+        <module>cakeshop-integration-test</module>
+        <module>cakeshop-service</module>
+        <module>cakeshop-event-source</module>
+        <module>cakeshop-custom</module>
+        <module>cakeshop-feature-control</module>
+        <module>cakeshop-healthcheck</module>
     </modules>
 
     <properties>
@@ -271,7 +271,7 @@
                                 <annotation>uk.gov.justice.domain.annotation.Event</annotation>
                             </annotations>
                             <validatorProperties>
-                                <serviceName>example</serviceName>
+                                <serviceName>cakeshop</serviceName>
                             </validatorProperties>
                         </configuration>
                     </execution>
