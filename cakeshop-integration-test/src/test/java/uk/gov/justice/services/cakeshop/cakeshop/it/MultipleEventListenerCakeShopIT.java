@@ -116,7 +116,7 @@ public class MultipleEventListenerCakeShopIT {
 
                 final TextMessage message = (TextMessage) publicTopicConsumer.receive();
                 with(message.getText())
-                        .assertThat("$._metadata.name", equalTo("example.events.recipe-added"))
+                        .assertThat("$._metadata.name", equalTo("cakeshop.events.recipe-added"))
                         .assertThat("$._metadata.stream.id", equalTo(recipeId))
                         .assertThat("$.recipeId", equalTo(recipeId))
                         .assertThat("$.name", equalTo("Apple pie"));

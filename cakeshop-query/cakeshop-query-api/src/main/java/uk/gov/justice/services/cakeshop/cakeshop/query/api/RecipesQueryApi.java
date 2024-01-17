@@ -23,17 +23,17 @@ public class RecipesQueryApi {
         return requester.request(query);
     }
 
-    @Handles("example.get-recipe")
+    @Handles("cakeshop.get-recipe")
     public JsonEnvelope getRecipe(final JsonEnvelope query) {
         return requester.request(query);
     }
 
-    @Handles("example.query-recipes")
+    @Handles("cakeshop.query-recipes")
     public Envelope<RecipesView> queryRecipes(final Envelope<SearchRecipes> query) {
         return requester.request(query, RecipesView.class);
     }
 
-    @Handles("example.get-recipe-photograph")
+    @Handles("cakeshop.get-recipe-photograph")
     public JsonEnvelope getRecipePhotograph(final JsonEnvelope query) {
         return requester.request(query);
     }

@@ -47,8 +47,8 @@ public class RecipesQueryViewTest {
     public void shouldHaveCorrectHandlerMethod() throws Exception {
         assertThat(queryView, isHandler(QUERY_VIEW)
                 .with(allOf(
-                        method("findRecipe").thatHandles("example.get-recipe"),
-                        method("listRecipes").thatHandles("example.search-recipes")))
+                        method("findRecipe").thatHandles("cakeshop.get-recipe"),
+                        method("listRecipes").thatHandles("cakeshop.search-recipes")))
         );
     }
 
@@ -187,7 +187,7 @@ public class RecipesQueryViewTest {
 
         final Envelope<RecipesView> response = queryView.listRecipes(envelope);
 
-        assertThat(response.metadata().name(), is("example.search-recipes"));
+        assertThat(response.metadata().name(), is("cakeshop.search-recipes"));
 
     }
 
@@ -229,7 +229,7 @@ public class RecipesQueryViewTest {
 
         final Envelope<PhotoView> response = queryView.findRecipePhoto(envelope);
 
-        assertThat(response.metadata().name(), is("example.get-recipe-photograph"));
+        assertThat(response.metadata().name(), is("cakeshop.get-recipe-photograph"));
         assertThat(response.payload().getFileId(), is(fileId));
     }
 
@@ -247,7 +247,7 @@ public class RecipesQueryViewTest {
                         .build());
 
         final Envelope<PhotoView> response = queryView.findRecipePhoto(envelope);
-        assertThat(response.metadata().name(), is("example.get-recipe-photograph"));
+        assertThat(response.metadata().name(), is("cakeshop.get-recipe-photograph"));
         assertThat(response.payload(), is(nullValue()));
     }
 }

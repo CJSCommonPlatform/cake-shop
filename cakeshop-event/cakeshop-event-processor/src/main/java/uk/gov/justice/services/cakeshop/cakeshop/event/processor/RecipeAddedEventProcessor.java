@@ -15,7 +15,7 @@ public class RecipeAddedEventProcessor {
     @Inject
     Sender sender;
 
-    @Handles("example.events.recipe-added")
+    @Handles("cakeshop.events.recipe-added")
     public void recipeAdded(final JsonEnvelope event) {
         sender.send(event);
     }

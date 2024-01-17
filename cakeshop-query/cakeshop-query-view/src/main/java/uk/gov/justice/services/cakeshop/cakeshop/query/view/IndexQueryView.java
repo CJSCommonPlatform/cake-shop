@@ -18,12 +18,12 @@ public class IndexQueryView {
     @Inject
     private IndexService indexService;
 
-    @Handles("example.get-index")
+    @Handles("cakeshop.get-index")
     public Envelope<IndexView> findIndex(final Envelope<SearchIndex> query) {
         final String indexId = query.payload().getIndexId().toString();
 
         return envelop(indexService.findIndexBy(indexId))
-                .withName("example.get-index")
+                .withName("cakeshop.get-index")
                 .withMetadataFrom(query);
     }
 }

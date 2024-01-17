@@ -18,12 +18,12 @@ public class CakeOrdersQueryView {
     @Inject
     CakeOrderService service;
 
-    @Handles("example.get-order")
+    @Handles("cakeshop.get-order")
     public Envelope<CakeOrderView> findOrder(final Envelope<SearchCakeOrder> query) {
         final String orderId = query.payload().getOrderId().toString();
 
         return envelop(service.findOrder(orderId))
-                .withName("example.get-order")
+                .withName("cakeshop.get-order")
                 .withMetadataFrom(query);
     }
 }

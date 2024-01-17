@@ -48,46 +48,46 @@ public class RecipeCommandApiTest {
     public void shouldHandleRecipeCommands() throws Exception {
         assertThat(RecipeCommandApi.class, isHandlerClass(COMMAND_API)
                 .with(method("addRecipe")
-                        .thatHandles("example.add-recipe"))
+                        .thatHandles("cakeshop.add-recipe"))
                 .with(method("renameRecipe")
-                        .thatHandles("example.rename-recipe"))
+                        .thatHandles("cakeshop.rename-recipe"))
                 .with(method("removeRecipe")
-                        .thatHandles("example.remove-recipe"))
+                        .thatHandles("cakeshop.remove-recipe"))
                 .with(method("uploadPhotograph")
-                        .thatHandles("example.upload-photograph"))
+                        .thatHandles("cakeshop.upload-photograph"))
         );
     }
 
     @Test
     public void shouldHandleAddRecipeRequest() {
-        commandApi.addRecipe(buildEnvelopeWith("example.add-recipe"));
+        commandApi.addRecipe(buildEnvelopeWith("cakeshop.add-recipe"));
 
         verify(sender).send(envelopeCaptor.capture());
-        assertThat(envelopeCaptor.getValue().metadata().name(), is("example.command.add-recipe"));
+        assertThat(envelopeCaptor.getValue().metadata().name(), is("cakeshop.command.add-recipe"));
     }
 
     @Test
     public void shouldHandleRenameRecipeRequest() {
-        commandApi.renameRecipe(buildEnvelopeWith("example.rename-recipe"));
+        commandApi.renameRecipe(buildEnvelopeWith("cakeshop.rename-recipe"));
 
         verify(sender).send(envelopeCaptor.capture());
-        assertThat(envelopeCaptor.getValue().metadata().name(), is("example.command.rename-recipe"));
+        assertThat(envelopeCaptor.getValue().metadata().name(), is("cakeshop.command.rename-recipe"));
     }
 
     @Test
     public void shouldHandleRemoveRecipeRequest() {
-        commandApi.removeRecipe(buildEnvelopeWith("example.remove-recipe"));
+        commandApi.removeRecipe(buildEnvelopeWith("cakeshop.remove-recipe"));
 
         verify(sender).send(envelopeCaptor.capture());
-        assertThat(envelopeCaptor.getValue().metadata().name(), is("example.command.remove-recipe"));
+        assertThat(envelopeCaptor.getValue().metadata().name(), is("cakeshop.command.remove-recipe"));
     }
 
     @Test
     public void shouldHandleUploadPhotographRequest() {
-        commandApi.uploadPhotograph(buildEnvelopeWith("example.upload-photograpgh"));
+        commandApi.uploadPhotograph(buildEnvelopeWith("cakeshop.upload-photograpgh"));
 
         verify(sender).send(envelopeCaptor.capture());
-        assertThat(envelopeCaptor.getValue().metadata().name(), is("example.command.upload-photograph"));
+        assertThat(envelopeCaptor.getValue().metadata().name(), is("cakeshop.command.upload-photograph"));
     }
 
     @Test

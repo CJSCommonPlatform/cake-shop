@@ -19,17 +19,17 @@ public class MakeCakeCommandApi {
     @Inject
     Sender sender;
 
-    @Handles("example.make-cake")
+    @Handles("cakeshop.make-cake")
     public Envelope<JsonObject> handle(final JsonEnvelope envelope) {
         sender.send(envelop(envelope.payloadAsJsonObject())
-                .withName("example.command.make-cake")
+                .withName("cakeshop.command.make-cake")
                 .withMetadataFrom(envelope));
 
         return envelop(
                 createObjectBuilder()
                         .add("status", "Making Cake")
                         .build())
-                .withName("example.command.make-cake-status")
+                .withName("cakeshop.command.make-cake-status")
                 .withMetadataFrom(envelope);
     }
 }

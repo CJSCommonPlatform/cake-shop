@@ -14,7 +14,7 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 @CustomServiceComponent("CUSTOM_API")
 public class OvenCustomApi {
 
-    @Handles("example.ovens-status")
+    @Handles("cakeshop.ovens-status")
     public Envelope<OvensStatus> status(final JsonEnvelope query) {
 
         final OvensStatus status = new OvensStatus(asList(
@@ -22,7 +22,7 @@ public class OvenCustomApi {
                 new OvenStatus(randomUUID(), "Large Oven", 0, false)));
 
         return envelop(status)
-                .withName("example.ovens-status")
+                .withName("cakeshop.ovens-status")
                 .withMetadataFrom(query);
     }
 }

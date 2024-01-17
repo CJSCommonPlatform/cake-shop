@@ -135,7 +135,7 @@
         <subsystem xmlns="urn:jboss:domain:core-management:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:7.0">
             <datasources>
-                <datasource jndi-name="java:/app/example-service/DS.eventstore" pool-name="DS.example.eventstore" enabled="true" use-java-context="true" jta="true">
+                <datasource jndi-name="java:/app/cakeshop-service/DS.eventstore" pool-name="DS.cakeshop.eventstore" enabled="true" use-java-context="true" jta="true">
                     <connection-url>jdbc:postgresql://localhost:5432/frameworkeventstore</connection-url>
                     <driver>postgres</driver>
                     <pool>
@@ -151,7 +151,7 @@
                         <check-valid-connection-sql>select 1</check-valid-connection-sql>
                     </validation>
                 </datasource>
-                <datasource jndi-name="java:/DS.example" pool-name="DS.example" enabled="true" use-java-context="true" jta="true">
+                <datasource jndi-name="java:/DS.cakeshop" pool-name="DS.cakeshop" enabled="true" use-java-context="true" jta="true">
                     <connection-url>jdbc:postgresql://localhost:5432/frameworkviewstore</connection-url>
                     <driver>postgres</driver>
                     <pool>
@@ -167,7 +167,7 @@
                         <check-valid-connection-sql>select 1</check-valid-connection-sql>
                     </validation>
                 </datasource>
-                <datasource jndi-name="java:/app/example/DS.system" pool-name="DS.example.system" enabled="true" use-java-context="true">
+                <datasource jndi-name="java:/app/cakeshop/DS.system" pool-name="DS.cakeshop.system" enabled="true" use-java-context="true">
                     <connection-url>jdbc:postgresql://localhost:5432/frameworksystem</connection-url>
                     <driver>postgres</driver>
                     <pool>
@@ -234,7 +234,7 @@
                     <managed-scheduled-executor-service name="default" jndi-name="java:jboss/ee/concurrency/scheduler/default" context-service="default" hung-task-termination-period="0" hung-task-threshold="60000" keepalive-time="3000"/>
                 </managed-scheduled-executor-services>
             </concurrent>
-            <default-bindings context-service="java:jboss/ee/concurrency/context/default" datasource="java:/app/example-service/DS.eventstore" jms-connection-factory="java:jboss/DefaultJMSConnectionFactory" managed-executor-service="java:jboss/ee/concurrency/executor/default" managed-scheduled-executor-service="java:jboss/ee/concurrency/scheduler/default" managed-thread-factory="java:jboss/ee/concurrency/factory/default"/>
+            <default-bindings context-service="java:jboss/ee/concurrency/context/default" datasource="java:/app/cakeshop-service/DS.eventstore" jms-connection-factory="java:jboss/DefaultJMSConnectionFactory" managed-executor-service="java:jboss/ee/concurrency/executor/default" managed-scheduled-executor-service="java:jboss/ee/concurrency/scheduler/default" managed-thread-factory="java:jboss/ee/concurrency/factory/default"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee-security:1.0"/>
         <subsystem xmlns="urn:jboss:domain:ejb3:9.0">
@@ -525,9 +525,9 @@
                 <jms-queue name="ExpiryQueue" entries="java:/jms/queue/ExpiryQueue"/>
                 <jms-queue name="DLQ" entries="java:jboss/exported/jms/queue/DLQ"/>
                 <jms-queue name="testQueue" entries="java:/jms/queue/testQueue"/>
-                <jms-queue name="example.controller.command" entries="example.controller.command"/>
-                <jms-queue name="example.handler.command" entries="example.handler.command"/>
-                <jms-topic name="example.event" entries="example.event"/>
+                <jms-queue name="cakeshop.controller.command" entries="cakeshop.controller.command"/>
+                <jms-queue name="cakeshop.handler.command" entries="cakeshop.handler.command"/>
+                <jms-topic name="cakeshop.event" entries="cakeshop.event"/>
                 <jms-topic name="public.event" entries="public.event"/>
                 <connection-factory name="InVmConnectionFactory" entries="java:/ConnectionFactory" connectors="in-vm"/>
                 <connection-factory name="RemoteConnectionFactory" entries="java:jboss/exported/jms/RemoteConnectionFactory" connectors="http-connector"/>
@@ -544,8 +544,8 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:naming:2.0">
             <bindings>
-                <simple name="java:/app/example-service/audit.blacklist" value="example.*" type="java.lang.String"/>
-                <simple name="java:/app/example-service/default.strategy.snapshot.threshold" value="3" type="java.lang.String"/>
+                <simple name="java:/app/cakeshop-service/audit.blacklist" value="cakeshop.*" type="java.lang.String"/>
+                <simple name="java:/app/cakeshop-service/default.strategy.snapshot.threshold" value="3" type="java.lang.String"/>
                 <simple name="java:global/envelope.validation.exception.handler" value="uk.gov.justice.services.core.envelope.RethrowingValidationExceptionHandler" type="java.lang.String"/>
                 <simple name="java:global/pre.publish.timer.max.runtime.milliseconds" value="450" type="java.lang.String"/>
                 <simple name="java:global/event.dequer.timer.max.runtime.milliseconds" value="450" type="java.lang.String"/>
@@ -584,7 +584,7 @@
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
                     <!-- In actual contexts this redirection is managed by haproxy configuration in development setup -->
-                    <filter-ref name="example-service" predicate="path-prefix('/example-command-api/') or path-prefix('/example-command-controller/') or path-prefix('/example-command-handler/') or path-prefix('/example-event-api/') or path-prefix('/example-event-listener/') or path-prefix('/example-event-indexer/') or path-prefix('/example-event-processor/') or path-prefix('/example-query-api/') or path-prefix('/example-query-controller/') or path-prefix('/example-query-view/') or path-prefix('/example-custom-api/')"/>
+                    <filter-ref name="cakeshop-service" predicate="path-prefix('/cakeshop-command-api/') or path-prefix('/cakeshop-command-controller/') or path-prefix('/cakeshop-command-handler/') or path-prefix('/cakeshop-event-api/') or path-prefix('/cakeshop-event-listener/') or path-prefix('/cakeshop-event-indexer/') or path-prefix('/cakeshop-event-processor/') or path-prefix('/cakeshop-query-api/') or path-prefix('/cakeshop-query-controller/') or path-prefix('/cakeshop-query-view/') or path-prefix('/cakeshop-custom-api/')"/>
                     <http-invoker http-authentication-factory="application-http-authentication"/>
                 </host>
             </server>
@@ -597,7 +597,7 @@
             </handlers>
 
             <filters>
-                <rewrite name="example-service" target="/example-service$${remaining}"/>
+                <rewrite name="cakeshop-service" target="/cakeshop-service$${remaining}"/>
             </filters>
             <application-security-domains>
                 <application-security-domain name="other" security-domain="ApplicationDomain"/>

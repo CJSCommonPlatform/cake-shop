@@ -30,13 +30,13 @@ public class OvenCustomApiTest {
     @Test
     public void shouldHandleOvenStatus() throws Exception {
         assertThat(OvenCustomApi.class, isCustomHandlerClass("CUSTOM_API")
-                .with(method("status").thatHandles("example.ovens-status")));
+                .with(method("status").thatHandles("cakeshop.ovens-status")));
     }
 
     @Test
     public void shouldReturnStatusOfAllOvens() throws Exception {
         final JsonEnvelope query = envelope().with(
-                metadataOf(randomUUID(), "example.ovens-status"))
+                metadataOf(randomUUID(), "cakeshop.ovens-status"))
                 .build();
 
         final Envelope<OvensStatus> status = ovenCustomApi.status(query);

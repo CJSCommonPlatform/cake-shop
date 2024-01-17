@@ -30,7 +30,7 @@ public class MakeCakeCommandHandler {
     @Inject
     AggregateService aggregateService;
 
-    @Handles("example.command.make-cake")
+    @Handles("cakeshop.command.make-cake")
     public void makeCake(final JsonEnvelope command) throws EventStreamException {
 
         final UUID recipeId = getUUID(command.payloadAsJsonObject(), FIELD_RECIPE_ID).get();

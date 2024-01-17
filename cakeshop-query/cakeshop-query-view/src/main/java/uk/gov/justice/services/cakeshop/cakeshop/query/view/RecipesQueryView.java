@@ -22,9 +22,9 @@ import javax.json.JsonObject;
 @ServiceComponent(Component.QUERY_VIEW)
 public class RecipesQueryView {
 
-    static final String NAME_RESPONSE_RECIPE = "example.get-recipe";
-    static final String NAME_RESPONSE_RECIPE_PHOTO = "example.get-recipe-photograph";
-    static final String NAME_RESPONSE_RECIPE_LIST = "example.search-recipes";
+    static final String NAME_RESPONSE_RECIPE = "cakeshop.get-recipe";
+    static final String NAME_RESPONSE_RECIPE_PHOTO = "cakeshop.get-recipe-photograph";
+    static final String NAME_RESPONSE_RECIPE_LIST = "cakeshop.search-recipes";
     private static final String FIELD_RECIPE_ID = "recipeId";
     private static final String FIELD_NAME = "name";
     private static final String PAGESIZE = "pagesize";
@@ -33,7 +33,7 @@ public class RecipesQueryView {
     @Inject
     RecipeService recipeService;
 
-    @Handles("example.get-recipe")
+    @Handles("cakeshop.get-recipe")
     public Envelope<RecipeView> findRecipe(final Envelope<JsonObject> query) {
         final RecipeView recipe = recipeService.findRecipe(query.payload().getString(FIELD_RECIPE_ID));
 
@@ -42,21 +42,21 @@ public class RecipesQueryView {
                 .withMetadataFrom(query);
     }
 
-    @Handles("example.search-recipes")
+    @Handles("cakeshop.search-recipes")
     public Envelope<RecipesView> listRecipes(final Envelope<JsonObject> query) {
         return envelop(fetchRecipes(query))
                 .withName(NAME_RESPONSE_RECIPE_LIST)
                 .withMetadataFrom(query);
     }
 
-    @Handles("example.query-recipes")
+    @Handles("cakeshop.query-recipes")
     public Envelope<RecipesView> queryRecipes(final Envelope<SearchRecipes> query) {
         return envelop(fetchRecipes(query.payload()))
                 .withName(NAME_RESPONSE_RECIPE_LIST)
                 .withMetadataFrom(query);
     }
 
-    @Handles("example.get-recipe-photograph")
+    @Handles("cakeshop.get-recipe-photograph")
     public Envelope<PhotoView> findRecipePhoto(final Envelope<JsonObject> query) {
         final PhotoView photo = recipeService.findRecipePhoto(query.payload().getString(FIELD_RECIPE_ID));
         return envelop(photo)

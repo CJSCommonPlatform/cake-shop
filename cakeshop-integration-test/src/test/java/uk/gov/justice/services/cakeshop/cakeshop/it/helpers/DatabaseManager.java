@@ -15,8 +15,8 @@ public class DatabaseManager {
     }
 
     public DataSource initViewStoreDb()  {
-        return initDatabase("db.example.url", "db.example.userName",
-                "db.example.password");
+        return initDatabase("db.cakeshop.url", "db.cakeshop.userName",
+                "db.cakeshop.password");
     }
 
     public DataSource initSystemDb()  {

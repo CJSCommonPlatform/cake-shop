@@ -13,7 +13,7 @@ public class IndexQueryApiTest {
     public void shouldHandleIndexQuery() throws Exception {
         assertThat(IndexQueryApi.class, isHandlerClass(QUERY_API)
                 .with(method("getIndex")
-                        .thatHandles("example.get-index")
+                        .thatHandles("cakeshop.get-index")
                         .withRequesterPassThrough()));
     }
 

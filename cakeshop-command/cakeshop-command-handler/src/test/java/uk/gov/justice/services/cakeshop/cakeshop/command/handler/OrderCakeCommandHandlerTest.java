@@ -37,8 +37,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class OrderCakeCommandHandlerTest {
 
-    private static final String COMMAND_NAME = "example.command.order-cake";
-    private static final String EVENT_NAME = "example.events.cake-ordered";
+    private static final String COMMAND_NAME = "cakeshop.command.order-cake";
+    private static final String EVENT_NAME = "cakeshop.events.cake-ordered";
     private static final UUID RECIPE_ID = randomUUID();
     private static final UUID ORDER_ID = randomUUID();
 

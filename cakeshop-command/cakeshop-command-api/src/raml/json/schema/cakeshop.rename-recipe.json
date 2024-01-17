@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "http://justice.gov.uk/example/command/api/example.rename-recipe.json",
+  "id": "http://justice.gov.uk/cakeshop/command/api/cakeshop.rename-recipe.json",
   "type": "object",
   "properties": {
     "name": {

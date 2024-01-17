@@ -16,16 +16,16 @@ public class RecipesQueryApiTest {
         assertThat(RecipesQueryApi.class, isHandlerClass(QUERY_API)
                 .with(allOf(
                         method("searchRecipes")
-                                .thatHandles("example.search-recipes")
+                                .thatHandles("cakeshop.search-recipes")
                                 .withRequesterPassThrough(),
                         method("getRecipe")
-                                .thatHandles("example.get-recipe")
+                                .thatHandles("cakeshop.get-recipe")
                                 .withRequesterPassThrough(),
                         method("queryRecipes")
-                                .thatHandles("example.query-recipes")
+                                .thatHandles("cakeshop.query-recipes")
                                 .withRequesterPassThrough(),
                         method("getRecipePhotograph")
-                                .thatHandles("example.get-recipe-photograph")
+                                .thatHandles("cakeshop.get-recipe-photograph")
                                 .withRequesterPassThrough()
                 )));
     }

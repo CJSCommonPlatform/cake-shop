@@ -51,13 +51,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class RecipeCommandHandlerTest {
 
-    private static final String ADD_RECIPE_COMMAND_NAME = "example.command.add-recipe";
-    private static final String ADD_RECIPE_EVENT_NAME = "example.events.recipe-added";
-    private static final String RENAME_RECIPE_COMMAND_NAME = "example.command.rename-recipe";
-    private static final String RENAME_RECIPE_EVENT_NAME = "example.events.recipe-renamed";
-    private static final String REMOVE_RECIPE_COMMAND_NAME = "example.command.remove-recipe";
-    private static final String REMOVE_RECIPE_EVENT_NAME = "example.events.recipe-removed";
-    private static final String RECIPE_PHOTOGRAPH_ADDED_EVENT_NAME = "example.events.recipe-photograph-added";
+    private static final String ADD_RECIPE_COMMAND_NAME = "cakeshop.command.add-recipe";
+    private static final String ADD_RECIPE_EVENT_NAME = "cakeshop.events.recipe-added";
+    private static final String RENAME_RECIPE_COMMAND_NAME = "cakeshop.command.rename-recipe";
+    private static final String RENAME_RECIPE_EVENT_NAME = "cakeshop.events.recipe-renamed";
+    private static final String REMOVE_RECIPE_COMMAND_NAME = "cakeshop.command.remove-recipe";
+    private static final String REMOVE_RECIPE_EVENT_NAME = "cakeshop.events.recipe-removed";
+    private static final String RECIPE_PHOTOGRAPH_ADDED_EVENT_NAME = "cakeshop.events.recipe-photograph-added";
 
     private static final UUID RECIPE_ID = randomUUID();
     private static final UUID PHOTO_ID = randomUUID();
@@ -84,7 +84,7 @@ public class RecipeCommandHandlerTest {
     @Test
     public void shouldHaveCorrectHandlesAnnotation() throws Exception {
         assertThat(recipeCommandHandler, isHandler(COMMAND_HANDLER)
-                .with(method("addRecipe").thatHandles("example.command.add-recipe")));
+                .with(method("addRecipe").thatHandles("cakeshop.command.add-recipe")));
     }
 
     @Test
@@ -188,7 +188,7 @@ public class RecipeCommandHandlerTest {
         final UUID commandId = randomUUID();
 
         final JsonEnvelope command = envelopeFrom(
-                metadataOf(commandId, "example.upload-photograph"),
+                metadataOf(commandId, "cakeshop.upload-photograph"),
                 createObjectBuilder()
                         .add("recipeId", RECIPE_ID.toString())
                         .add("photoId", PHOTO_ID.toString())

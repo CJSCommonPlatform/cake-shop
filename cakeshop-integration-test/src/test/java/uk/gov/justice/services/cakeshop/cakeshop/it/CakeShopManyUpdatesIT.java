@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 public class CakeShopManyUpdatesIT {
 
-    private static final String COMMAND_HANDLER_QUEUE = "example.handler.command";
+    private static final String COMMAND_HANDLER_QUEUE = "cakeshop.handler.command";
     private static final String DEAD_LETTER_QUEUE = "DLQ";
 
     private final JmsBootstrapper jmsBootstrapper = new JmsBootstrapper();
