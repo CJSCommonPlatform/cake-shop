@@ -7,10 +7,10 @@
     <persistence-unit name="Cakeshop">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:/DS.cakeshop</jta-data-source>
-        <class>uk.gov.justice.services.cakeshop.cakeshop.persistence.entity.Recipe</class>
-        <class>uk.gov.justice.services.cakeshop.cakeshop.persistence.entity.RecipeIngredient</class>
-        <class>uk.gov.justice.services.cakeshop.cakeshop.persistence.entity.CakeOrder</class>
-        <class>uk.gov.justice.services.cakeshop.cakeshop.persistence.entity.Cake</class>
+        <class>uk.gov.justice.services.cakeshop.persistence.entity.Recipe</class>
+        <class>uk.gov.justice.services.cakeshop.persistence.entity.RecipeIngredient</class>
+        <class>uk.gov.justice.services.cakeshop.persistence.entity.CakeOrder</class>
+        <class>uk.gov.justice.services.cakeshop.persistence.entity.Cake</class>
     </persistence-unit>
 
 </persistence>
