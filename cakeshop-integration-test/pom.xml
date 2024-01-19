@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>uk.gov.justice.example</groupId>
+        <groupId>uk.gov.justice.services</groupId>
         <artifactId>cake-shop</artifactId>
         <version>17.0.2-SNAPSHOT</version>
     </parent>
@@ -37,7 +37,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.example</groupId>
+            <groupId>uk.gov.justice.services</groupId>
             <artifactId>cakeshop-domain</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
@@ -115,7 +115,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.example</groupId>
+            <groupId>uk.gov.justice.services</groupId>
             <artifactId>cakeshop-viewstore-persistence</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
@@ -300,7 +300,7 @@
                         <version>${event-store.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>uk.gov.justice.example</groupId>
+                        <groupId>uk.gov.justice.services</groupId>
                         <artifactId>cakeshop-viewstore-liquibase</artifactId>
                         <version>${project.version}</version>
                     </dependency>
@@ -331,7 +331,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <dependencies>
                        <dependency>
-                           <groupId>uk.gov.justice.example</groupId>
+                           <groupId>uk.gov.justice.services</groupId>
                            <artifactId>cakeshop-service</artifactId>
                            <version>${project.version}</version>
                            <type>war</type>
@@ -366,7 +366,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>uk.gov.justice.example</groupId>
+                                    <groupId>uk.gov.justice.services</groupId>
                                     <artifactId>cakeshop-service</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
