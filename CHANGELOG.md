@@ -89,7 +89,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Update json-schema-catalog to 1.7.4
 
 ### Changed
-- Use a single event-source.yaml in example-event-source module
+- Use a single event-source.yaml in cakeshop-event-source module
 
 ## [2.0.0-M3] - 2019-05-09
 
@@ -165,6 +165,6 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [1.0.0] - 2018-11-09
 
 ### Added
-- Extracted project from example app in Microservices Framework 5.0.0-M1: https://github.com/CJSCommonPlatform/microservice_framework
+- Extracted project from cakeshop app in Microservices Framework 5.0.0-M1: https://github.com/CJSCommonPlatform/microservice_framework
 
 

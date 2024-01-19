@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/query/cakeshop.query-recipes.json",
+  "type": "object",
+  "properties": {
+    "pagesize": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "glutenFree": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "pagesize"
+  ]
+}

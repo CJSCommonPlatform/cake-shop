@@ -1,0 +1,6 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/command/api/cakeshop.remove-recipe.json",
+  "type": "object",
+  "properties": {}
+}

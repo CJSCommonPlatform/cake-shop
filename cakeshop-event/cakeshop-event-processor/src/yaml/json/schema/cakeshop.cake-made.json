@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/event/cakeshop.events.cake-made.json",
+  "type": "object",
+  "properties": {
+    "cakeId": {
+      "id": "/cakeId",
+      "type": "string"
+    },
+    "name": {
+      "id": "/name",
+      "type": "string"
+    }
+  },
+  "required": [
+    "cakeId",
+    "name"
+  ]
+}

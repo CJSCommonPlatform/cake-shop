@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/command/api/cakeshop.make-cake-status.json",
+  "type": "object",
+  "properties": {
+    "status": {
+      "id": "/status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/command/handler/cakeshop.make-cake.json",
+  "type": "object",
+  "properties": {
+    "recipeId": {
+      "id": "/recipeId",
+      "type": "string"
+    },
+    "cakeId": {
+      "id": "/cakeId",
+      "type": "string"
+    }
+
+  },
+  "required": [
+    "recipeId",
+    "cakeId"
+  ]
+}

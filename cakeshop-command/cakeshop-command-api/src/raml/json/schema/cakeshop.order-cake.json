@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/command/api/cakeshop.order-cake.json",
+  "type": "object",
+  "properties": {
+    "recipeId": {
+      "type": "string"
+    },
+    "deliveryDate": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "recipeId",
+    "deliveryDate"
+  ]
+}

@@ -1,0 +1,129 @@
+#%RAML 0.8
+title: Cakeshop Query
+baseUri: http://localhost:8080/cakeshop-query-api/query/api/rest/cakeshop
+version: v0.1
+mediaType: application/json
+protocols: [ HTTP, HTTPS ]
+
+/recipes:
+  description: list all recipes
+  get:
+    description: |
+        ...
+        (mapping):
+            responseType: application/vnd.cakeshop.recipes+json
+            name: cakeshop.search-recipes
+        ...
+    queryParameters:
+        pagesize:
+            type: integer
+            required: true
+        name:
+            displayName: Name
+            type: string
+            description: A recipe name
+            example: Mess
+            required: false
+        glutenFree:
+            type: boolean
+            required: false
+    responses:
+      200:
+        body:
+          application/vnd.cakeshop.recipes+json:
+            schema: !include json/schema/cakeshop.search-recipes.json
+            example: !include json/recipes.json
+  post:
+    description: |
+        ...
+        (mapping):
+            requestType: application/vnd.cakeshop.query-recipes+json
+            name: cakeshop.query-recipes
+        ...
+    body:
+        application/vnd.cakeshop.query-recipes+json:
+            schema: !include json/schema/cakeshop.query-recipes.json
+            example: !include json/query-recipes.json
+    responses:
+       200:
+         body:
+           application/vnd.cakeshop.recipes+json:
+             schema: !include json/schema/cakeshop.search-recipes.json
+             example: !include json/recipes.json
+
+/recipes/{recipeId}:
+  description: return a recipe
+  get:
+    description: |
+        ...
+        (mapping):
+            responseType: application/vnd.cakeshop.recipe+json
+            name: cakeshop.get-recipe
+        ...
+    responses:
+      200:
+        body:
+          application/vnd.cakeshop.recipe+json:
+            schema: !include json/schema/cakeshop.get-recipe.json
+            example: !include json/recipe.json
+
+/orders/{orderId}:
+  description: return an order
+  get:
+    description: |
+        ...
+        (mapping):
+            responseType: application/vnd.cakeshop.order+json
+            name: cakeshop.get-order
+        ...
+    responses:
+      200:
+        body:
+          application/vnd.cakeshop.order+json:
+            schema: !include json/schema/cakeshop.get-order.json
+            example: !include json/order.json
+/cakes:
+  description: return cakes
+  get:
+    description: |
+        ...
+        (mapping):
+            responseType: application/vnd.cakeshop.cakes+json
+            name: cakeshop.search-cakes
+        ...
+    responses:
+      200:
+        body:
+          application/vnd.cakeshop.cakes+json:
+            schema: !include json/schema/cakeshop.search-cakes.json
+            example: !include json/cakes.json
+
+/recipes/{recipeId}/photograph:
+  description: return recipe photograph data
+  get:
+    description: |
+        ...
+        (mapping):
+            responseType: application/octet-stream
+            name: cakeshop.get-recipe-photograph
+        ...
+    responses:
+      200:
+        body:
+          application/octet-stream:
+
+/index/{indexId}:
+  description: return a index
+  get:
+    description: |
+        ...
+        (mapping):
+            responseType: application/vnd.cakeshop.index+json
+            name: cakeshop.get-index
+        ...
+    responses:
+      200:
+        body:
+          application/vnd.cakeshop.index+json:
+            schema: !include json/schema/cakeshop.search-index.json
+            example: !include json/index.json

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/query/cakeshop.search-index.json",
+  "type": "object",
+  "properties": {
+    "indexId": {
+      "type": "string"
+    },
+    "deliveryDate": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "indexId",
+    "deliveryDate"
+  ]
+}

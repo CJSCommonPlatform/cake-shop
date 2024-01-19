@@ -1,0 +1,12 @@
+subscriptions_descriptor:
+  spec_version: 1.0.0
+  service: cakeshop
+  service_component: EVENT_INDEXER
+  subscriptions:
+    - name: event indexer subscription
+      events:
+        - name: cakeshop.events.cake-ordered
+          schema_uri: http://justice.gov.uk/cakeshop/event/listener/cakeshop.events.cake-ordered.json
+      event_source_name: cakeshop
+
+

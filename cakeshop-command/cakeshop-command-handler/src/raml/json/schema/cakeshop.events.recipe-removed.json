@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/event/cakeshop.events.recipe-removed.json",
+  "type": "object",
+  "properties": {
+    "recipeId": {
+      "id": "/recipeId"
+    }
+  },
+  "required": [
+    "recipeId"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/command/api/cakeshop.make-cake.json",
+  "type": "object",
+  "properties": {
+  }
+}

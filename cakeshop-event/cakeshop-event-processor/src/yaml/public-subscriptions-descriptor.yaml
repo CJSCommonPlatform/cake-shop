@@ -1,0 +1,14 @@
+subscriptions_descriptor:
+  spec_version: 1.0.0
+  service: cakeshop
+  service_component: EVENT_PROCESSOR
+  subscriptions:
+    - name: public event processor subscription
+      events:
+        - name: cakeshop.events.recipe-added
+          schema_uri: http://justice.gov.uk/cakeshop/event/cakeshop.events.recipe-added.json
+
+        - name: cakeshop.events.cake-made
+          schema_uri: http://justice.gov.uk/cakeshop/event/cakeshop.events.cake-made.json
+
+      event_source_name: public.event.source

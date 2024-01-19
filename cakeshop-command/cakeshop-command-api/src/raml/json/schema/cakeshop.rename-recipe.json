@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/command/api/cakeshop.rename-recipe.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "id": "/name",
+      "type": "string",
+      "description": "Uniquely identifies the cake to be produced from the recipe",
+      "name": "Name of Cake",
+      "title": "Name of Cake"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

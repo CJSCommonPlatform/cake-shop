@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/command/api/cakeshop.add-recipe-file.json",
+  "type": "object",
+  "properties": {
+    "fileName": {
+      "id": "/fileName",
+      "type": "string"
+    },
+    "fileContent": {
+      "id": "/fileContent",
+      "type": "string"
+    }
+  },
+  "required": [
+    "fileName",
+    "fileContent"
+  ]
+}

@@ -1,0 +1,10 @@
+unified_search_descriptor:
+  name: cakeshop
+  spec_version: 1.0.0
+  service: cakeshopcontext
+  service_component: EVENT_INDEXER
+  events:
+     - name: cakeshop.events.cake-ordered
+       transformer_config: cake-ordered-spec.json
+       index_name: crime_case_index
+...

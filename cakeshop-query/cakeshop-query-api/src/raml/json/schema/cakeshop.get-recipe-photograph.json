@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cakeshop/query/cakeshop.get-recipe-photograph.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "id": "/fileId",
+      "type": "string"
+    }
+  }
+}
