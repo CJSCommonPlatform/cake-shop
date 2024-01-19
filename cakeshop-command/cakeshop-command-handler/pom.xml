@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>cakeshop-command</artifactId>
-        <groupId>uk.gov.justice.example</groupId>
+        <groupId>uk.gov.justice.services</groupId>
         <version>17.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -43,7 +43,7 @@
             <artifactId>command-handler-interceptors</artifactId>
         </dependency>
         <dependency>
-            <groupId>uk.gov.justice.example</groupId>
+            <groupId>uk.gov.justice.services</groupId>
             <artifactId>cakeshop-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
