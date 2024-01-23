@@ -1,16 +1,20 @@
 package uk.gov.justice.services.cakeshop.it.helpers;
 
-import static javax.jms.Session.AUTO_ACKNOWLEDGE;
-
+import com.jayway.jsonpath.JsonPath;
+import java.util.Optional;
 import javax.jms.Connection;
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Queue;
 import javax.jms.QueueBrowser;
 import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.jms.Topic;
-
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import uk.gov.justice.services.test.utils.core.messaging.Poller;
+
+import static javax.jms.Session.AUTO_ACKNOWLEDGE;
 
 public class JmsBootstrapper {
 
@@ -18,6 +22,7 @@ public class JmsBootstrapper {
     private static final String JMS_PASSWORD = SystemPropertyFinder.findJmsUserPassword();
     private static final String JMS_PORT = SystemPropertyFinder.findJmsPort();
     private static final String JMS_BROKER_URL = "tcp://localhost:" + JMS_PORT;
+    private final Poller poller = new Poller();
 
     private final ActiveMQConnectionFactory jmsConnectionFactory = new ActiveMQConnectionFactory(JMS_BROKER_URL);
 
@@ -50,8 +55,30 @@ public class JmsBootstrapper {
         return session.createBrowser(queue);
     }
 
-    private void clear(MessageConsumer msgConsumer) throws JMSException {
+    public void clear(MessageConsumer msgConsumer) throws JMSException {
         while (msgConsumer.receiveNoWait() != null) {
+        }
+    }
+
+    public Optional<String> getPayloadByEventName(final MessageConsumer messageConsumerClient, final String expectedEventName) {
+        return poller.pollUntilFound(() -> {
+                    final Optional<String> eventPayload = retrieveEventPayload(messageConsumerClient);
+                    final boolean eventMatched = eventPayload
+                            .map(payload -> JsonPath.parse(payload).read("$._metadata.name", String.class))
+                            .filter(eventName -> eventName.equals(expectedEventName))
+                            .isPresent();
+
+                    return eventMatched ? eventPayload : Optional.empty();
+        });
+    }
+
+    private Optional<String> retrieveEventPayload(final MessageConsumer messageConsumerClient) {
+        try {
+            final Message message = messageConsumerClient.receive(1000*5);
+
+            return message != null ? Optional.ofNullable(((TextMessage) message).getText()) : Optional.empty();
+        } catch (JMSException e) {
+            return Optional.empty();
         }
     }
 }

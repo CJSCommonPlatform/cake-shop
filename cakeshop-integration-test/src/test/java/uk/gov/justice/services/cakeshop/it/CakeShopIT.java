@@ -1,5 +1,31 @@
 package uk.gov.justice.services.cakeshop.it;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
+import javax.jms.MessageConsumer;
+import javax.jms.Session;
+import javax.sql.DataSource;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.core.Response;
+import org.apache.http.message.BasicNameValuePair;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import uk.gov.justice.services.cakeshop.it.helpers.ApiResponse;
+import uk.gov.justice.services.cakeshop.it.helpers.CommandFactory;
+import uk.gov.justice.services.cakeshop.it.helpers.CommandSender;
+import uk.gov.justice.services.cakeshop.it.helpers.DatabaseManager;
+import uk.gov.justice.services.cakeshop.it.helpers.EventFactory;
+import uk.gov.justice.services.cakeshop.it.helpers.EventFinder;
+import uk.gov.justice.services.cakeshop.it.helpers.JmsBootstrapper;
+import uk.gov.justice.services.cakeshop.it.helpers.Querier;
+import uk.gov.justice.services.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.common.converter.ObjectToJsonObjectConverter;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
+import uk.gov.justice.services.test.utils.core.messaging.Poller;
+
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
@@ -13,6 +39,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.justice.services.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
 import static uk.gov.justice.services.cakeshop.it.params.CakeShopMediaTypes.POST_RECIPES_QUERY_MEDIA_TYPE;
 import static uk.gov.justice.services.cakeshop.it.params.CakeShopMediaTypes.QUERY_RECIPES_MEDIA_TYPE;
@@ -22,31 +49,12 @@ import static uk.gov.justice.services.cakeshop.it.params.CakeShopUris.RECIPES_RE
 import static uk.gov.justice.services.cakeshop.it.params.CakeShopUris.RECIPES_RESOURCE_URI;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
-import uk.gov.justice.services.cakeshop.it.helpers.ApiResponse;
-import uk.gov.justice.services.cakeshop.it.helpers.CommandFactory;
-import uk.gov.justice.services.cakeshop.it.helpers.EventFactory;
-import uk.gov.justice.services.cakeshop.it.helpers.EventFinder;
-import uk.gov.justice.services.cakeshop.it.helpers.Querier;
-import uk.gov.justice.services.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventJdbcRepository;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventRepositoryFactory;
-import uk.gov.justice.services.cakeshop.it.helpers.CommandSender;
-import uk.gov.justice.services.cakeshop.it.helpers.DatabaseManager;
-
-import javax.sql.DataSource;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
-
-import org.apache.http.message.BasicNameValuePair;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 public class CakeShopIT {
 
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final EventJdbcRepository eventJdbcRepository = new EventRepositoryFactory().getEventJdbcRepository(eventStoreDataSource);
+    private final ObjectToJsonObjectConverter objectToJsonObjectConverter = new ObjectToJsonObjectConverter(new ObjectMapper());
+    private final JmsBootstrapper jmsBootstrapper = new JmsBootstrapper();
 
     private final EventFactory eventFactory = new EventFactory();
     private final EventFinder eventFinder = new EventFinder(eventJdbcRepository);
@@ -55,6 +63,7 @@ public class CakeShopIT {
     private Client client;
     private Querier querier;
     private CommandSender commandSender;
+    private final Poller poller = new Poller();
 
     @BeforeEach
     public void before() throws Exception {
@@ -78,6 +87,29 @@ public class CakeShopIT {
                 .post(entity(commandFactory.addRecipeCommand(), ADD_RECIPE_MEDIA_TYPE));
 
         assertThat(response.getStatus(), isStatus(ACCEPTED));
+    }
+
+    @Test
+    public void shouldSendNotificationThroughJobStoreTaskOnProcessingCakeMadeEvent() throws Exception {
+        try (final Session jmsSession = jmsBootstrapper.jmsSession()) {
+            try (final MessageConsumer publicTopicConsumer = jmsBootstrapper.topicConsumerOf("public.event", jmsSession)) {
+                jmsBootstrapper.clear(publicTopicConsumer);
+
+                final String recipeId = randomUUID().toString();
+                final String cakeId = randomUUID().toString();
+                final String cakeName = "Super cake";
+
+                commandSender.addRecipe(recipeId, cakeName);
+                await().until(() -> querier.recipesQueryResult().body().contains(recipeId));
+                final ApiResponse apiResponse = commandSender.makeCake(recipeId, cakeId);
+                assertThat(apiResponse.httpCode(), isStatus(ACCEPTED));
+
+                final Optional<String> eventPayload = jmsBootstrapper.getPayloadByEventName(publicTopicConsumer, "jobstore.task.notification.cake-made");
+                assertTrue(eventPayload.isPresent());
+                with(eventPayload.get())
+                        .assertThat("$.cakeId", equalTo(cakeId));
+            }
+        }
     }
 
     @Test

@@ -15,6 +15,7 @@ before_script:
 - psql -c 'create database frameworkviewstore;' -U postgres
 - psql -c 'create database fileservice;' -U postgres
 - psql -c 'create database frameworksystem;' -U postgres
+- psql -c 'create database frameworkjobstore;' -U postgres
 - psql -c "CREATE USER framework WITH PASSWORD 'framework';" -U postgres
 - psql -c "CREATE USER fileservice WITH PASSWORD 'fileservice';" -U postgres
 addons:

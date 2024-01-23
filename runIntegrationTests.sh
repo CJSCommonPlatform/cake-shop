@@ -35,6 +35,7 @@ runLiquibase() {
   runSystemLiquibase
   runEventTrackingLiquibase
   runFileServiceLiquibase
+  runJobStoreLiquibase
   printf "${CYAN}All liquibase $LIQUIBASE_COMMAND scripts run${NO_COLOUR}\n\n"
 }
 
