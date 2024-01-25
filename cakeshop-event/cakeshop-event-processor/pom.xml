@@ -49,6 +49,14 @@
             <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>rest-client-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>jobstore-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>job-executor</artifactId>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>

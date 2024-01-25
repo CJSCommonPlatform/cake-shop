@@ -4,6 +4,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+ - Add jobstore usecase
 
 ## [17.0.1] - 2023-12-13
 ### Changed

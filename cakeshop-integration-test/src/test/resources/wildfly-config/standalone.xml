@@ -151,6 +151,22 @@
                         <check-valid-connection-sql>select 1</check-valid-connection-sql>
                     </validation>
                 </datasource>
+                <datasource jndi-name="java:/app/cakeshop-service/DS.jobstore" pool-name="DS.cakeshop.jobstore" enabled="true" use-java-context="true" jta="true">
+                    <connection-url>jdbc:postgresql://localhost:5432/frameworkjobstore</connection-url>
+                    <driver>postgres</driver>
+                    <pool>
+                        <min-pool-size>20</min-pool-size>
+                        <max-pool-size>30</max-pool-size>
+                        <prefill>true</prefill>
+                    </pool>
+                    <security>
+                        <user-name>framework</user-name>
+                        <password>framework</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                    </validation>
+                </datasource>
                 <datasource jndi-name="java:/DS.cakeshop" pool-name="DS.cakeshop" enabled="true" use-java-context="true" jta="true">
                     <connection-url>jdbc:postgresql://localhost:5432/frameworkviewstore</connection-url>
                     <driver>postgres</driver>
@@ -549,6 +565,8 @@
                 <simple name="java:global/envelope.validation.exception.handler" value="uk.gov.justice.services.core.envelope.RethrowingValidationExceptionHandler" type="java.lang.String"/>
                 <simple name="java:global/pre.publish.timer.max.runtime.milliseconds" value="450" type="java.lang.String"/>
                 <simple name="java:global/event.dequer.timer.max.runtime.milliseconds" value="450" type="java.lang.String"/>
+                <simple name="java:/app/cakeshop-service/jobstore.timer.interval.milliseconds" value="100" type="java.lang.String"/>
+                <simple name="java:/app/cakeshop-service/jobstore.timer.start.wait.milliseconds" value="200" type="java.lang.String"/>
             </bindings>
             <remote-naming/>
         </subsystem>
