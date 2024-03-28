@@ -15,6 +15,7 @@ import static uk.gov.justice.services.eventstore.management.commands.ValidatePub
 import static uk.gov.justice.services.eventstore.management.commands.VerifyCatchupCommand.VERIFY_CATCHUP;
 import static uk.gov.justice.services.eventstore.management.commands.VerifyRebuildCommand.VERIFY_REBUILD;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
+import static uk.gov.justice.services.management.ping.commands.LogRuntimeIdCommand.LOG_RUNTIME_ID;
 import static uk.gov.justice.services.management.ping.commands.PingCommand.PING;
 import static uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand.REFRESH_FEATURE_CACHE;
 import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
@@ -25,6 +26,7 @@ import uk.gov.justice.services.jmx.api.command.SystemCommandDetails;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
+import uk.gov.justice.services.management.ping.commands.LogRuntimeIdCommand;
 
 import java.util.List;
 import java.util.Map;
@@ -53,7 +55,7 @@ public class ListSystemCommandsIT {
                     .getRemote(CONTEXT_NAME)
                     .listCommands();
 
-            assertThat(systemCommandDetailsList.size(), is(12));
+            assertThat(systemCommandDetailsList.size(), is(13));
 
             final Map<String, SystemCommandDetails> systemCommandDetailsMap = systemCommandDetailsList
                     .stream()
@@ -71,6 +73,7 @@ public class ListSystemCommandsIT {
             assertThat(systemCommandDetailsMap.get(VALIDATE_EVENTS), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(VERIFY_REBUILD), is(notNullValue()));
             assertThat(systemCommandDetailsMap.get(VERIFY_CATCHUP), is(notNullValue()));
+            assertThat(systemCommandDetailsMap.get(LOG_RUNTIME_ID), is(notNullValue()));
         }
     }
 }
