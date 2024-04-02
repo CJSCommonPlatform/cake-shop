@@ -11,6 +11,11 @@
         <class>uk.gov.justice.services.example.cakeshop.persistence.entity.RecipeIngredient</class>
         <class>uk.gov.justice.services.example.cakeshop.persistence.entity.CakeOrder</class>
         <class>uk.gov.justice.services.example.cakeshop.persistence.entity.Cake</class>
+
+        <properties>
+            <property name="jboss.as.jpa.providerModule" value="org.hibernate:5.2"/>
+        </properties>
+
     </persistence-unit>
 
 </persistence>
