@@ -9,6 +9,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Included fix for out of memory error in catchup for large datasets
 - Publishing of events no longer use a trigger on the event_log table
 - Filestore now does hard delete when deleting files rather than just marking as deleted
+- Fix hibernate incompatibility issue while running ITs in embedded wildfly
+- Fix classDefNotFoundError logged by wildfly-maven-plugin while shutting down embedded wildfly server 
 
 ## [7.0.0] - 2021-09-27
 ### Changed
