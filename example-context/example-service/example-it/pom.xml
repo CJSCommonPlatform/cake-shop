@@ -495,13 +495,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.github.classgraph</groupId>
-                        <artifactId>classgraph</artifactId>
-                        <version>4.8.168</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
         </plugins>
