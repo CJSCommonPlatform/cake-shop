@@ -11,6 +11,7 @@
     <properties>
         <wildfly.version>10.0.0.Final</wildfly.version>
         <jboss.home>${project.build.directory}/wildfly-${wildfly.version}</jboss.home>
+        <!--<hibernate.version>5.2.18.Final</hibernate.version>-->
 
         <!-- Single war is used by default, to run example-it with multiple wars set the system example.use-multiple-war property to true: -->
         <!-- mvn clean install -Dexample.use-multiple-war=true -->
@@ -82,6 +83,16 @@
         <dependency>
             <groupId>uk.gov.justice.event-store</groupId>
             <artifactId>test-utils-persistence</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-entitymanager</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -109,6 +120,44 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- All below hibernate artifacts are used by embedded wildfly modules -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.18.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>5.2.18.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-infinispan</artifactId>
+            <version>5.2.18.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>jipijapa-hibernate5</artifactId>
+            <version>11.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.6.14</version>
         </dependency>
         <dependency>
             <groupId>org.wildfly</groupId>
