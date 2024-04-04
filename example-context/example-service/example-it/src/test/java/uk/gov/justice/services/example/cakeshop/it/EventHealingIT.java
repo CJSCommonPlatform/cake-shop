@@ -23,7 +23,7 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJd
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
-import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter;
+import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
@@ -60,7 +60,7 @@ public class EventHealingIT {
     private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
 
-    private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
+    private final ProcessedEventFinder processedEventFinder = new ProcessedEventFinder(viewStoreDataSource);
 
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
@@ -117,7 +117,7 @@ public class EventHealingIT {
         }
 
         poller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+            final int eventCount = processedEventFinder.countProcessedEvents();
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
@@ -133,7 +133,7 @@ public class EventHealingIT {
         runCatchup();
 
         final Optional<Integer> numberOfEventsInProcessedEventTable = poller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+            final int eventCount = processedEventFinder.countProcessedEvents();
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
