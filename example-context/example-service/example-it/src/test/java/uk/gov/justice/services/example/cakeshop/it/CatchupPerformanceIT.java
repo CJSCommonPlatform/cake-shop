@@ -17,7 +17,7 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.BatchEventInserter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
-import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter;
+import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
@@ -46,7 +46,7 @@ public class CatchupPerformanceIT {
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
 
-    private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
+    private final ProcessedEventFinder processedEventCounter = new ProcessedEventFinder(viewStoreDataSource);
 
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
