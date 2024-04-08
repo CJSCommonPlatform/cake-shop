@@ -4,7 +4,6 @@ import static java.lang.Integer.parseInt;
 import static java.lang.System.getProperty;
 import static java.time.ZoneOffset.UTC;
 import static java.util.UUID.fromString;
-import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
@@ -12,6 +11,8 @@ import static uk.gov.justice.services.eventstore.management.commands.ReplayEvent
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
+import org.junit.Before;
+import org.junit.Test;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventFinder;
@@ -29,11 +30,6 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-@Ignore("Temporarily ignoring until the command is implemented in event-store. 4 April 2024")
 public class SendEventToEventListenersIT {
 
     private static final String HOST = getHost();
@@ -71,7 +67,7 @@ public class SendEventToEventListenersIT {
 
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
 
-            final UUID commandRuntimeId = randomUUID();
+            final UUID commandRuntimeId = publishedEvent.getId();
             systemCommanderClient
                     .getRemote(CONTEXT_NAME)
                     .callWithRuntimeId(REPLAY_EVENT_TO_EVENT_LISTENER, commandRuntimeId);
