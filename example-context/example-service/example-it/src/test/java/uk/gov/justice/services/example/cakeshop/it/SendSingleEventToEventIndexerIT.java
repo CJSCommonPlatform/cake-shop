@@ -7,12 +7,10 @@ import static java.util.UUID.fromString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
-import static uk.gov.justice.services.eventstore.management.commands.ReplayEventToEventListenerCommand.REPLAY_EVENT_TO_EVENT_LISTENER;
+import static uk.gov.justice.services.eventstore.management.commands.ReplayEventToEventIndexerCommand.REPLAY_EVENT_TO_EVENT_INDEXER;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
-import org.junit.Before;
-import org.junit.Test;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventFinder;
@@ -30,7 +28,12 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
-public class SendEventToEventListenersIT {
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+@Ignore("Temporarily ignoring until the command is implemented in event-store. 10 April 2024")
+public class SendSingleEventToEventIndexerIT {
 
     private static final String HOST = getHost();
     private static final int PORT = parseInt(getProperty("random.management.port"));
@@ -55,7 +58,7 @@ public class SendEventToEventListenersIT {
     }
 
     @Test
-    public void shouldReplaySingleEventToEventListenersUsingTheReplayEventToEventListenerJmxCommand() throws Exception {
+    public void shouldReplaySingleEventToEventIndexerUsingTheReplayEventToEventIndexerJmxCommand() throws Exception {
 
         final PublishedEvent publishedEvent = createPublishedEvent();
         publishedEventInserter.insert(publishedEvent);
@@ -70,7 +73,7 @@ public class SendEventToEventListenersIT {
             final UUID commandRuntimeId = publishedEvent.getId();
             systemCommanderClient
                     .getRemote(CONTEXT_NAME)
-                    .callWithRuntimeId(REPLAY_EVENT_TO_EVENT_LISTENER, commandRuntimeId);
+                    .callWithRuntimeId(REPLAY_EVENT_TO_EVENT_INDEXER, commandRuntimeId);
         }
 
         final Optional<ProcessedEvent> processedEvent = poller.pollUntilFound(
@@ -79,7 +82,7 @@ public class SendEventToEventListenersIT {
 
         if (processedEvent.isPresent()) {
             assertThat(processedEvent.get().getEventId(), is(publishedEvent.getId()));
-            assertThat(processedEvent.get().getComponentName(), is("EVENT_LISTENER"));
+            assertThat(processedEvent.get().getComponentName(), is("EVENT_INDEXER"));
         } else {
             fail();
         }
