@@ -12,7 +12,6 @@ import static uk.gov.justice.services.jmx.system.command.client.connection.JmxPa
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
@@ -31,7 +30,6 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
-@Ignore("Temporarily ignoring until the command is implemented in event-store. 10 April 2024")
 public class SendSingleEventToEventListenerIT {
 
     private static final String HOST = getHost();
