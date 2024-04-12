@@ -230,6 +230,7 @@ public class EventValidationIT {
     private Optional<SystemCommandStatus> commandNoLongerInProgress(final SystemCommanderMBean systemCommanderMBean, final UUID commandId) {
 
         final SystemCommandStatus systemCommandStatus = systemCommanderMBean.getCommandStatus(commandId);
+        System.out.printf("Polling for command state to be COMMAND_COMPLETE||COMMAND_FAILED for commandId: %s", commandId);
 
         final CommandState commandState = systemCommandStatus.getCommandState();
         if (commandState == COMMAND_COMPLETE || commandState == COMMAND_FAILED) {

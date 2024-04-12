@@ -74,7 +74,10 @@ public class SendSingleEventToEventListenerIT {
         }
 
         final Optional<ProcessedEvent> processedEvent = poller.pollUntilFound(
-                () -> processedEventFinder.findProcessedEvent(publishedEvent.getId())
+                () -> {
+                    System.out.printf("Polling processed_event table for existence of event id: %s", publishedEvent.getId());
+                    return processedEventFinder.findProcessedEvent(publishedEvent.getId());
+                }
         );
 
         if (processedEvent.isPresent()) {
