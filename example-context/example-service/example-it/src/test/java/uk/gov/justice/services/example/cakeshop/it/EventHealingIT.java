@@ -9,6 +9,7 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
@@ -71,7 +72,7 @@ public class EventHealingIT {
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
     private final SequenceSetter sequenceSetter = new SequenceSetter();
 
-    private final Poller poller = new Poller();
+    private final Poller poller = new Poller(50, 1000);
 
     private Client client;
 
@@ -116,14 +117,17 @@ public class EventHealingIT {
             assertThat(response.getStatus(), isStatus(ACCEPTED));
         }
 
-        poller.pollUntilFound(() -> {
-            final int eventCount = processedEventFinder.countProcessedEvents();
+        final Optional<Integer> result = poller.pollUntilFound(() -> {
+            final int eventCount = processedEventFinder.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d", numberOfRecipes, eventCount);
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
 
             return empty();
         });
+
+        assertTrue(result.isPresent());
 
         removeRecipesFromViewStore(3, findRecipeIdForEventNumber(3));
         removeRecipesFromViewStore(5, findRecipeIdForEventNumber(5));
@@ -133,7 +137,8 @@ public class EventHealingIT {
         runCatchup();
 
         final Optional<Integer> numberOfEventsInProcessedEventTable = poller.pollUntilFound(() -> {
-            final int eventCount = processedEventFinder.countProcessedEvents();
+            final int eventCount = processedEventFinder.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d", numberOfRecipes, eventCount);
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
@@ -189,7 +194,8 @@ public class EventHealingIT {
                 "recipe",
                 "cake",
                 "cake_order",
-                "processed_event"
+                "processed_event",
+                "stream_status"
         );
 
         databaseCleaner.cleanStreamBufferTable(contextName);

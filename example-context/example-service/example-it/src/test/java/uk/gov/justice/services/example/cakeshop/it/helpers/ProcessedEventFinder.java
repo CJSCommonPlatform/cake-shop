@@ -78,4 +78,20 @@ public class ProcessedEventFinder {
             throw new RuntimeException("Failed to run query '" + sql + "' against the view store", e);
         }
     }
+
+    public int countProcessedEventsForEventListener() {
+
+        final String sql = "SELECT COUNT (*) FROM processed_event where component = 'EVENT_LISTENER'";
+
+        try(final Connection connection = viewStoreDataSource.getConnection();
+            final PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            final ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            resultSet.next();
+
+            return resultSet.getInt(1);
+        } catch (final SQLException e) {
+            throw new RuntimeException("Failed to run query '" + sql + "' against the view store", e);
+        }
+    }
 }

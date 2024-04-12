@@ -95,7 +95,8 @@ public class CatchupPerformanceIT {
         System.out.println("Waiting for events to publish...");
 
         final Optional<Integer> processedEventCount = longPoller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+            final int eventCount = processedEventCounter.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d", totalEvents, eventCount);
             if (eventCount == totalEvents) {
                 return of(eventCount);
             }
@@ -112,9 +113,8 @@ public class CatchupPerformanceIT {
         runCatchup();
 
         final Optional<Integer> numberOfReplayedEvents = longPoller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
-            System.out.println(format("%s events in processed_event table", eventCount));
-
+            final int eventCount = processedEventCounter.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d", totalEvents, eventCount);
             if (eventCount == totalEvents) {
                 return of(eventCount);
             }

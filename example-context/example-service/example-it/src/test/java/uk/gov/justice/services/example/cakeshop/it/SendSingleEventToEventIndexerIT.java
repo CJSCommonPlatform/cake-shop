@@ -29,10 +29,8 @@ import java.util.UUID;
 import javax.sql.DataSource;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("Temporarily ignoring until the command is implemented in event-store. 10 April 2024")
 public class SendSingleEventToEventIndexerIT {
 
     private static final String HOST = getHost();
