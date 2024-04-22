@@ -9,6 +9,7 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.example.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
@@ -23,7 +24,7 @@ import uk.gov.justice.services.eventsourcing.repository.jdbc.event.EventStreamJd
 import uk.gov.justice.services.eventsourcing.repository.jdbc.eventstream.EventStreamJdbcRepository;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CommandFactory;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
-import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter;
+import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
@@ -60,7 +61,7 @@ public class EventHealingIT {
     private final EventStreamJdbsRepositoryFactory eventStreamJdbcRepositoryFactory = new EventStreamJdbsRepositoryFactory();
     private final EventStreamJdbcRepository eventStreamJdbcRepository = eventStreamJdbcRepositoryFactory.getEventStreamJdbcRepository(eventStoreDataSource);
 
-    private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
+    private final ProcessedEventFinder processedEventFinder = new ProcessedEventFinder(viewStoreDataSource);
 
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
@@ -71,7 +72,7 @@ public class EventHealingIT {
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
     private final SequenceSetter sequenceSetter = new SequenceSetter();
 
-    private final Poller poller = new Poller();
+    private final Poller poller = new Poller(50, 1000);
 
     private Client client;
 
@@ -116,14 +117,17 @@ public class EventHealingIT {
             assertThat(response.getStatus(), isStatus(ACCEPTED));
         }
 
-        poller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+        final Optional<Integer> result = poller.pollUntilFound(() -> {
+            final int eventCount = processedEventFinder.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d", numberOfRecipes, eventCount);
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
 
             return empty();
         });
+
+        assertTrue(result.isPresent());
 
         removeRecipesFromViewStore(3, findRecipeIdForEventNumber(3));
         removeRecipesFromViewStore(5, findRecipeIdForEventNumber(5));
@@ -133,7 +137,8 @@ public class EventHealingIT {
         runCatchup();
 
         final Optional<Integer> numberOfEventsInProcessedEventTable = poller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+            final int eventCount = processedEventFinder.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d", numberOfRecipes, eventCount);
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
@@ -189,7 +194,8 @@ public class EventHealingIT {
                 "recipe",
                 "cake",
                 "cake_order",
-                "processed_event"
+                "processed_event",
+                "stream_status"
         );
 
         databaseCleaner.cleanStreamBufferTable(contextName);

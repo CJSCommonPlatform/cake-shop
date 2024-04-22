@@ -17,7 +17,7 @@ import uk.gov.justice.services.example.cakeshop.it.helpers.BatchEventInserter;
 import uk.gov.justice.services.example.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.example.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.example.cakeshop.it.helpers.PositionInStreamIterator;
-import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventCounter;
+import uk.gov.justice.services.example.cakeshop.it.helpers.ProcessedEventFinder;
 import uk.gov.justice.services.example.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
@@ -46,7 +46,7 @@ public class CatchupPerformanceIT {
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
 
-    private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
+    private final ProcessedEventFinder processedEventCounter = new ProcessedEventFinder(viewStoreDataSource);
 
     private static final String HOST = getHost();
     private static final int PORT = valueOf(getProperty("random.management.port"));
@@ -95,7 +95,8 @@ public class CatchupPerformanceIT {
         System.out.println("Waiting for events to publish...");
 
         final Optional<Integer> processedEventCount = longPoller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+            final int eventCount = processedEventCounter.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d", totalEvents, eventCount);
             if (eventCount == totalEvents) {
                 return of(eventCount);
             }
@@ -112,9 +113,8 @@ public class CatchupPerformanceIT {
         runCatchup();
 
         final Optional<Integer> numberOfReplayedEvents = longPoller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
-            System.out.println(format("%s events in processed_event table", eventCount));
-
+            final int eventCount = processedEventCounter.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d", totalEvents, eventCount);
             if (eventCount == totalEvents) {
                 return of(eventCount);
             }

@@ -391,7 +391,7 @@
                     <driver>postgres</driver>
                     <pool>
                         <min-pool-size>3</min-pool-size>
-                        <max-pool-size>3</max-pool-size>
+                        <max-pool-size>6</max-pool-size>
                         <prefill>true</prefill>
                     </pool>
                     <security>

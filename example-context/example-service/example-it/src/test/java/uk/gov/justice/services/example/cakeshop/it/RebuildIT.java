@@ -124,6 +124,7 @@ public class RebuildIT {
 
             final List<PublishedEvent> events = doGetPublishedEvents();
 
+            System.out.printf("Polling published_event table. Expected events count: %d, found: %d", 3, events.size());
             if (events.size() == 3) {
                 final Optional<Long> eventNumber = events.get(0).getEventNumber();
                 if(eventNumber.isPresent()) {

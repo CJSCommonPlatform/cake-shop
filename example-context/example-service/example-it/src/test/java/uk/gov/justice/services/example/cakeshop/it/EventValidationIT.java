@@ -60,7 +60,7 @@ public class EventValidationIT {
 
     private final TestSystemCommanderClientFactory systemCommanderClientFactory = new TestSystemCommanderClientFactory();
 
-    private final Poller poller = new Poller();
+    private final Poller poller = new Poller(100, 1000);
     private final BatchEventInserter batchEventInserter = new BatchEventInserter(eventStoreDataSource, BATCH_INSERT_SIZE);
 
     private PublishedEventCounter publishedEventCounter = new PublishedEventCounter(eventStoreDataSource);
@@ -134,6 +134,7 @@ public class EventValidationIT {
     private void waitForEventsToPublish(final int totalEvents) {
         final Optional<Integer> publishedEventCount = poller.pollUntilFound(() -> {
             final int eventCount = publishedEventCounter.countPublishedEvents();
+            System.out.printf("Polling published_event table. Expected events count: %d, found: %d", totalEvents, eventCount);
             if (eventCount == totalEvents) {
                 return of(eventCount);
             }
@@ -229,6 +230,7 @@ public class EventValidationIT {
     private Optional<SystemCommandStatus> commandNoLongerInProgress(final SystemCommanderMBean systemCommanderMBean, final UUID commandId) {
 
         final SystemCommandStatus systemCommandStatus = systemCommanderMBean.getCommandStatus(commandId);
+        System.out.printf("Polling for command state to be COMMAND_COMPLETE||COMMAND_FAILED for commandId: %s", commandId);
 
         final CommandState commandState = systemCommandStatus.getCommandState();
         if (commandState == COMMAND_COMPLETE || commandState == COMMAND_FAILED) {
