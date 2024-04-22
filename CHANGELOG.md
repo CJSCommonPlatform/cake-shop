@@ -5,7 +5,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 ### Added
- - Add jobstore usecase
+- Add jobstore usecase
+- Add ITs for validating REPLAY_EVENT_TO_EVENT_LISTENER and REPLAY_EVENT_TO_EVENT_INDEXER command processing
 
 ## [17.0.1] - 2023-12-13
 ### Changed

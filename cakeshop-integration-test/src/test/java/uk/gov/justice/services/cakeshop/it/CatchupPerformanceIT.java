@@ -1,26 +1,21 @@
 package uk.gov.justice.services.cakeshop.it;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import javax.sql.DataSource;
-import javax.ws.rs.client.Client;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.gov.justice.services.cakeshop.it.helpers.CakeshopEventGenerator;
-import uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory;
-import uk.gov.justice.services.cakeshop.it.helpers.ProcessedEventCounter;
-import uk.gov.justice.services.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.cakeshop.it.helpers.*;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
-import uk.gov.justice.services.cakeshop.it.helpers.BatchEventInserter;
-import uk.gov.justice.services.cakeshop.it.helpers.DatabaseManager;
-import uk.gov.justice.services.cakeshop.it.helpers.PositionInStreamIterator;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
+
+import javax.sql.DataSource;
+import javax.ws.rs.client.Client;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static java.lang.String.format;
 import static java.util.Optional.empty;
@@ -28,9 +23,9 @@ import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
-import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
 import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.DB_CONTEXT_NAME;
+import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 
 public class CatchupPerformanceIT {
@@ -40,7 +35,7 @@ public class CatchupPerformanceIT {
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
 
-    private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
+    private final ProcessedEventFinder processedEventCounter = new ProcessedEventFinder(viewStoreDataSource);
 
     private final TestSystemCommanderClientFactory systemCommanderClientFactory = new TestSystemCommanderClientFactory();
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
@@ -83,7 +78,8 @@ public class CatchupPerformanceIT {
         System.out.println("Waiting for events to publish...");
 
         final Optional<Integer> processedEventCount = longPoller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+            final int eventCount = processedEventCounter.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d\n", totalEvents, eventCount);
             if (eventCount == totalEvents) {
                 return of(eventCount);
             }
@@ -100,8 +96,8 @@ public class CatchupPerformanceIT {
         runCatchup();
 
         final Optional<Integer> numberOfReplayedEvents = longPoller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
-            System.out.println(format("%s events in processed_event table", eventCount));
+            final int eventCount = processedEventCounter.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d\n", totalEvents, eventCount);
 
             if (eventCount == totalEvents) {
                 return of(eventCount);

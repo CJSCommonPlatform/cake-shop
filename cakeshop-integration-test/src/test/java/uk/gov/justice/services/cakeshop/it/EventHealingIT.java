@@ -14,11 +14,7 @@ import javax.ws.rs.core.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.gov.justice.services.cakeshop.it.helpers.CommandFactory;
-import uk.gov.justice.services.cakeshop.it.helpers.DatabaseManager;
-import uk.gov.justice.services.cakeshop.it.helpers.ProcessedEventCounter;
-import uk.gov.justice.services.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory;
+import uk.gov.justice.services.cakeshop.it.helpers.*;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
@@ -32,6 +28,7 @@ import static javax.ws.rs.client.Entity.entity;
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.eventstore.management.commands.EventCatchupCommand.CATCHUP;
 import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
@@ -45,7 +42,7 @@ public class EventHealingIT {
 
     private final DataSource eventStoreDataSource = new DatabaseManager().initEventStoreDb();
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
-    private final ProcessedEventCounter processedEventCounter = new ProcessedEventCounter(viewStoreDataSource);
+    private final ProcessedEventFinder processedEventFinder = new ProcessedEventFinder(viewStoreDataSource);
 
     private final CommandFactory commandFactory = new CommandFactory();
 
@@ -53,7 +50,7 @@ public class EventHealingIT {
     private final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
     private final SequenceSetter sequenceSetter = new SequenceSetter();
 
-    private final Poller poller = new Poller();
+    private final Poller poller = new Poller(50, 1000);
 
     private Client client;
 
@@ -96,14 +93,17 @@ public class EventHealingIT {
             assertThat(response.getStatus(), isStatus(ACCEPTED));
         }
 
-        poller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+        final Optional<Integer> result = poller.pollUntilFound(() -> {
+            final int eventCount = processedEventFinder.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d\n", numberOfRecipes, eventCount);
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
 
             return empty();
         });
+
+        assertTrue(result.isPresent());
 
         removeRecipesFromViewStore(3, findRecipeIdForEventNumber(3));
         removeRecipesFromViewStore(5, findRecipeIdForEventNumber(5));
@@ -113,7 +113,8 @@ public class EventHealingIT {
         runCatchup();
 
         final Optional<Integer> numberOfEventsInProcessedEventTable = poller.pollUntilFound(() -> {
-            final int eventCount = processedEventCounter.countProcessedEvents();
+            final int eventCount = processedEventFinder.countProcessedEventsForEventListener();
+            System.out.printf("Polling processed_event table. Expected events count: %d, found: %d\n", numberOfRecipes, eventCount);
             if (eventCount == numberOfRecipes) {
                 return of(eventCount);
             }
@@ -160,7 +161,8 @@ public class EventHealingIT {
                 "recipe",
                 "cake",
                 "cake_order",
-                "processed_event"
+                "processed_event",
+                "stream_status"
         );
         databaseCleaner.cleanStreamBufferTable(DB_CONTEXT_NAME);
         databaseCleaner.cleanStreamStatusTable(DB_CONTEXT_NAME);

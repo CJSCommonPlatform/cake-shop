@@ -139,8 +139,8 @@
                     <connection-url>jdbc:postgresql://localhost:5432/frameworkeventstore</connection-url>
                     <driver>postgres</driver>
                     <pool>
-                        <min-pool-size>20</min-pool-size>
-                        <max-pool-size>30</max-pool-size>
+                        <min-pool-size>3</min-pool-size>
+                        <max-pool-size>6</max-pool-size>
                         <prefill>true</prefill>
                     </pool>
                     <security>
@@ -155,8 +155,8 @@
                     <connection-url>jdbc:postgresql://localhost:5432/frameworkjobstore</connection-url>
                     <driver>postgres</driver>
                     <pool>
-                        <min-pool-size>20</min-pool-size>
-                        <max-pool-size>30</max-pool-size>
+                        <min-pool-size>3</min-pool-size>
+                        <max-pool-size>6</max-pool-size>
                         <prefill>true</prefill>
                     </pool>
                     <security>
@@ -172,7 +172,7 @@
                     <driver>postgres</driver>
                     <pool>
                         <min-pool-size>3</min-pool-size>
-                        <max-pool-size>3</max-pool-size>
+                        <max-pool-size>6</max-pool-size>
                         <prefill>true</prefill>
                     </pool>
                     <security>
@@ -188,7 +188,7 @@
                     <driver>postgres</driver>
                     <pool>
                         <min-pool-size>3</min-pool-size>
-                        <max-pool-size>3</max-pool-size>
+                        <max-pool-size>6</max-pool-size>
                         <prefill>true</prefill>
                     </pool>
                     <security>
@@ -204,7 +204,7 @@
                     <driver>postgres</driver>
                     <pool>
                         <min-pool-size>3</min-pool-size>
-                        <max-pool-size>3</max-pool-size>
+                        <max-pool-size>6</max-pool-size>
                         <prefill>true</prefill>
                     </pool>
                     <security>
