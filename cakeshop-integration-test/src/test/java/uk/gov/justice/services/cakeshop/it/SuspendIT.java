@@ -80,6 +80,7 @@ public class SuspendIT {
             final UUID commandId = systemCommanderMBean.call(UNSUSPEND, GUARDED);
 
             final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
+                System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", commandId);
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
                 if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
                     return of(commandStatus);
@@ -103,6 +104,7 @@ public class SuspendIT {
             final UUID commandId = systemCommanderMBean.call(SUSPEND, FORCED);
 
             final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
+                System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", commandId);
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(commandId);
                 if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
                     return of(commandStatus);
@@ -137,6 +139,7 @@ public class SuspendIT {
             final UUID suspendCommandId = systemCommanderMBean.call(SUSPEND, FORCED);
 
             final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
+                System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", suspendCommandId);
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(suspendCommandId);
                 if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
                     return of(commandStatus);
@@ -163,6 +166,7 @@ public class SuspendIT {
             final UUID unsuspendCommandId = systemCommanderMBean.call(UNSUSPEND, FORCED);
 
             final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
+                System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", unsuspendCommandId);
                 final SystemCommandStatus commandStatus = systemCommanderMBean.getCommandStatus(unsuspendCommandId);
                 if (commandStatus.getCommandState() == COMMAND_COMPLETE) {
                     return of(commandStatus);

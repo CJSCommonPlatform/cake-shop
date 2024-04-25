@@ -101,6 +101,7 @@ public class CakeShopManyUpdatesIT {
                 .put(eventFactory.renameRecipeEntity("Final Name"));
 
         new Poller().pollUntilFound(() -> {
+            System.out.printf("Polling for query response body to contain 'Final Name' for recipeId: %s\n", recipeId);
             if (querier.queryForRecipe(recipeId).body().contains("Final Name")) {
                 return of(true);
             }
