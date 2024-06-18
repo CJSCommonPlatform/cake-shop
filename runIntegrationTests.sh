@@ -24,7 +24,6 @@ WILDFLY_DEPLOYMENT_DIR="$CPP_DOCKER_DIR/containers/wildfly/deployments"
 source $CPP_DOCKER_DIR/docker-utility-functions.sh
 source $CPP_DOCKER_DIR/build-scripts/integration-test-scipt-functions.sh
 
-source ${CPP_DOCKER_DIR}/build-scripts/download-jars-for-liquibase-runner-functions.sh
 source ${CPP_DOCKER_DIR}/build-scripts/download-liquibase-jar-functions.sh
 
 runLiquibase() {

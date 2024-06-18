@@ -139,9 +139,9 @@
                     <connection-url>jdbc:postgresql://localhost:5432/frameworkeventstore</connection-url>
                     <driver>postgres</driver>
                     <pool>
-                        <min-pool-size>3</min-pool-size>
-                        <max-pool-size>6</max-pool-size>
-                        <prefill>true</prefill>
+                        <min-pool-size>10</min-pool-size>
+                        <max-pool-size>100</max-pool-size>
+                        <prefill>false</prefill>
                     </pool>
                     <security>
                         <user-name>framework</user-name>
@@ -155,9 +155,9 @@
                     <connection-url>jdbc:postgresql://localhost:5432/frameworkjobstore</connection-url>
                     <driver>postgres</driver>
                     <pool>
-                        <min-pool-size>3</min-pool-size>
-                        <max-pool-size>6</max-pool-size>
-                        <prefill>true</prefill>
+                        <min-pool-size>10</min-pool-size>
+                        <max-pool-size>100</max-pool-size>
+                        <prefill>false</prefill>
                     </pool>
                     <security>
                         <user-name>framework</user-name>
@@ -171,9 +171,9 @@
                     <connection-url>jdbc:postgresql://localhost:5432/frameworkviewstore</connection-url>
                     <driver>postgres</driver>
                     <pool>
-                        <min-pool-size>3</min-pool-size>
-                        <max-pool-size>6</max-pool-size>
-                        <prefill>true</prefill>
+                        <min-pool-size>10</min-pool-size>
+                        <max-pool-size>100</max-pool-size>
+                        <prefill>false</prefill>
                     </pool>
                     <security>
                         <user-name>framework</user-name>
@@ -187,9 +187,9 @@
                     <connection-url>jdbc:postgresql://localhost:5432/frameworksystem</connection-url>
                     <driver>postgres</driver>
                     <pool>
-                        <min-pool-size>3</min-pool-size>
-                        <max-pool-size>6</max-pool-size>
-                        <prefill>true</prefill>
+                        <min-pool-size>10</min-pool-size>
+                        <max-pool-size>100</max-pool-size>
+                        <prefill>false</prefill>
                     </pool>
                     <security>
                         <user-name>framework</user-name>
@@ -203,9 +203,9 @@
                     <connection-url>jdbc:postgresql://localhost:5432/fileservice</connection-url>
                     <driver>postgres</driver>
                     <pool>
-                        <min-pool-size>3</min-pool-size>
-                        <max-pool-size>6</max-pool-size>
-                        <prefill>true</prefill>
+                        <min-pool-size>10</min-pool-size>
+                        <max-pool-size>100</max-pool-size>
+                        <prefill>false</prefill>
                     </pool>
                     <security>
                         <user-name>fileservice</user-name>
