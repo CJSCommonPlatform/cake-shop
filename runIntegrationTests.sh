@@ -6,9 +6,9 @@
 #context name is used to derive database name for running liquibase scripts and cake-shop uses framework database instead of it's own database
 CONTEXT_NAME=framework
 
-FRAMEWORK_LIBRARIES_VERSION=17.3.2
-FRAMEWORK_VERSION=17.4.1
-EVENT_STORE_VERSION=17.4.1
+FRAMEWORK_LIBRARIES_VERSION=17.5.1
+FRAMEWORK_VERSION=17.6.0
+EVENT_STORE_VERSION=17.6.1
 
 DOCKER_CONTAINER_REGISTRY_HOST_NAME=crmdvrepo01
 
