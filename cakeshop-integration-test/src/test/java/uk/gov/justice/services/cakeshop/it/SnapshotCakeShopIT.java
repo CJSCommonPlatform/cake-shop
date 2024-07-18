@@ -11,6 +11,7 @@ import uk.gov.justice.domain.snapshot.DefaultObjectInputStreamStrategy;
 import uk.gov.justice.services.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.cakeshop.it.helpers.Querier;
 import uk.gov.justice.services.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.core.aggregate.exception.AggregateChangeDetectedException;
 import uk.gov.justice.services.eventsourcing.jdbc.snapshot.SnapshotJdbcRepository;
 import uk.gov.justice.services.eventsourcing.jdbc.snapshot.StandaloneSnapshotJdbcRepositoryFactory;
@@ -52,6 +53,8 @@ public class SnapshotCakeShopIT {
 
     @Test
     public void shouldUseSnapshotWhenMakingCakes() throws AggregateChangeDetectedException {
+
+        final UtcClock utcClock = new UtcClock();
 
         final String recipeId = randomUUID().toString();
         final String cakeName = "Delicious cake";

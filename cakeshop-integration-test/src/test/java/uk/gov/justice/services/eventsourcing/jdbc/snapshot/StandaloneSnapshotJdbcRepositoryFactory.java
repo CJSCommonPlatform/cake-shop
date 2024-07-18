@@ -2,6 +2,7 @@ package uk.gov.justice.services.eventsourcing.jdbc.snapshot;
 
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
+import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.test.utils.persistence.SettableEventStoreDataSourceProvider;
 
 import javax.sql.DataSource;
@@ -18,10 +19,12 @@ public class StandaloneSnapshotJdbcRepositoryFactory {
 
         final SettableEventStoreDataSourceProvider eventStoreDataSourceProvider = new SettableEventStoreDataSourceProvider();
         final Logger logger = LoggerFactory.getLogger(SnapshotJdbcRepository.class);
+        final UtcClock clock = new UtcClock();
 
         eventStoreDataSourceProvider.setDataSource(dataSource);
 
         setField(snapshotJdbcRepository, "eventStoreDataSourceProvider", eventStoreDataSourceProvider);
+        setField(snapshotJdbcRepository, "clock", clock);
         setField(snapshotJdbcRepository, "logger", logger);
 
         return snapshotJdbcRepository;
