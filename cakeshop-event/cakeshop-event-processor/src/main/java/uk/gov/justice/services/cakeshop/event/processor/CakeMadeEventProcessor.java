@@ -12,10 +12,12 @@ import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.moj.cpp.jobstore.api.ExecutionService;
 import uk.gov.moj.cpp.jobstore.api.task.ExecutionInfo;
+import uk.gov.moj.cpp.jobstore.persistence.Priority;
 
 import static uk.gov.justice.services.cakeshop.jobstore.CakeMadeNotificationTask.CAKE_MADE_NOTIFICATION_TASK;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.moj.cpp.jobstore.api.task.ExecutionStatus.STARTED;
+import static uk.gov.moj.cpp.jobstore.persistence.Priority.HIGH;
 
 @ServiceComponent(EVENT_PROCESSOR)
 public class CakeMadeEventProcessor {
@@ -44,7 +46,8 @@ public class CakeMadeEventProcessor {
                 objectToJsonObjectConverter.convert(new CakeMadeJobData(cakeId)),
                 CAKE_MADE_NOTIFICATION_TASK,
                 clock.now(),
-                STARTED);
+                STARTED,
+                HIGH);
 
         executionService.executeWith(executionInfo);
 

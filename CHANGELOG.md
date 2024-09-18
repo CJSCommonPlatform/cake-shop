@@ -7,6 +7,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ### Added
 - Add jobstore usecase
 - Add ITs for validating REPLAY_EVENT_TO_EVENT_LISTENER and REPLAY_EVENT_TO_EVENT_INDEXER command processing
+### Changed
+- Update framework libraries to 17.6.2 in order to:
+  - Update jobstore to process tasks with higher priority first
+  - Fix for Jackson single argument constructor issue inspired from  https://github.com/FasterXML/jackson-databind/issues/1498
 
 ## [17.0.1] - 2023-12-13
 ### Changed
