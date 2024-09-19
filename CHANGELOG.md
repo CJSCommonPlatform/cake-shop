@@ -7,10 +7,15 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ### Added
 - Add jobstore usecase
 - Add ITs for validating REPLAY_EVENT_TO_EVENT_LISTENER and REPLAY_EVENT_TO_EVENT_INDEXER command processing
+- New Jndi value `java:global/catchup.event.source.whitelist` for a comma separated list of whitelisted event-sources for catchup.
 ### Changed
-- Update framework libraries to 17.6.2 in order to:
-  - Update jobstore to process tasks with higher priority first
-  - Fix for Jackson single argument constructor issue inspired from  https://github.com/FasterXML/jackson-databind/issues/1498
+- Update jobstore to process tasks with higher priority first
+- Fix for Jackson single argument constructor issue inspired from  https://github.com/FasterXML/jackson-databind/issues/1498
+- Update jobstore to process tasks with higher priority first
+- Refactor of File Store to merge file store 'metadata' table into the 'content' table.
+- File Store now only contains one table
+- The catchup process can now whitelist event sources to catchup
+- New Jndi value can be set to `ALLOW_ALL` to allow all
 
 ## [17.0.1] - 2023-12-13
 ### Changed

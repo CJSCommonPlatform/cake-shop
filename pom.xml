@@ -44,9 +44,9 @@
         <wildfly.version>26.1.2.Final</wildfly.version>
         <wildfly.maven.plugin.version>4.1.1.Final</wildfly.maven.plugin.version>
 
-        <framework-libraries.version>17.6.2</framework-libraries.version>
-        <framework.version>17.6.2</framework.version>
-        <event-store.version>17.6.4</event-store.version>
+        <framework-libraries.version>17.6.3</framework-libraries.version>
+        <framework.version>17.6.3</framework.version>
+        <event-store.version>17.6.5</event-store.version>
 
         <!-- TODO - move to common bom -->
         <weld-junit5.version>1.2.2.Final</weld-junit5.version>
