@@ -6,6 +6,8 @@ import uk.gov.justice.services.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.cakeshop.it.helpers.ProcessedEventFinder;
 import uk.gov.justice.services.cakeshop.it.helpers.PublishedEventInserter;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters.JmxCommandRuntimeParametersBuilder;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.subscription.ProcessedEvent;
@@ -56,9 +58,12 @@ public class SendSingleEventToEventListenerIT {
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(buildJmxParameters())) {
 
             final UUID commandRuntimeId = publishedEvent.getId();
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = new JmxCommandRuntimeParametersBuilder()
+                    .withCommandRuntimeId(commandRuntimeId)
+                    .build();
             systemCommanderClient
                     .getRemote(CONTEXT_NAME)
-                    .callWithRuntimeId(REPLAY_EVENT_TO_EVENT_LISTENER, commandRuntimeId, FORCED);
+                    .call(REPLAY_EVENT_TO_EVENT_LISTENER, jmxCommandRuntimeParameters, FORCED);
         }
 
         final Optional<ProcessedEvent> processedEvent = poller.pollUntilFound(

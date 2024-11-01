@@ -1,11 +1,11 @@
 package uk.gov.justice.services.cakeshop.it;
 
-import org.junit.Before;
-import org.junit.Test;
 import uk.gov.justice.services.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.cakeshop.it.helpers.ProcessedEventFinder;
 import uk.gov.justice.services.cakeshop.it.helpers.PublishedEventInserter;
 import uk.gov.justice.services.eventsourcing.repository.jdbc.event.PublishedEvent;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters.JmxCommandRuntimeParametersBuilder;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.subscription.ProcessedEvent;
@@ -21,11 +21,14 @@ import static java.time.ZoneOffset.UTC;
 import static java.util.UUID.fromString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
 import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
 import static uk.gov.justice.services.eventstore.management.commands.ReplayEventToEventIndexerCommand.REPLAY_EVENT_TO_EVENT_INDEXER;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SendSingleEventToEventIndexerIT {
 
@@ -38,7 +41,7 @@ public class SendSingleEventToEventIndexerIT {
     private final ProcessedEventFinder processedEventFinder = new ProcessedEventFinder(viewStoreDataSource);
     private final Poller poller = new Poller();
 
-    @Before
+    @BeforeEach
     public void cleanDatabases() {
         final String contextName = "framework";
 
@@ -56,9 +59,12 @@ public class SendSingleEventToEventIndexerIT {
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(buildJmxParameters())) {
 
             final UUID commandRuntimeId = publishedEvent.getId();
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = new JmxCommandRuntimeParametersBuilder()
+                    .withCommandRuntimeId(commandRuntimeId)
+                    .build();
             systemCommanderClient
                     .getRemote(CONTEXT_NAME)
-                    .callWithRuntimeId(REPLAY_EVENT_TO_EVENT_INDEXER, commandRuntimeId, FORCED);
+                    .call(REPLAY_EVENT_TO_EVENT_INDEXER, jmxCommandRuntimeParameters, FORCED);
         }
 
         final Optional<ProcessedEvent> processedEvent = poller.pollUntilFound(

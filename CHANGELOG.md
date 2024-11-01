@@ -8,7 +8,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Add jobstore usecase
 - Add ITs for validating REPLAY_EVENT_TO_EVENT_LISTENER and REPLAY_EVENT_TO_EVENT_INDEXER command processing
 - New Jndi value `java:global/catchup.event.source.whitelist` for a comma separated list of whitelisted event-sources for catchup.
+- New parameter 'JmxCommandRuntimeParameters' to JMX commands
 ### Changed
+- All JmxCommandHandlers must now have `commandName` String, `commandId` UUID and JmxCommandRuntimeParameters in their method signatures
 - Improve the fetching of jobs by priority from the jobstore by retrying with a different priority if the first select returns no jobs
 - Update jobstore to process tasks with higher priority first
 - Fix for Jackson single argument constructor issue inspired from  https://github.com/FasterXML/jackson-databind/issues/1498

@@ -1,30 +1,8 @@
 package uk.gov.justice.services.cakeshop.it;
 
-import java.util.Optional;
-import java.util.UUID;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response.Status;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import uk.gov.justice.services.cakeshop.it.helpers.ApiResponse;
-import uk.gov.justice.services.cakeshop.it.helpers.CommandSender;
-import uk.gov.justice.services.cakeshop.it.helpers.EventFactory;
-import uk.gov.justice.services.cakeshop.it.helpers.Querier;
-import uk.gov.justice.services.cakeshop.it.helpers.RestEasyClientFactory;
-import uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory;
-import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
-import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
-import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
-import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
-import uk.gov.justice.services.test.utils.core.messaging.Poller;
-import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
-
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.lang.String.format;
 import static java.lang.Thread.sleep;
-import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -38,9 +16,35 @@ import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.CONTEXT_
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
+import static uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters.withNoCommandParameters;
 import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
 import static uk.gov.justice.services.management.suspension.commands.UnsuspendCommand.UNSUSPEND;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
+
+import uk.gov.justice.services.cakeshop.it.helpers.ApiResponse;
+import uk.gov.justice.services.cakeshop.it.helpers.CommandSender;
+import uk.gov.justice.services.cakeshop.it.helpers.EventFactory;
+import uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory;
+import uk.gov.justice.services.cakeshop.it.helpers.Querier;
+import uk.gov.justice.services.cakeshop.it.helpers.RestEasyClientFactory;
+import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
+import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
+import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
+import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
+import uk.gov.justice.services.test.utils.core.messaging.Poller;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.core.Response.Status;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 
 public class SuspendIT {
 
@@ -77,7 +81,7 @@ public class SuspendIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
-            final UUID commandId = systemCommanderMBean.call(UNSUSPEND, GUARDED);
+            final UUID commandId = systemCommanderMBean.call(UNSUSPEND, withNoCommandParameters(), GUARDED);
 
             final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
                 System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", commandId);
@@ -86,7 +90,7 @@ public class SuspendIT {
                     return of(commandStatus);
                 }
 
-                return empty();
+                return Optional.empty();
             });
 
             if (!unsuspendStatus.isPresent()) {
@@ -101,7 +105,7 @@ public class SuspendIT {
         //invoke suspending
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(JmxParametersFactory.buildJmxParameters())) {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
-            final UUID commandId = systemCommanderMBean.call(SUSPEND, FORCED);
+            final UUID commandId = systemCommanderMBean.call(SUSPEND, withNoCommandParameters(), FORCED);
 
             final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
                 System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", commandId);
@@ -111,7 +115,7 @@ public class SuspendIT {
                 }
 
 
-                return empty();
+                return Optional.empty();
             });
 
             if (!suspendStatus.isPresent()) {
@@ -136,7 +140,7 @@ public class SuspendIT {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
             //invoke suspending
-            final UUID suspendCommandId = systemCommanderMBean.call(SUSPEND, FORCED);
+            final UUID suspendCommandId = systemCommanderMBean.call(SUSPEND, withNoCommandParameters(), FORCED);
 
             final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
                 System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", suspendCommandId);
@@ -146,7 +150,7 @@ public class SuspendIT {
                 }
 
 
-                return empty();
+                return Optional.empty();
             });
 
             if (!suspendStatus.isPresent()) {
@@ -163,7 +167,7 @@ public class SuspendIT {
             verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
             //invoke unsuspending
-            final UUID unsuspendCommandId = systemCommanderMBean.call(UNSUSPEND, FORCED);
+            final UUID unsuspendCommandId = systemCommanderMBean.call(UNSUSPEND, withNoCommandParameters(), FORCED);
 
             final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
                 System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", unsuspendCommandId);
@@ -173,7 +177,7 @@ public class SuspendIT {
                 }
 
 
-                return empty();
+                return Optional.empty();
             });
 
             if (!unsuspendStatus.isPresent()) {
@@ -194,7 +198,7 @@ public class SuspendIT {
         final Optional<String> recId = of(recipeId);
         await().until(() -> {
             if (checkRecipeName) {
-                final ApiResponse response = verifyResponse(empty(), status);
+                final ApiResponse response = verifyResponse(Optional.empty(), status);
 
                 verifyResponseBody(recipeId, recipeId2, recipeName, recipeName2, response);
             } else {

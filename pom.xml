@@ -45,8 +45,8 @@
         <wildfly.maven.plugin.version>4.1.1.Final</wildfly.maven.plugin.version>
 
         <framework-libraries.version>17.6.8</framework-libraries.version>
-        <framework.version>17.6.8</framework.version>
-        <event-store.version>17.6.10</event-store.version>
+        <framework.version>17.100.0-M3</framework.version>
+        <event-store.version>17.100.0-M3</event-store.version>
     </properties>
 
     <dependencyManagement>

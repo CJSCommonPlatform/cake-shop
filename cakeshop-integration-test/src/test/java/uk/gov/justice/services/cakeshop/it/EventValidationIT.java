@@ -1,8 +1,5 @@
 package uk.gov.justice.services.cakeshop.it;
 
-import static java.lang.Integer.parseInt;
-import static java.lang.System.getProperty;
-import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.is;
@@ -13,15 +10,16 @@ import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.DB_CONTE
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
+import static uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters.withNoCommandParameters;
 
-import uk.gov.justice.services.cakeshop.it.helpers.CakeshopEventGenerator;
-import uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory;
-import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
-import uk.gov.justice.services.eventstore.management.commands.ValidatePublishedEventsCommand;
 import uk.gov.justice.services.cakeshop.it.helpers.BatchEventInserter;
+import uk.gov.justice.services.cakeshop.it.helpers.CakeshopEventGenerator;
 import uk.gov.justice.services.cakeshop.it.helpers.DatabaseManager;
+import uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory;
 import uk.gov.justice.services.cakeshop.it.helpers.PositionInStreamIterator;
 import uk.gov.justice.services.cakeshop.it.helpers.PublishedEventCounter;
+import uk.gov.justice.services.eventsourcing.repository.jdbc.event.Event;
+import uk.gov.justice.services.eventstore.management.commands.ValidatePublishedEventsCommand;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.domain.CommandState;
 import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
@@ -128,7 +126,7 @@ public class EventValidationIT {
                 return of(eventCount);
             }
 
-            return empty();
+            return Optional.empty();
         });
 
         if (! publishedEventCount.isPresent()) {
@@ -141,7 +139,7 @@ public class EventValidationIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
             final UUID commandId = systemCommanderMBean
-                    .call(systemCommand.getName(), GUARDED);
+                    .call(systemCommand.getName(), withNoCommandParameters(), GUARDED);
 
             return poller.pollUntilFound(() -> commandNoLongerInProgress(systemCommanderMBean, commandId));
         }
@@ -227,6 +225,6 @@ public class EventValidationIT {
 
         }
 
-        return empty();
+        return Optional.empty();
     }
 }
