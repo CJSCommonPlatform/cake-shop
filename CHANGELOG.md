@@ -9,6 +9,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Add ITs for validating REPLAY_EVENT_TO_EVENT_LISTENER and REPLAY_EVENT_TO_EVENT_INDEXER command processing
 - New Jndi value `java:global/catchup.event.source.whitelist` for a comma separated list of whitelisted event-sources for catchup.
 - New parameter 'JmxCommandRuntimeParameters' to JMX commands
+- New Jmx command `RebuildSnapshotCommand` and handler that can force hydration and generation of an Aggregate snapshot
 ### Changed
 - All JmxCommandHandlers must now have `commandName` String, `commandId` UUID and JmxCommandRuntimeParameters in their method signatures
 - Improve the fetching of jobs by priority from the jobstore by retrying with a different priority if the first select returns no jobs
