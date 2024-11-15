@@ -4,6 +4,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- New column `buffered_at` on the stream_buffer tables to allow for monitoring of stuck stream_buffer events
+
 ## [17.100.1] - 2024-11-12
 ### Added
 - Add jobstore usecase
@@ -22,7 +25,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - File Store now only contains one table
 - The catchup process can now whitelist event sources to catchup
 - New Jndi value can be set to `ALLOW_ALL` to allow all
-- Split filestore `content` tables back into two tables of `metadata` and `content` to allow for backwards compatibility with liquibase
+**- Split filestore `content` tables back into two tables of `metadata` and `content` to allow for backwards compatibility with liquibase**
 ### Fixed
 - JdbcResultSetStreamer now correctly streams data using statement.setFetchSize(). The Default fetch size is 200. This can be overridden with JNDI prop jdbc.statement.fetchSize
 
