@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
 import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
 import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.DB_CONTEXT_NAME;
 import static uk.gov.justice.services.cakeshop.it.params.CakeShopMediaTypes.ADD_RECIPE_MEDIA_TYPE;
@@ -158,9 +159,15 @@ public class EventHealingIT {
     }
 
     private void runCatchup() throws Exception {
-        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(JmxParametersFactory.buildJmxParameters())) {
+        try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(buildJmxParameters())) {
 
-            systemCommanderClient.getRemote(CONTEXT_NAME).call(CATCHUP, withNoCommandParameters(), GUARDED);
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
+            systemCommanderClient.getRemote(CONTEXT_NAME).call(
+                    CATCHUP,
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    GUARDED.isGuarded()
+            );
         }
     }
 
