@@ -81,7 +81,13 @@ public class SuspendIT {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
-            final UUID commandId = systemCommanderMBean.call(UNSUSPEND, withNoCommandParameters(), GUARDED);
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
+            final UUID commandId = systemCommanderMBean.call(
+                    UNSUSPEND,
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    GUARDED.isGuarded()
+            );
 
             final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
                 System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", commandId);
@@ -105,7 +111,13 @@ public class SuspendIT {
         //invoke suspending
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(JmxParametersFactory.buildJmxParameters())) {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
-            final UUID commandId = systemCommanderMBean.call(SUSPEND, withNoCommandParameters(), FORCED);
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
+            final UUID commandId = systemCommanderMBean.call(
+                    SUSPEND,
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    FORCED.isGuarded()
+            );
 
             final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
                 System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", commandId);
@@ -140,7 +152,13 @@ public class SuspendIT {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
 
             //invoke suspending
-            final UUID suspendCommandId = systemCommanderMBean.call(SUSPEND, withNoCommandParameters(), FORCED);
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
+            final UUID suspendCommandId = systemCommanderMBean.call(
+                    SUSPEND,
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    FORCED.isGuarded()
+            );
 
             final Optional<SystemCommandStatus> suspendStatus = poller.pollUntilFound(() -> {
                 System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", suspendCommandId);
@@ -167,7 +185,11 @@ public class SuspendIT {
             verifyRecipeAdded(recipeId, recipeId2, null, null, false, NOT_FOUND);
 
             //invoke unsuspending
-            final UUID unsuspendCommandId = systemCommanderMBean.call(UNSUSPEND, withNoCommandParameters(), FORCED);
+            final UUID unsuspendCommandId = systemCommanderMBean.call(
+                    UNSUSPEND,
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    FORCED.isGuarded());
 
             final Optional<SystemCommandStatus> unsuspendStatus = poller.pollUntilFound(() -> {
                 System.out.printf("Polling for command state to be COMMAND_COMPLETE for commandId: %s\n", unsuspendCommandId);

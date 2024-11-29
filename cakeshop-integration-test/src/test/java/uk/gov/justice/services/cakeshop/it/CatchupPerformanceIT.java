@@ -159,7 +159,12 @@ public class CatchupPerformanceIT {
 
         try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(JmxParametersFactory.buildJmxParameters())) {
 
-            systemCommanderClient.getRemote(CONTEXT_NAME).call(CATCHUP, withNoCommandParameters(), GUARDED);
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
+            systemCommanderClient.getRemote(CONTEXT_NAME).call(
+                    CATCHUP,
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    GUARDED.isGuarded());
         }
     }
 

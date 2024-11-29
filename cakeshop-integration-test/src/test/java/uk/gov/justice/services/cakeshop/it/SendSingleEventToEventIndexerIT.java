@@ -1,5 +1,15 @@
 package uk.gov.justice.services.cakeshop.it;
 
+import static java.time.ZoneOffset.UTC;
+import static java.util.UUID.fromString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+import static uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
+import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
+import static uk.gov.justice.services.eventstore.management.commands.ReplayEventToEventIndexerCommand.REPLAY_EVENT_TO_EVENT_INDEXER;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
+
 import uk.gov.justice.services.cakeshop.it.helpers.DatabaseManager;
 import uk.gov.justice.services.cakeshop.it.helpers.ProcessedEventFinder;
 import uk.gov.justice.services.cakeshop.it.helpers.PublishedEventInserter;
@@ -12,20 +22,11 @@ import uk.gov.justice.services.subscription.ProcessedEvent;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
 import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
-import javax.sql.DataSource;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.time.ZoneOffset.UTC;
-import static java.util.UUID.fromString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-import static uk.gov.justice.services.cakeshop.it.helpers.JmxParametersFactory.buildJmxParameters;
-import static uk.gov.justice.services.cakeshop.it.helpers.TestConstants.CONTEXT_NAME;
-import static uk.gov.justice.services.eventstore.management.commands.ReplayEventToEventIndexerCommand.REPLAY_EVENT_TO_EVENT_INDEXER;
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
+import javax.sql.DataSource;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,11 @@ public class SendSingleEventToEventIndexerIT {
                     .build();
             systemCommanderClient
                     .getRemote(CONTEXT_NAME)
-                    .call(REPLAY_EVENT_TO_EVENT_INDEXER, jmxCommandRuntimeParameters, FORCED);
+                    .call(REPLAY_EVENT_TO_EVENT_INDEXER,
+                            jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                            jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                            FORCED.isGuarded()
+                    );
         }
 
         final Optional<ProcessedEvent> processedEvent = poller.pollUntilFound(
