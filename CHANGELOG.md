@@ -6,6 +6,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 ### Added
 - New column `buffered_at` on the stream_buffer tables to allow for monitoring of stuck stream_buffer events
+### Changed
+- Jmx MBean `SystemCommanderMBean` now only takes basic Java Objects to keep the JMX handling interoperable
+### Removed
+- Removed `JmxCommandParameters` and `CommandRunMode` from JMX SystemCommanderMBean call
 
 ## [17.100.1] - 2024-11-12
 ### Added

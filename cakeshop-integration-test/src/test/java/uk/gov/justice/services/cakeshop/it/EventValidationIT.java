@@ -24,6 +24,7 @@ import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.domain.CommandState;
 import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.TestSystemCommanderClientFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
@@ -138,8 +139,12 @@ public class EventValidationIT {
         try (final SystemCommanderClient systemCommanderClient = systemCommanderClientFactory.create(jmxParameters)) {
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
-            final UUID commandId = systemCommanderMBean
-                    .call(systemCommand.getName(), withNoCommandParameters(), GUARDED);
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
+            final UUID commandId = systemCommanderMBean.call(
+                    systemCommand.getName(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    GUARDED.isGuarded());
 
             return poller.pollUntilFound(() -> commandNoLongerInProgress(systemCommanderMBean, commandId));
         }

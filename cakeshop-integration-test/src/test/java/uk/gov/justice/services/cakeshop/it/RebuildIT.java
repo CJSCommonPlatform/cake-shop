@@ -104,7 +104,13 @@ public class RebuildIT {
     private void invokeRebuild() throws Exception {
 
         try(final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(JmxParametersFactory.buildJmxParameters())) {
-            systemCommanderClient.getRemote(CONTEXT_NAME).call(REBUILD, withNoCommandParameters(), GUARDED);
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
+            systemCommanderClient.getRemote(CONTEXT_NAME).call(
+                    REBUILD,
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    GUARDED.isGuarded()
+            );
         }
     }
 

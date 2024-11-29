@@ -62,8 +62,11 @@ public class SendSingleEventToEventListenerIT {
                     .withCommandRuntimeId(commandRuntimeId)
                     .build();
             systemCommanderClient
-                    .getRemote(CONTEXT_NAME)
-                    .call(REPLAY_EVENT_TO_EVENT_LISTENER, jmxCommandRuntimeParameters, FORCED);
+                    .getRemote(CONTEXT_NAME).call(
+                            REPLAY_EVENT_TO_EVENT_LISTENER,
+                            jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                            jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                            FORCED.isGuarded());
         }
 
         final Optional<ProcessedEvent> processedEvent = poller.pollUntilFound(
