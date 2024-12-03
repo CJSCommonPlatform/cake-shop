@@ -84,7 +84,7 @@ public class RebuildSnapshotsIT {
 
         batchEventInserter.updateEventLogTable(events);
 
-        final JmxCommandRuntimeParameters aggregateClassNameAndStreamId = new JmxCommandRuntimeParameters.JmxCommandRuntimeParametersBuilder()
+        final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = new JmxCommandRuntimeParameters.JmxCommandRuntimeParametersBuilder()
                 .withCommandRuntimeString(aggregateClassName)
                 .withCommandRuntimeId(recipeId)
                 .build();
@@ -93,8 +93,9 @@ public class RebuildSnapshotsIT {
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(CONTEXT_NAME);
             final UUID commandId = systemCommanderMBean.call(
                     REBUILD_SNAPSHOTS,
-                    aggregateClassNameAndStreamId,
-                    FORCED);
+                    jmxCommandRuntimeParameters.getCommandRuntimeId(),
+                    jmxCommandRuntimeParameters.getCommandRuntimeString(),
+                    FORCED.isGuarded());
 
             final StopWatch stopWatch = new StopWatchFactory().createStartedStopWatch();
             final Optional<SystemCommandStatus> systemCommandStatus = longPoller.pollUntilFound(() -> {
