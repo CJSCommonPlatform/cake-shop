@@ -562,11 +562,12 @@
             <bindings>
                 <simple name="java:/app/cakeshop-service/audit.blacklist" value="cakeshop.*" type="java.lang.String"/>
                 <simple name="java:/app/cakeshop-service/default.strategy.snapshot.threshold" value="3" type="java.lang.String"/>
+                <simple name="java:/app/cakeshop-service/jobstore.timer.interval.milliseconds" value="100" type="java.lang.String"/>
+                <simple name="java:/app/cakeshop-service/jobstore.timer.start.wait.milliseconds" value="200" type="java.lang.String"/>
+                <simple name="java:/app/cakeshop-service/event.error.handling.enabled" value="true" type="java.lang.String"/>
                 <simple name="java:global/envelope.validation.exception.handler" value="uk.gov.justice.services.core.envelope.RethrowingValidationExceptionHandler" type="java.lang.String"/>
                 <simple name="java:global/pre.publish.timer.max.runtime.milliseconds" value="450" type="java.lang.String"/>
                 <simple name="java:global/event.dequer.timer.max.runtime.milliseconds" value="450" type="java.lang.String"/>
-                <simple name="java:/app/cakeshop-service/jobstore.timer.interval.milliseconds" value="100" type="java.lang.String"/>
-                <simple name="java:/app/cakeshop-service/jobstore.timer.start.wait.milliseconds" value="200" type="java.lang.String"/>
             </bindings>
             <remote-naming/>
         </subsystem>

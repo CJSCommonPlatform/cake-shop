@@ -1,10 +1,8 @@
 package uk.gov.justice.services.cakeshop.event.listener;
 
+import static java.util.UUID.randomUUID;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_LISTENER;
 
-import uk.gov.justice.services.common.converter.JsonObjectToObjectConverter;
-import uk.gov.justice.services.core.annotation.Handles;
-import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.cakeshop.domain.event.RecipeAdded;
 import uk.gov.justice.services.cakeshop.event.listener.converter.RecipeAddedToIngredientsConverter;
 import uk.gov.justice.services.cakeshop.event.listener.converter.RecipeAddedToRecipeConverter;
@@ -12,6 +10,9 @@ import uk.gov.justice.services.cakeshop.persistence.IngredientRepository;
 import uk.gov.justice.services.cakeshop.persistence.RecipeRepository;
 import uk.gov.justice.services.cakeshop.persistence.entity.Ingredient;
 import uk.gov.justice.services.cakeshop.persistence.entity.Recipe;
+import uk.gov.justice.services.common.converter.JsonObjectToObjectConverter;
+import uk.gov.justice.services.core.annotation.Handles;
+import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import java.util.UUID;
@@ -51,7 +52,20 @@ public class RecipeEventListener {
 
         final RecipeAdded recipeAdded = jsonObjectConverter.convert(event.payloadAsJsonObject(), RecipeAdded.class);
 
-        recipeRepository.save(recipeAddedToRecipeConverter.convert(recipeAdded));
+        final Recipe recipe = recipeAddedToRecipeConverter.convert(recipeAdded);
+
+        if ("DELIBERATELY_FAIL".equals(recipe.getName())) {
+            final Recipe malformedRecipe = new Recipe(
+                    randomUUID(),
+                    null,
+                    true,
+                    randomUUID());
+
+            // should throw exception due to null recipe name
+            recipeRepository.save(malformedRecipe);
+        } else {
+            recipeRepository.save(recipe);
+        }
 
         LOGGER.trace("=====================================================> Recipe saved, RecipeId: " + recipeId);
 
