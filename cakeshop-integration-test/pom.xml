@@ -10,9 +10,6 @@
     <artifactId>cakeshop-integration-test</artifactId>
     <properties>
         <jboss.home>${project.build.directory}/wildfly-${wildfly.version}</jboss.home>
-
-        <!-- Single war is used by default, to run cakeshop-it with multiple wars set the system cakeshop.use-multiple-war property to true: -->
-        <!-- mvn clean install -Dcakeshop.use-multiple-war=true -->
     </properties>
 
     <dependencies>
@@ -123,11 +120,6 @@
         <dependency>
             <groupId>uk.gov.justice.event-store</groupId>
             <artifactId>test-utils-event</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>uk.gov.justice.event-store</groupId>
-            <artifactId>subscription-manager</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

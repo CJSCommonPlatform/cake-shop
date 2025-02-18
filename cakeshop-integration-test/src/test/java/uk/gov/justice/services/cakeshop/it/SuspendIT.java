@@ -68,8 +68,20 @@ public class SuspendIT {
         querier = new Querier(client);
         commandSender = new CommandSender(client, eventFactory);
 
-        databaseCleaner.cleanSystemTables("framework");
-        databaseCleaner.cleanEventStoreTables("framework");
+        final String contextName = "framework";
+        databaseCleaner.cleanSystemTables(contextName);
+        databaseCleaner.cleanEventStoreTables(contextName);
+        databaseCleaner.cleanViewStoreTables(contextName,
+                "cake",
+                "cake_order",
+                "recipe",
+                "ingredient",
+                "index",
+                "index",
+                "processed_event",
+                "stream_buffer",
+                "stream_status",
+                "stream_error");
     }
 
     @AfterEach
@@ -206,6 +218,7 @@ public class SuspendIT {
                 fail();
             }
 
+            sleep(5000L);
             //check new recipes have been added successfully after unsuspending
             verifyRecipeAdded(recipeId, recipeId2, MARBLE_CAKE, CARROT_CAKE, true, OK);
         }
