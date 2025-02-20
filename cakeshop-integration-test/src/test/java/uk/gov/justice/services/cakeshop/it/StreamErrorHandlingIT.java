@@ -77,7 +77,7 @@ public class StreamErrorHandlingIT {
             assertThat(streamError.causeMessage().get(), startsWith("ERROR: null value in column \"name\" violates not-null constraint"));
             assertThat(streamError.javaClassname(), is("uk.gov.justice.services.persistence.EntityManagerFlushInterceptor"));
 
-            final Optional<StreamStatus> streamStatus = poller.pollUntilFound(() -> findStreamStatus(streamError.streamId()));
+            final Optional<StreamStatus> streamStatus = poller.pollUntilFound(() -> findStreamStatus(streamError.streamId(), "cakeshop", "EVENT_LISTENER"));
             if (streamStatus.isPresent()) {
                 assertThat(streamStatus.get().streamErrorId(), is(streamError.id()));
                 assertThat(streamStatus.get().streamErrorPosition(), is(streamError.positionInStream()));
@@ -109,7 +109,9 @@ public class StreamErrorHandlingIT {
                     stream_id,
                     position_in_stream,
                     date_created,
-                    full_stack_trace
+                    full_stack_trace,
+                    component_name,
+                    source
                 FROM stream_error
                 WHERE event_name = ?""";
 
@@ -134,6 +136,8 @@ public class StreamErrorHandlingIT {
                     final Long positionInStream = resultSet.getLong("position_in_stream");
                     final ZonedDateTime dateCreated = ZonedDateTimes.fromSqlTimestamp(resultSet.getTimestamp("date_created"));
                     final String stackTrace = resultSet.getString("full_stack_trace");
+                    final String componentName = resultSet.getString("component_name");
+                    final String source = resultSet.getString("source");
 
                     final StreamError streamError = new StreamError(
                             id,
@@ -150,7 +154,9 @@ public class StreamErrorHandlingIT {
                             streamId,
                             positionInStream,
                             dateCreated,
-                            stackTrace
+                            stackTrace,
+                            componentName,
+                            source
                     );
 
                     return of(streamError);
@@ -163,7 +169,7 @@ public class StreamErrorHandlingIT {
         return empty();
     }
 
-    private Optional<StreamStatus> findStreamStatus(final UUID streamId) {
+    private Optional<StreamStatus> findStreamStatus(final UUID streamId, final String source, final String component) {
 
         final String SELECT_SQL = """
                     SELECT
@@ -171,11 +177,15 @@ public class StreamErrorHandlingIT {
                     stream_error_id,
                     stream_error_position
                 FROM stream_status
-                WHERE stream_id = ?""";
+                WHERE stream_id = ?
+                AND source = ?
+                AND component = ?""";
 
         try (final Connection connection = viewStoreDataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
             preparedStatement.setObject(1, streamId);
+            preparedStatement.setString(2, source);
+            preparedStatement.setString(3, component);
 
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

@@ -106,6 +106,10 @@
             <artifactId>cakeshop-healthcheck</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>

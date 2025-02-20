@@ -135,88 +135,304 @@
         <subsystem xmlns="urn:jboss:domain:core-management:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:7.0">
             <datasources>
-                <datasource jndi-name="java:/app/cakeshop-service/DS.eventstore" pool-name="DS.cakeshop.eventstore" enabled="true" use-java-context="true" jta="true">
-                    <connection-url>jdbc:postgresql://localhost:5432/frameworkeventstore</connection-url>
-                    <driver>postgres</driver>
-                    <pool>
-                        <min-pool-size>10</min-pool-size>
-                        <max-pool-size>100</max-pool-size>
-                        <prefill>false</prefill>
-                    </pool>
+                <xa-datasource jndi-name="java:/app/cakeshop-service/DS.eventstore" pool-name="DS.cakeshop.eventstore" enabled="true" use-java-context="true" spy="false" use-ccm="true" statistics-enabled="true">
+                    <xa-datasource-property name="PortNumber">
+                        5432
+                    </xa-datasource-property>
+                    <xa-datasource-property name="DatabaseName">
+                        frameworkeventstore
+                    </xa-datasource-property>
+                    <xa-datasource-property name="ApplicationName">
+                        cakeshop
+                    </xa-datasource-property>
+                    <xa-datasource-property name="currentSchema">
+                        public
+                    </xa-datasource-property>
+                    <xa-datasource-property name="targetServerType">
+                        master
+                    </xa-datasource-property>
+                    <xa-datasource-property name="assumeMinServerVersion">
+                        11.10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="connectTimeout">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="hostRecheckSeconds">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="logUnclosedConnections">
+                        false
+                    </xa-datasource-property>
+                    <xa-datasource-property name="socketTimeout">
+                        0
+                    </xa-datasource-property>
+                    <xa-datasource-property name="tcpKeepAlive">
+                        true
+                    </xa-datasource-property>
+                    <driver>postgresql</driver>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <xa-pool>
+                        <min-pool-size>0</min-pool-size>
+                        <initial-pool-size>0</initial-pool-size>
+                        <max-pool-size>10</max-pool-size>
+                        <allow-multiple-users>false</allow-multiple-users>
+                    </xa-pool>
                     <security>
                         <user-name>framework</user-name>
                         <password>framework</password>
                     </security>
                     <validation>
-                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+                        <validate-on-match>true</validate-on-match>
+                        <use-fast-fail>true</use-fast-fail>
+                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
                     </validation>
-                </datasource>
-                <datasource jndi-name="java:/app/cakeshop-service/DS.jobstore" pool-name="DS.cakeshop.jobstore" enabled="true" use-java-context="true" jta="true">
-                    <connection-url>jdbc:postgresql://localhost:5432/frameworkjobstore</connection-url>
-                    <driver>postgres</driver>
-                    <pool>
-                        <min-pool-size>10</min-pool-size>
-                        <max-pool-size>100</max-pool-size>
-                        <prefill>false</prefill>
-                    </pool>
+                    <timeout>
+                        <xa-resource-timeout>0</xa-resource-timeout>
+                    </timeout>
+                    <statement>
+                        <track-statements>nowarn</track-statements>
+                    </statement>
+                </xa-datasource>
+                <xa-datasource jndi-name="java:/app/cakeshop-service/DS.jobstore" pool-name="DS.cakeshop.jobstore" enabled="true" use-java-context="true" spy="false" use-ccm="true" statistics-enabled="true">
+                    <xa-datasource-property name="PortNumber">
+                        5432
+                    </xa-datasource-property>
+                    <xa-datasource-property name="DatabaseName">
+                        frameworkjobstore
+                    </xa-datasource-property>
+                    <xa-datasource-property name="ApplicationName">
+                        cakeshop
+                    </xa-datasource-property>
+                    <xa-datasource-property name="currentSchema">
+                        public
+                    </xa-datasource-property>
+                    <xa-datasource-property name="targetServerType">
+                        master
+                    </xa-datasource-property>
+                    <xa-datasource-property name="assumeMinServerVersion">
+                        11.10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="connectTimeout">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="hostRecheckSeconds">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="logUnclosedConnections">
+                        false
+                    </xa-datasource-property>
+                    <xa-datasource-property name="socketTimeout">
+                        0
+                    </xa-datasource-property>
+                    <xa-datasource-property name="tcpKeepAlive">
+                        true
+                    </xa-datasource-property>
+                    <driver>postgresql</driver>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <xa-pool>
+                        <min-pool-size>0</min-pool-size>
+                        <initial-pool-size>0</initial-pool-size>
+                        <max-pool-size>10</max-pool-size>
+                        <allow-multiple-users>false</allow-multiple-users>
+                    </xa-pool>
                     <security>
                         <user-name>framework</user-name>
                         <password>framework</password>
                     </security>
                     <validation>
-                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+                        <validate-on-match>true</validate-on-match>
+                        <use-fast-fail>true</use-fast-fail>
+                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
                     </validation>
-                </datasource>
-                <datasource jndi-name="java:/DS.cakeshop" pool-name="DS.cakeshop" enabled="true" use-java-context="true" jta="true">
-                    <connection-url>jdbc:postgresql://localhost:5432/frameworkviewstore</connection-url>
-                    <driver>postgres</driver>
-                    <pool>
-                        <min-pool-size>10</min-pool-size>
-                        <max-pool-size>100</max-pool-size>
-                        <prefill>false</prefill>
-                    </pool>
+                    <timeout>
+                        <xa-resource-timeout>0</xa-resource-timeout>
+                    </timeout>
+                    <statement>
+                        <track-statements>nowarn</track-statements>
+                    </statement>
+                </xa-datasource>
+
+                <xa-datasource jndi-name="java:/DS.cakeshop" pool-name="DS.cakeshop" enabled="true" use-java-context="true" spy="false" use-ccm="true" statistics-enabled="true">
+                    <xa-datasource-property name="PortNumber">
+                        5432
+                    </xa-datasource-property>
+                    <xa-datasource-property name="DatabaseName">
+                        frameworkviewstore
+                    </xa-datasource-property>
+                    <xa-datasource-property name="ApplicationName">
+                        cakeshop
+                    </xa-datasource-property>
+                    <xa-datasource-property name="currentSchema">
+                        public
+                    </xa-datasource-property>
+                    <xa-datasource-property name="targetServerType">
+                        master
+                    </xa-datasource-property>
+                    <xa-datasource-property name="assumeMinServerVersion">
+                        11.10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="connectTimeout">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="hostRecheckSeconds">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="logUnclosedConnections">
+                        false
+                    </xa-datasource-property>
+                    <xa-datasource-property name="socketTimeout">
+                        0
+                    </xa-datasource-property>
+                    <xa-datasource-property name="tcpKeepAlive">
+                        true
+                    </xa-datasource-property>
+                    <driver>postgresql</driver>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <xa-pool>
+                        <min-pool-size>0</min-pool-size>
+                        <initial-pool-size>0</initial-pool-size>
+                        <max-pool-size>10</max-pool-size>
+                        <allow-multiple-users>false</allow-multiple-users>
+                    </xa-pool>
                     <security>
                         <user-name>framework</user-name>
                         <password>framework</password>
                     </security>
                     <validation>
-                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+                        <validate-on-match>true</validate-on-match>
+                        <use-fast-fail>true</use-fast-fail>
+                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
                     </validation>
-                </datasource>
-                <datasource jndi-name="java:/app/cakeshop/DS.system" pool-name="DS.cakeshop.system" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:postgresql://localhost:5432/frameworksystem</connection-url>
-                    <driver>postgres</driver>
-                    <pool>
-                        <min-pool-size>10</min-pool-size>
-                        <max-pool-size>100</max-pool-size>
-                        <prefill>false</prefill>
-                    </pool>
+                    <timeout>
+                        <xa-resource-timeout>0</xa-resource-timeout>
+                    </timeout>
+                    <statement>
+                        <track-statements>nowarn</track-statements>
+                    </statement>
+                </xa-datasource>
+                <xa-datasource jndi-name="java:/app/cakeshop/DS.system" pool-name="cakeshop.DS.system" enabled="true" use-java-context="true" spy="false" use-ccm="true" statistics-enabled="true">
+                    <xa-datasource-property name="PortNumber">
+                        5432
+                    </xa-datasource-property>
+                    <xa-datasource-property name="DatabaseName">
+                        frameworksystem
+                    </xa-datasource-property>
+                    <xa-datasource-property name="ApplicationName">
+                        cakeshop
+                    </xa-datasource-property>
+                    <xa-datasource-property name="currentSchema">
+                        public
+                    </xa-datasource-property>
+                    <xa-datasource-property name="targetServerType">
+                        master
+                    </xa-datasource-property>
+                    <xa-datasource-property name="assumeMinServerVersion">
+                        11.10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="connectTimeout">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="hostRecheckSeconds">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="logUnclosedConnections">
+                        false
+                    </xa-datasource-property>
+                    <xa-datasource-property name="socketTimeout">
+                        0
+                    </xa-datasource-property>
+                    <xa-datasource-property name="tcpKeepAlive">
+                        true
+                    </xa-datasource-property>
+                    <driver>postgresql</driver>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <xa-pool>
+                        <min-pool-size>0</min-pool-size>
+                        <initial-pool-size>0</initial-pool-size>
+                        <max-pool-size>10</max-pool-size>
+                        <allow-multiple-users>false</allow-multiple-users>
+                    </xa-pool>
                     <security>
                         <user-name>framework</user-name>
                         <password>framework</password>
                     </security>
                     <validation>
-                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+                        <validate-on-match>true</validate-on-match>
+                        <use-fast-fail>true</use-fast-fail>
+                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
                     </validation>
-                </datasource>
-                <datasource jndi-name="java:/DS.fileservice" pool-name="DS.fileservice" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:postgresql://localhost:5432/fileservice</connection-url>
-                    <driver>postgres</driver>
-                    <pool>
-                        <min-pool-size>10</min-pool-size>
-                        <max-pool-size>100</max-pool-size>
-                        <prefill>false</prefill>
-                    </pool>
+                    <timeout>
+                        <xa-resource-timeout>0</xa-resource-timeout>
+                    </timeout>
+                    <statement>
+                        <track-statements>nowarn</track-statements>
+                    </statement>
+                </xa-datasource>
+                <xa-datasource jndi-name="java:/DS.fileservice" pool-name="DS.fileservice" enabled="true" use-java-context="true" spy="false" use-ccm="true" statistics-enabled="true">
+                    <xa-datasource-property name="PortNumber">
+                        5432
+                    </xa-datasource-property>
+                    <xa-datasource-property name="DatabaseName">
+                        fileservice
+                    </xa-datasource-property>
+                    <xa-datasource-property name="ApplicationName">
+                        cakeshop
+                    </xa-datasource-property>
+                    <xa-datasource-property name="currentSchema">
+                        public
+                    </xa-datasource-property>
+                    <xa-datasource-property name="targetServerType">
+                        master
+                    </xa-datasource-property>
+                    <xa-datasource-property name="assumeMinServerVersion">
+                        11.10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="connectTimeout">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="hostRecheckSeconds">
+                        10
+                    </xa-datasource-property>
+                    <xa-datasource-property name="logUnclosedConnections">
+                        false
+                    </xa-datasource-property>
+                    <xa-datasource-property name="socketTimeout">
+                        0
+                    </xa-datasource-property>
+                    <xa-datasource-property name="tcpKeepAlive">
+                        true
+                    </xa-datasource-property>
+                    <driver>postgresql</driver>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <xa-pool>
+                        <min-pool-size>0</min-pool-size>
+                        <initial-pool-size>0</initial-pool-size>
+                        <max-pool-size>10</max-pool-size>
+                        <allow-multiple-users>false</allow-multiple-users>
+                    </xa-pool>
                     <security>
                         <user-name>fileservice</user-name>
                         <password>fileservice</password>
                     </security>
                     <validation>
-                        <check-valid-connection-sql>select 1</check-valid-connection-sql>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+                        <validate-on-match>true</validate-on-match>
+                        <use-fast-fail>true</use-fast-fail>
+                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
                     </validation>
-                </datasource>
+                    <timeout>
+                        <xa-resource-timeout>0</xa-resource-timeout>
+                    </timeout>
+                    <statement>
+                        <track-statements>nowarn</track-statements>
+                    </statement>
+                </xa-datasource>
                 <drivers>
-                    <driver name="postgres" module="org.postgresql">
+                    <driver name="postgresql" module="org.postgresql">
                         <driver-class>org.postgresql.Driver</driver-class>
                         <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
                     </driver>
