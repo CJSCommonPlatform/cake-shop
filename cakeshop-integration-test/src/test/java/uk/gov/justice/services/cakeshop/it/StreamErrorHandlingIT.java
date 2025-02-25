@@ -14,7 +14,10 @@ import uk.gov.justice.services.cakeshop.it.helpers.EventFactory;
 import uk.gov.justice.services.cakeshop.it.helpers.RestEasyClientFactory;
 import uk.gov.justice.services.common.converter.ZonedDateTimes;
 import uk.gov.justice.services.event.buffer.core.repository.streamerror.StreamError;
+import uk.gov.justice.services.event.buffer.core.repository.streamerror.StreamErrorDetails;
+import uk.gov.justice.services.event.buffer.core.repository.streamerror.StreamErrorHash;
 import uk.gov.justice.services.test.utils.core.messaging.Poller;
+import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,6 +41,7 @@ public class StreamErrorHandlingIT {
 
     private final DataSource viewStoreDataSource = new DatabaseManager().initViewStoreDb();
     private final EventFactory eventFactory = new EventFactory();
+    final DatabaseCleaner databaseCleaner = new DatabaseCleaner();
 
     private final Poller poller = new Poller(20, 1000L);
 
@@ -46,6 +50,20 @@ public class StreamErrorHandlingIT {
     @BeforeEach
     public void before() throws Exception {
         client = new RestEasyClientFactory().createResteasyClient();
+
+        databaseCleaner.cleanEventStoreTables("framework");
+
+        databaseCleaner.cleanStreamBufferTable("framework");
+        databaseCleaner.cleanStreamStatusTable("framework");
+        databaseCleaner.cleanViewStoreTables(
+                "framework",
+                "stream_error_hash",
+                "stream_error",
+                "cake",
+                "cake_order",
+                "recipe",
+                "ingredient",
+                "processed_event");
     }
 
     @AfterEach
@@ -71,20 +89,24 @@ public class StreamErrorHandlingIT {
 
         if (streamErrorOptional.isPresent()) {
             final StreamError streamError = streamErrorOptional.get();
-            assertThat(streamError.exceptionClassName(), is("javax.persistence.PersistenceException"));
-            assertThat(streamError.exceptionMessage(), is("org.hibernate.exception.ConstraintViolationException: could not execute statement"));
-            assertThat(streamError.causeClassName(), is(of("org.postgresql.util.PSQLException")));
-            assertThat(streamError.causeMessage().get(), startsWith("ERROR: null value in column \"name\" violates not-null constraint"));
-            assertThat(streamError.javaClassname(), is("uk.gov.justice.services.persistence.EntityManagerFlushInterceptor"));
+            final StreamErrorDetails streamErrorDetails = streamError.streamErrorDetails();
+            final StreamErrorHash streamErrorHash = streamError.streamErrorHash();
 
-            final Optional<StreamStatus> streamStatus = poller.pollUntilFound(() -> findStreamStatus(streamError.streamId(), "cakeshop", "EVENT_LISTENER"));
+            assertThat(streamErrorHash.exceptionClassName(), is("javax.persistence.PersistenceException"));
+            assertThat(streamErrorHash.causeClassName(), is(of("org.postgresql.util.PSQLException")));
+            assertThat(streamErrorHash.javaClassName(), is("uk.gov.justice.services.persistence.EntityManagerFlushInterceptor"));
+
+            assertThat(streamErrorDetails.exceptionMessage(), is("org.hibernate.exception.ConstraintViolationException: could not execute statement"));
+            assertThat(streamErrorDetails.causeMessage().get(), startsWith("ERROR: null value in column \"name\" violates not-null constraint"));
+
+            final Optional<StreamStatus> streamStatus = poller.pollUntilFound(() -> findStreamStatus(streamErrorDetails.streamId(), "cakeshop", "EVENT_LISTENER"));
             if (streamStatus.isPresent()) {
-                assertThat(streamStatus.get().streamErrorId(), is(streamError.id()));
-                assertThat(streamStatus.get().streamErrorPosition(), is(streamError.positionInStream()));
-                assertThat(streamStatus.get().streamId(), is(streamError.streamId()));
+                assertThat(streamStatus.get().streamErrorId(), is(streamErrorDetails.id()));
+                assertThat(streamStatus.get().streamErrorPosition(), is(streamErrorDetails.positionInStream()));
+                assertThat(streamStatus.get().streamId(), is(streamErrorDetails.streamId()));
 
             } else {
-                fail("Could not find stream status for streamId: " + streamError.streamId());
+                fail("Could not find stream status for streamId: " + streamErrorDetails.streamId());
             }
         } else {
             fail("Failed to find stream error for event named '" + eventName + "' in stream_error table");
@@ -93,18 +115,26 @@ public class StreamErrorHandlingIT {
 
     private Optional<StreamError> findStreamError(final String eventName) {
 
+        final Optional<StreamErrorDetails> streamErrorDetails = findStreamErrorDetails(eventName);
+
+        if (streamErrorDetails.isPresent()) {
+            final Optional<StreamErrorHash> streamErrorHash = findStreamErrorHash(streamErrorDetails.get().hash());
+
+            if (streamErrorHash.isPresent()) {
+                return of(new StreamError(streamErrorDetails.get(), streamErrorHash.get()));
+            }
+        }
+
+        return empty();
+    }
+
+    private Optional<StreamErrorDetails> findStreamErrorDetails(final String eventName) {
         final String SELECT_SQL = """
                     SELECT
                     id,
                     hash,
-                    exception_classname,
                     exception_message,
-                    cause_classname,
                     cause_message,
-                    java_classname,
-                    java_method,
-                    java_line_number,
-                    event_name,
                     event_id,
                     stream_id,
                     position_in_stream,
@@ -123,14 +153,8 @@ public class StreamErrorHandlingIT {
                 if (resultSet.next()) {
                     final UUID id = (UUID) resultSet.getObject("id");
                     final String hash = resultSet.getString("hash");
-                    final String javaClassName = resultSet.getString("java_classname");
-                    final String exceptionClassname = resultSet.getString("exception_classname");
                     final String exceptionMessage = resultSet.getString("exception_message");
-                    final Optional<String> causeClassName = ofNullable(resultSet.getString("cause_classname"));
                     final Optional<String> causeMessage = ofNullable(resultSet.getString("cause_message"));
-                    final String javaMethod = resultSet.getString("java_method");
-                    final int javaLineNumber = resultSet.getInt("java_line_number");
-                    final String theEventName = resultSet.getString("event_name");
                     final UUID eventId = (UUID) resultSet.getObject("event_id");
                     final UUID streamId = (UUID) resultSet.getObject("stream_id");
                     final Long positionInStream = resultSet.getLong("position_in_stream");
@@ -139,17 +163,12 @@ public class StreamErrorHandlingIT {
                     final String componentName = resultSet.getString("component_name");
                     final String source = resultSet.getString("source");
 
-                    final StreamError streamError = new StreamError(
+                    final StreamErrorDetails streamError = new StreamErrorDetails(
                             id,
                             hash,
-                            exceptionClassname,
                             exceptionMessage,
-                            causeClassName,
                             causeMessage,
-                            javaClassName,
-                            javaMethod,
-                            javaLineNumber,
-                            theEventName,
+                            eventName,
                             eventId,
                             streamId,
                             positionInStream,
@@ -167,6 +186,49 @@ public class StreamErrorHandlingIT {
         }
 
         return empty();
+    }
+
+    private Optional<StreamErrorHash> findStreamErrorHash(final String hash) {
+
+        final String SELECT_SQL = """
+                        SELECT
+                            exception_classname,
+                            cause_classname,
+                            java_classname,
+                            java_method,
+                            java_line_number
+                        FROM stream_error_hash
+                        WHERE hash = ?
+                """;
+
+        try (final Connection connection = viewStoreDataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SQL)) {
+            preparedStatement.setString(1, hash);
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    final String exceptionClassname = resultSet.getString("exception_classname");
+                    final Optional<String> causeClassname = ofNullable(resultSet.getString("cause_classname"));
+                    final String javaClassname = resultSet.getString("java_classname");
+                    final String javaMethod = resultSet.getString("java_method");
+                    final int javaLineNumber = resultSet.getInt("java_line_number");
+
+                    final StreamErrorHash streamErrorHash = new StreamErrorHash(
+                            hash,
+                            exceptionClassname,
+                            causeClassname,
+                            javaClassname,
+                            javaMethod,
+                            javaLineNumber
+                    );
+
+                    return of(streamErrorHash);
+                }
+
+                return empty();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to read from stream_error table", e);
+        }
     }
 
     private Optional<StreamStatus> findStreamStatus(final UUID streamId, final String source, final String component) {

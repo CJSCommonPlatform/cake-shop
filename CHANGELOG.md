@@ -5,6 +5,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 ### Added
+- New tables in viewstore `stream_error` and `stream_error_hash` for storing errors on a stream 
 - New column `buffered_at` on the stream_buffer tables to allow for monitoring of stuck stream_buffer events
 - New integration test for event error handling
 ### Changed
