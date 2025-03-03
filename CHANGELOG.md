@@ -8,6 +8,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - New tables in viewstore `stream_error` and `stream_error_hash` for storing errors on a stream 
 - New column `buffered_at` on the stream_buffer tables to allow for monitoring of stuck stream_buffer events
 - New integration test for event error handling
+- The columns `stream_id`, `component_name` and `source` on the `stream_error` table are now unique when combined
+- Inserts into `stream_error` now `DO NOTHING` if a row with the same `stream_id`, `component_name` and `source` on the `stream`error` already exists
+- Inserts into `stream_error` are therefore idempotent
+- No longer removing stream_errors before inserting a new error, as the insert is now idempotent
+
 ### Changed
 - Jmx MBean `SystemCommanderMBean` now only takes basic Java Objects to keep the JMX handling interoperable
 ### Removed
