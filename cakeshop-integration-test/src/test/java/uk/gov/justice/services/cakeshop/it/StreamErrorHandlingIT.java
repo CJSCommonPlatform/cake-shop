@@ -97,7 +97,7 @@ public class StreamErrorHandlingIT {
             assertThat(streamErrorHash.javaClassName(), is("uk.gov.justice.services.persistence.EntityManagerFlushInterceptor"));
 
             assertThat(streamErrorDetails.exceptionMessage(), is("org.hibernate.exception.ConstraintViolationException: could not execute statement"));
-            assertThat(streamErrorDetails.causeMessage().get(), startsWith("ERROR: null value in column \"name\" violates not-null constraint"));
+            assertThat(streamErrorDetails.causeMessage().get(), startsWith("ERROR: null value in column \"name\" of relation \"recipe\" violates not-null constraint"));
 
             final Optional<StreamStatus> streamStatus = poller.pollUntilFound(() -> findStreamStatus(streamErrorDetails.streamId(), "cakeshop", "EVENT_LISTENER"));
             if (streamStatus.isPresent()) {
@@ -140,7 +140,7 @@ public class StreamErrorHandlingIT {
                     position_in_stream,
                     date_created,
                     full_stack_trace,
-                    component_name,
+                    component,
                     source
                 FROM stream_error
                 WHERE event_name = ?""";
@@ -160,7 +160,7 @@ public class StreamErrorHandlingIT {
                     final Long positionInStream = resultSet.getLong("position_in_stream");
                     final ZonedDateTime dateCreated = ZonedDateTimes.fromSqlTimestamp(resultSet.getTimestamp("date_created"));
                     final String stackTrace = resultSet.getString("full_stack_trace");
-                    final String componentName = resultSet.getString("component_name");
+                    final String componentName = resultSet.getString("component");
                     final String source = resultSet.getString("source");
 
                     final StreamErrorDetails streamError = new StreamErrorDetails(
