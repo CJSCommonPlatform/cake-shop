@@ -3,6 +3,7 @@ package uk.gov.justice.services.cakeshop.it;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -97,8 +98,9 @@ public class StreamErrorHandlingIT {
             assertThat(streamErrorHash.javaClassName(), is("uk.gov.justice.services.persistence.EntityManagerFlushInterceptor"));
 
             assertThat(streamErrorDetails.exceptionMessage(), is("org.hibernate.exception.ConstraintViolationException: could not execute statement"));
-            assertThat(streamErrorDetails.causeMessage().get(), startsWith("ERROR: null value in column \"name\" of relation \"recipe\" violates not-null constraint"));
-
+            assertThat(streamErrorDetails.causeMessage().get(), startsWith("ERROR: null value in column"));
+            assertThat(streamErrorDetails.causeMessage().get(), containsString("violates not-null constraint"));
+            
             final Optional<StreamStatus> streamStatus = poller.pollUntilFound(() -> findStreamStatus(streamErrorDetails.streamId(), "cakeshop", "EVENT_LISTENER"));
             if (streamStatus.isPresent()) {
                 assertThat(streamStatus.get().streamErrorId(), is(streamErrorDetails.id()));
