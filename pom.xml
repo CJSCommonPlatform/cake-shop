@@ -12,7 +12,7 @@
 
     <groupId>uk.gov.justice.services</groupId>
     <artifactId>cake-shop</artifactId>
-    <version>17.101.0-SNAPSHOT</version>
+    <version>17.102.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Cakeshop Application</name>
@@ -45,8 +45,8 @@
         <wildfly.maven.plugin.version>4.1.1.Final</wildfly.maven.plugin.version>
 
         <framework-libraries.version>17.102.1</framework-libraries.version>
-        <framework.version>17.102.0</framework.version>
-        <event-store.version>17.102.0-M7</event-store.version>
+        <framework.version>17.102.1</framework.version>
+        <event-store.version>17.102.2</event-store.version>
     </properties>
 
     <dependencyManagement>
